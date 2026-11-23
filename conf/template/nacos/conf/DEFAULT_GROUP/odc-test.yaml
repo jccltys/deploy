@@ -52,11 +52,9 @@ origin:
       # 需要修改gitlab地址，gitlab的token信息（需要修改）
       url: http://192.168.31.171:180/
       # gitlab的token信息（需要修改）
-      token: YOUR_GITLAB_TOKEN
-            # gitlab账号（需要修改）
-      username: root
+      #token: YOUR_GITLAB_TOKEN
       # gitlab密码（需要修改）
-      password: YOUR_GITLAB_PASSWORD
+      #password: YOUR_GITLAB_PASSWORD
       # gitlab群组（需要修改）默认，odc
       namespace: odc
       # 所有应用gitla默认分支（需要修改）
