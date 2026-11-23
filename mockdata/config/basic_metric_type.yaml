@@ -1,0 +1,2989 @@
+-
+    type: Apache
+    metric: 请求次数
+    source: apache.instance.throughput.requestCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 吞吐率
+    source: apache.instance.throughput.requestCountPerMinute
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 错误次数
+    source: apache.instance.error.errorCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 每分钟错误次数
+    source: apache.instance.error.errorCountPerMinute
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 错误请求次数
+    source: apache.instance.error.errorRequestCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 请求错误率
+    source: apache.instance.error.errorRequestRatio
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: Apdex
+    source: apache.instance.performance.apdex
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 响应时间
+    source: apache.instance.performance.responseTime
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 正常请求次数
+    source: apache.instance.performance.normalCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 较慢请求次数
+    source: apache.instance.performance.relativeSlowCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 很慢请求次数
+    source: apache.instance.performance.verySlowCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 较慢请求占比
+    source: apache.instance.performance.relativeSlowRatio
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 很慢请求占比
+    source: apache.instance.performance.verySlowRatio
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: GC总耗时
+    source: apache.instance.jvm.gcTimeTotal
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: GC次数
+    source: apache.instance.jvm.gcCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 内存使用率
+    source: apache.instance.jvm.memoryUsageRatio
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 堆内存使用率
+    source: apache.instance.jvm.heapMemoryusageRatio
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 已提交堆内存大小
+    source: apache.instance.jvm.committedHeap
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 已使用堆内存大小
+    source: apache.instance.jvm.usedHeap
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 堆内存最大值
+    source: apache.instance.jvm.maxHeap
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 已提交堆外内存大小
+    source: apache.instance.jvm.committedNonHeap
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 已使用堆外内存大小
+    source: apache.instance.jvm.usedNonHeap
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 堆外内存最大值
+    source: apache.instance.jvm.maxNonHeap
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 堆内存老年代大小
+    source: apache.instance.jvm.heapOldGen
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 堆内存年轻代Survivor区大小
+    source: apache.instance.jvm.heapYongGenSurvivor
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 堆内存年轻代Eden区大小
+    source: apache.instance.jvm.heapYongGenEden
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 元空间大小
+    source: apache.instance.jvm.metaspace
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 加载class数量
+    source: apache.instance.jvm.loadedClassCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 存活对象数量
+    source: apache.instance.jvm.liveObjectCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 对象占用内存大小
+    source: apache.instance.jvm.objectMemory
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 对象生命周期
+    source: apache.instance.jvm.objectLifecycle
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 对象引用计数
+    source: apache.instance.jvm.objectReferenceCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 线程总数量
+    source: apache.instance.thread.threadsCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 等待中线程数量
+    source: apache.instance.thread.waitingThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 新建线程数量
+    source: apache.instance.thread.newThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 超时等待线程数量
+    source: apache.instance.thread.timedWaitingCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 运行线程数
+    source: apache.instance.thread.runningThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 阻塞线程数
+    source: apache.instance.thread.blockedThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 死锁线程数
+    source: apache.instance.thread.deadlockThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 最大线程数
+    source: apache.threadpool.thread.maxThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 核心线程数
+    source: apache.threadpool.thread.coreThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 存在线程数
+    source: apache.threadpool.thread.currentThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 活跃线程数
+    source: apache.threadpool.thread.activeThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 任务总数
+    source: apache.threadpool.task.taskCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 队列任务数量
+    source: apache.threadpool.task.queueTaskCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 队列剩余容量
+    source: apache.threadpool.task.queueRemainingCapacity
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 已完成任务数
+    source: apache.threadpool.task.completedTaskCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 等待任务数
+    source: apache.threadpool.task.waitingTaskCount
+    metricName: APM
+    dimension: ""
+-
+    type: Apache
+    metric: 拒绝任务数
+    source: apache.threadpool.task.refusedTaskCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 请求次数
+    source: webLogic.instance.throughput.requestCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 吞吐率
+    source: webLogic.instance.throughput.requestCountPerMinute
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 错误次数
+    source: webLogic.instance.error.errorCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 每分钟错误次数
+    source: webLogic.instance.error.errorCountPerMinute
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 错误请求次数
+    source: webLogic.instance.error.errorRequestCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 请求错误率
+    source: webLogic.instance.error.errorRequestRatio
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: Apdex
+    source: webLogic.instance.performance.apdex
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 响应时间
+    source: webLogic.instance.performance.responseTime
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 正常请求次数
+    source: webLogic.instance.performance.normalCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 较慢请求次数
+    source: webLogic.instance.performance.relativeSlowCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 很慢请求次数
+    source: webLogic.instance.performance.verySlowCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 较慢请求占比
+    source: webLogic.instance.performance.relativeSlowRatio
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 很慢请求占比
+    source: webLogic.instance.performance.verySlowRatio
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: GC总耗时
+    source: webLogic.instance.jvm.gcTimeTotal
+    metricName: APM
+    dimension: ""
+    default:
+      value: 0
+      min: 0
+      max: 10
+      objectIds: ["15u3hkl5m9xf00bk", "15u3hkl5m9xf01bk"]
+      timeRange:
+        start: "09:00"
+        end: "09:15" 
+-
+    type: WebLogic
+    metric: GC次数
+    source: webLogic.instance.jvm.gcCount
+    metricName: APM
+    dimension: ""
+    default:
+      value: 0
+      min: 1
+      max: 10
+      objectIds: ["15u3hkl5m9xf00bk", "15u3hkl5m9xf01bk"]
+      timeRange:
+        start: "09:00"
+        end: "09:15"
+-
+    type: WebLogic
+    metric: 内存使用率
+    source: webLogic.instance.jvm.memoryUsageRatio
+    metricName: APM
+    dimension: ""
+    default:
+      value:
+      min: 40
+      max: 80
+      objectIds: ["15u3hkl5m9xf00bk", "15u3hkl5m9xf01bk"]
+      timeRange:
+        start: "09:00"
+        end: "09:15"
+-
+    type: WebLogic
+    metric: 堆内存使用率
+    source: webLogic.instance.jvm.heapMemoryusageRatio
+    metricName: APM
+    dimension: ""
+    default:
+      value: 20
+      min: 40
+      max: 80
+      objectIds: ["15u3hkl5m9xf00bk", "15u3hkl5m9xf01bk"]
+      timeRange:
+        start: "09:00"
+        end: "09:15"
+-
+    type: WebLogic
+    metric: 已提交堆内存大小
+    source: webLogic.instance.jvm.committedHeap
+    metricName: APM
+    dimension: ""
+    default:
+      value: 20
+      min: 40
+      max: 80
+      objectIds: ["15u3hkl5m9xf00bk", "15u3hkl5m9xf01bk"]
+      timeRange:
+        start: "09:00"
+        end: "09:15"
+-
+    type: WebLogic
+    metric: 已使用堆内存大小
+    source: webLogic.instance.jvm.usedHeap
+    metricName: APM
+    dimension: ""
+    default:
+      value: 20
+      min: 40
+      max: 80
+      objectIds: ["15u3hkl5m9xf00bk", "15u3hkl5m9xf01bk"]
+      timeRange:
+        start: "09:00"
+        end: "09:10"
+-
+    type: WebLogic
+    metric: 堆内存最大值
+    source: webLogic.instance.jvm.maxHeap
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 已提交堆外内存大小
+    source: webLogic.instance.jvm.committedNonHeap
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 已使用堆外内存大小
+    source: webLogic.instance.jvm.usedNonHeap
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 堆外内存最大值
+    source: webLogic.instance.jvm.maxNonHeap
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 堆内存老年代大小
+    source: webLogic.instance.jvm.heapOldGen
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 堆内存年轻代Survivor区大小
+    source: webLogic.instance.jvm.heapYongGenSurvivor
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 堆内存年轻代Eden区大小
+    source: webLogic.instance.jvm.heapYongGenEden
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 元空间大小
+    source: webLogic.instance.jvm.metaspace
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 加载class数量
+    source: webLogic.instance.jvm.loadedClassCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 存活对象数量
+    source: webLogic.instance.jvm.liveObjectCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 对象占用内存大小
+    source: webLogic.instance.jvm.objectMemory
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 对象生命周期
+    source: webLogic.instance.jvm.objectLifecycle
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 对象引用计数
+    source: webLogic.instance.jvm.objectReferenceCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 线程总数量
+    source: webLogic.instance.thread.threadsCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 等待中线程数量
+    source: webLogic.instance.thread.waitingThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 新建线程数量
+    source: webLogic.instance.thread.newThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 超时等待线程数量
+    source: webLogic.instance.thread.timedWaitingCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 运行线程数
+    source: webLogic.instance.thread.runningThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 阻塞线程数
+    source: webLogic.instance.thread.blockedThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 死锁线程数
+    source: webLogic.instance.thread.deadlockThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 最大线程数
+    source: webLogic.threadpool.thread.maxThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 核心线程数
+    source: webLogic.threadpool.thread.coreThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 存在线程数
+    source: webLogic.threadpool.thread.currentThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 活跃线程数
+    source: webLogic.threadpool.thread.activeThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 任务总数
+    source: webLogic.threadpool.task.taskCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 队列任务数量
+    source: webLogic.threadpool.task.queueTaskCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 队列剩余容量
+    source: webLogic.threadpool.task.queueRemainingCapacity
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 已完成任务数
+    source: webLogic.threadpool.task.completedTaskCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 等待任务数
+    source: webLogic.threadpool.task.waitingTaskCount
+    metricName: APM
+    dimension: ""
+-
+    type: WebLogic
+    metric: 拒绝任务数
+    source: webLogic.threadpool.task.refusedTaskCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 请求次数
+    source: mod.instance.throughput.requestCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 吞吐率
+    source: mod.instance.throughput.requestCountPerMinute
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 错误次数
+    source: mod.instance.error.errorCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 每分钟错误次数
+    source: mod.instance.error.errorCountPerMinute
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 错误请求次数
+    source: mod.instance.error.errorRequestCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 请求错误率
+    source: mod.instance.error.errorRequestRatio
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: Apdex
+    source: mod.instance.performance.apdex
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 响应时间
+    source: mod.instance.performance.responseTime
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 正常请求次数
+    source: mod.instance.performance.normalCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 较慢请求次数
+    source: mod.instance.performance.relativeSlowCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 很慢请求次数
+    source: mod.instance.performance.verySlowCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 较慢请求占比
+    source: mod.instance.performance.relativeSlowRatio
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 很慢请求占比
+    source: mod.instance.performance.verySlowRatio
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: GC总耗时
+    source: mod.instance.jvm.gcTimeTotal
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: GC次数
+    source: mod.instance.jvm.gcCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 内存使用率
+    source: mod.instance.jvm.memoryUsageRatio
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 堆内存使用率
+    source: mod.instance.jvm.heapMemoryusageRatio
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 已提交堆内存大小
+    source: mod.instance.jvm.committedHeap
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 已使用堆内存大小
+    source: mod.instance.jvm.usedHeap
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 堆内存最大值
+    source: mod.instance.jvm.maxHeap
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 已提交堆外内存大小
+    source: mod.instance.jvm.committedNonHeap
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 已使用堆外内存大小
+    source: mod.instance.jvm.usedNonHeap
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 堆外内存最大值
+    source: mod.instance.jvm.maxNonHeap
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 堆内存老年代大小
+    source: mod.instance.jvm.heapOldGen
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 堆内存年轻代Survivor区大小
+    source: mod.instance.jvm.heapYongGenSurvivor
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 堆内存年轻代Eden区大小
+    source: mod.instance.jvm.heapYongGenEden
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 元空间大小
+    source: mod.instance.jvm.metaspace
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 加载class数量
+    source: mod.instance.jvm.loadedClassCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 存活对象数量
+    source: mod.instance.jvm.liveObjectCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 对象占用内存大小
+    source: mod.instance.jvm.objectMemory
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 对象生命周期
+    source: mod.instance.jvm.objectLifecycle
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 对象引用计数
+    source: mod.instance.jvm.objectReferenceCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 线程总数量
+    source: mod.instance.thread.threadsCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 等待中线程数量
+    source: mod.instance.thread.waitingThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 新建线程数量
+    source: mod.instance.thread.newThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 超时等待线程数量
+    source: mod.instance.thread.timedWaitingCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 运行线程数
+    source: mod.instance.thread.runningThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 阻塞线程数
+    source: mod.instance.thread.blockedThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 死锁线程数
+    source: mod.instance.thread.deadlockThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 最大线程数
+    source: mod.threadpool.thread.maxThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 核心线程数
+    source: mod.threadpool.thread.coreThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 存在线程数
+    source: mod.threadpool.thread.currentThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 活跃线程数
+    source: mod.threadpool.thread.activeThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 任务总数
+    source: mod.threadpool.task.taskCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 队列任务数量
+    source: mod.threadpool.task.queueTaskCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 队列剩余容量
+    source: mod.threadpool.task.queueRemainingCapacity
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 已完成任务数
+    source: mod.threadpool.task.completedTaskCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 等待任务数
+    source: mod.threadpool.task.waitingTaskCount
+    metricName: APM
+    dimension: ""
+-
+    type: ModInstance
+    metric: 拒绝任务数
+    source: mod.threadpool.task.refusedTaskCount
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 节点是否是leader
+    source: zk_server_leader
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 服务是否启动
+    source: zk_up
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 发送网络包数量
+    source: zk_packets_sent
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 接收网络包数量
+    source: zk_packets_received
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 临时节点的数量
+    source: zk_ephemerals_count
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: znode数量
+    source: zk_znode_count
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 观察者数量
+    source: zk_watch_count
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 节点删除的次数
+    source: zk_cnt_node_deleted_watch_count
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 节点结构变化的次数
+    source: zk_cnt_node_children_watch_count
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 节点更新的次数
+    source: zk_cnt_node_changed_watch_count
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 节点创建的次数
+    source: zk_cnt_node_created_watch_count
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 请求的平均延迟时间
+    source: zk_avg_latency
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 请求的最小延迟时间
+    source: zk_min_latency
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 请求的最大延迟时间
+    source: zk_max_latency
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 读取操作时延
+    source: zk_cnt_readlatency
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 提案处理时延
+    source: zk_cnt_proposal_latency
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 写入操作时延
+    source: zk_cnt_updatelatency
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 未处理的请求数量
+    source: zk_outstanding_requests
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: zk打开文件描述符的数量
+    source: zk_open_file_descriptor_count
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: zk允许打开文件描述符的最大数量
+    source: zk_max_file_descriptor_count
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 存储数据大小
+    source: zk_approximate_data_size
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 客户端活跃连接数
+    source: zk_num_alive_connections
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 全局会话数
+    source: zk_global_sessions
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 本地会话数
+    source: zk_local_sessions
+    metricName: APM
+    dimension: ""
+-
+    type: ZooKeeper
+    metric: 节点状态
+    source: zk_server_state
+    metricName: APM
+    dimension: ""
+-
+    type: Oracle
+    metric: 主库归档日志传输通道状态和GAP
+    source: oracle.primary.larchive_dest.status_gap
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 主库备库日志差异
+    source: oracle.primary.sequence.diff
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: '备库的apply lag'
+    source: oracle.standby.apply_lag
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 备库角色
+    source: oracle.standby.database_role
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 备库MRP进程数量
+    source: oracle.standby.mrp
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 备库保护模式
+    source: oracle.standby.protection_mode
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 备库恢复模式
+    source: oracle.standby.recover_mode
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 备库RFS进程数量
+    source: oracle.standby.rfs
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: '备库的transport lag'
+    source: oracle.standby.tranport_lag
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: ASM磁盘组已使用大小
+    source: oracle.asm.diskgroup.used_size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: IO延迟
+    source: oracle.io.latency
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: IO吞吐量
+    source: oracle.io.throughout
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: ASM-DiskGroup空闲量
+    source: oracle.asm.disk.group.free
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 服务最大响应时间
+    source: oracle.base.service.response.time.max
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 'Buffer Get最多的SQL'
+    source: oracle.topsql.buffer_gets
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 最耗CPU时间的10个SQL
+    source: oracle.topsql.cpu_time
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 最耗执行时间的10个SQL
+    source: oracle.topsql.elasped_time_pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 最耗物理读的10个SQL
+    source: oracle.topsql.physical_reads
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 超过60秒的会话等待
+    source: oracle.session.block
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 会话阻塞详情
+    source: oracle.session.block.detail
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 用户会话游标使用率
+    source: oracle.session.cursor_used_pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 最耗CPU的10个session
+    source: oracle.topsession.cpu
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 最耗逻辑读的10个session
+    source: oracle.topsession.logic_read
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 最耗PGA内存的10个session
+    source: oracle.topsession.pga
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 最耗物理读的10个session
+    source: oracle.topsession.phys_read
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Redo的active和current占比
+    source: oracle.redo.active_current.pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Undo表空间剩余大小
+    source: oracle.tbs.undo.free_size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Undo表空间已使用大小
+    source: oracle.tbs.undo.used_size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: UNDO表空间active_unexpired占比
+    source: oracle.undo.active_unexpired.pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle当前连接数
+    source: oracle.base.current.connections
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle数据库实例状态
+    source: oracle.base.ins.status
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle连接状态
+    source: oracle.can_connect
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: oracle资源锁定时长
+    source: oracle.lock.time
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: oracle锁等待秒数
+    source: oracle.lock.wait.second
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle自由空间碎片索引比值
+    source: oracle.patchrate.fsfi
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 'Oracle PGA Cache命中率'
+    source: oracle.pga.cache.hit.percentage
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 'Oracle PGA可用程序全局区百分比'
+    source: oracle.pga.freeable.pct_usage
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 'Oracle PGA最大分配大小'
+    source: oracle.pga.maximum.pga.allocated
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle可用程序全局区百分比
+    source: oracle.process.freeable.pct_usage
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle已分配程序全局区
+    source: oracle.process.total.pga.allocated
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle已使用程序全局区
+    source: oracle.process.total.pga.inuse
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle可用程序全局区
+    source: oracle.process.useable.total
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 'Oracle RAC状态'
+    source: oracle.rac.rac.status
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle高速缓存区命中率
+    source: oracle.ratio.cacheratio
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle共享区字典缓存区命中率
+    source: oracle.ratio.dictionarycacheratio
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle磁盘排序与内存排序比率
+    source: oracle.ratio.diskmemorysortratio
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle共享区库缓存区命中率
+    source: oracle.ratio.librarycacheratio.hit_rate
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle多次解析(重装)的条目比率
+    source: oracle.ratio.reloadstopingratio
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle回退段等待次数与获取次数比率
+    source: oracle.ratio.rollbacksegmentheader
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle时间间隔递归调用百分比
+    source: oracle.recursion.interval.recursive_calls.pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 'Oracle Willing-to-wait请求latch成功数'
+    source: oracle.redo.willing.gets
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 'Oracle Willing-to-wait请求latch失败数'
+    source: oracle.redo.willing.misses
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 'Oracle Willing-to-wait请求失败与获得的百分比'
+    source: oracle.redo.willing.percent
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 'Oracle SGA数据字典缓存大小'
+    source: oracle.sga.dictioncache
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 'Oracle SGA命中率'
+    source: oracle.sga.hit.rate
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 'Oracle SGA高速缓冲区大小'
+    source: oracle.sga.librarycache
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 'Oracle SGA重做日志缓冲区大小'
+    source: oracle.sga.redolog
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 'Oracle SGA共享库缓存大小'
+    source: oracle.sga.sharedcache
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 'Oracle SGA共享池大小'
+    source: oracle.sga.sharepool
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 'Oracle SGA SQL缓存大小'
+    source: oracle.sga.sqlcache
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle用户等待状态
+    source: oracle.user.wait.state
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle等待事件活跃session数
+    source: oracle.wait.event.act.session
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle事件等待率
+    source: oracle.wait.event.rate
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 临时表空间剩余大小
+    source: oracle.tbs.temp.free_size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 临时表空间使用率
+    source: oracle.tbs.temp.used_pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 临时表空间已使用大小
+    source: oracle.tbs.temp.used_size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 最近一天rman归档日志备份
+    source: oracle.rman.archivelog.1d
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 最近一天rman归档日志备份输入大小
+    source: oracle.rman.archivelog.1d.input_size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 最近一天rman归档日志备份输出大小
+    source: oracle.rman.archivelog.1d.output_size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 最近一周rman全备份
+    source: oracle.rman.full.7d
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 最近一周rman全备份输入大小
+    source: oracle.rman.full.7d.input_size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 最近一周rman全备份输出大小
+    source: oracle.rman.full.7d.output_size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 状态异常的用户
+    source: oracle.user.account_status
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 'PGA 命中率'
+    source: oracle.pga.cache_hitratio
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 'Row Cache命中率'
+    source: oracle.rowcache.hitratio
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 数据库占用空间
+    source: oracle.db.used_space
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Schema占用空间
+    source: oracle.schema.used_space
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: ASM磁盘组大小
+    source: oracle.asm.diskgroup.total_size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 数据文件最大值
+    source: oracle.datafile.max
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: process最大连接数
+    source: oracle.process.max
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: session最大连接数
+    source: oracle.session.max
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 临时表空间大小
+    source: oracle.tbs.temp.total_size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 表空间大小
+    source: oracle.tbs.total_size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Undo表空间大小
+    source: oracle.tbs.undo.total_size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 当前数据文件个数
+    source: oracle.datafile.current
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 数据文件个数占比
+    source: oracle.datafile.used_pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 失效的索引及分区索引
+    source: oracle.index.unusable
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 失效的索引及分区索引数量
+    source: oracle.index.unusable.count
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 无效对象
+    source: oracle.objects.invalid
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 无效对象数量
+    source: oracle.objects.invalid.count
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: ASM磁盘状态
+    source: oracle.asm.disk.state
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: ASM磁盘组状态
+    source: oracle.asm.diskgroup.state
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 数据文件状态
+    source: oracle.datafile.status
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Grid监听日志大小
+    source: oracle.grid.listener_log.size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Scan监听日志大小
+    source: oracle.grid.listener_scan_log.size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle监听日志大小
+    source: oracle.listener_log.size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 'Oracle ASM-DiskGroup使用率'
+    source: oracle.asm.disk.group.usage_pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 失效索引个数
+    source: oracle.remote.monitor.index.unusable.count
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle读表空间平均时间
+    source: oracle.tablespace.io.read.avg
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle写表空间平均时间
+    source: oracle.tablespace.io.write.avg
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle表空间允许的最大Extent数量
+    source: oracle.tablespace.max.extents_count
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle表空间已使用大小
+    source: oracle.tablespace.space
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Oracle表空间已使用百分率
+    source: oracle.tablespace.used.percentage
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 表空间剩余大小
+    source: oracle.tbs.free_size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 表空间使用率(可扩展最大值做分母)
+    source: oracle.tbs.used_pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 表空间使用率(当前大小做分母)
+    source: oracle.tbs.used_pct.current_size_as_denominator
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 表空间已使用大小
+    source: oracle.tbs.used_size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Process占比
+    source: oracle.remote.monitor.process.used_pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: Session占比
+    source: oracle.remote.monitor.session.used_pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 运行时长
+    source: oracle.run_time
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 集群process总数
+    source: oracle.rac.process
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 集群process当前连接数
+    source: oracle.rac.process.current
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 集群process占比
+    source: oracle.rac.process.used_pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 集群session总数
+    source: oracle.rac.session
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 集群session当前active连接数
+    source: oracle.rac.session.active
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 集群session当前inactive数
+    source: oracle.rac.session.inactive
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 集群session当前连接数
+    source: oracle.rac.session.total
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 集群session占比
+    source: oracle.rac.session.used_pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: cluster服务
+    source: oracle.cluster.svc
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: 集群CRS资源
+    source: oracle.crs.res
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: CRS基础资源
+    source: oracle.crs.res.init
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Oracle
+    metric: has服务
+    source: oracle.has.svc
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Redis
+    metric: 服务器状态
+    source: redis_up
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 已运行的时间
+    source: redis_uptime_in_seconds
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 已知节点数量
+    source: redis_cluster_known_nodes
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 集群的状态
+    source: redis_cluster_state
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 被阻塞的客户端数量
+    source: redis_blocked_clients
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 连接的客户端数量
+    source: redis_connected_clients
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 已使用内存总量
+    source: redis_memory_used_bytes
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 允许的最大内存总量
+    source: redis_memory_max_bytes
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 允许的最大客户端连接数
+    source: redis_config_maxclients
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 最近一次AOF写入状态
+    source: redis_aof_last_bgrewrite_status
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 最近一次bgsave保存RDB的状态
+    source: redis_rdb_last_bgsave_status
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 慢查询日志数量
+    source: redis_slowlog_length
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 接收到的命令总数
+    source: redis_commands_total
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 命中key总数
+    source: redis_keyspace_hits_total
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 未命中key总数
+    source: redis_keyspace_misses_total
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 网络接收总量
+    source: redis_net_input_bytes_total
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 网络发送总量
+    source: redis_net_output_bytes_total
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: key总数
+    source: redis_db_keys
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 设置过期时间的key总数
+    source: redis_db_keys_expiring
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 过期被淘汰的key总数
+    source: redis_expired_keys_total
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 被淘汰的key总数
+    source: redis_evicted_keys_total
+    metricName: APM
+    dimension: ""
+-
+    type: Redis
+    metric: 处理命令花费总时间
+    source: redis_commands_duration_seconds_total
+    metricName: APM
+    dimension: ""
+-
+    type: Linux
+    metric: '1分钟 CPU load'
+    source: system.load.1
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: '15分钟CPU Load'
+    source: system.load.15
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: '5分钟CPU Load'
+    source: system.load.5
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: 逻辑cpu使用率
+    source: system.cpu.core.pct_usage
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: 'CPU 空闲时间占比'
+    source: system.cpu.idle
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: CPU使用率
+    source: system.cpu.pct_usage
+    metricName: 基础监控
+    dimension: ""
+    default:
+      min: 96
+      max: 97
+      objectIds: ["23u3hkl5m9xf00bk"]
+      timeRange:
+        start: "09:59"
+        end: "10:02"
+-
+    type: Linux
+    metric: CPU系统时间占比
+    source: system.cpu.system
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: CPU用户时间占比
+    source: system.cpu.user
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: ping延时
+    source: icmp.request.delayed_time
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: ping状态
+    source: ping.can_connect
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: swap分区剩余大小
+    source: system.swap.free
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: swap分区总大小
+    source: system.swap.total
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: swap分区已使用大小
+    source: system.swap.used
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: swap分区使用率
+    source: system.swap.used_pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: 端口状态
+    source: tcp.can_connect
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: TCP端口的开启情况
+    source: tcp.port.status
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: 响应时间
+    source: tcp.response_time
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: 内存使用率(应用角度)
+    source: system.mem.pct_usage
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: 内存使用率(系统角度)
+    source: system.mem.real.pct_useage
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: 已使用内存(系统角度)
+    source: system.mem.real.used
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: 物理内存总量
+    source: system.mem.total
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: 可用内存(应用角度)
+    source: system.mem.usable
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: 已使用内存(应用角度)
+    source: system.mem.used
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: 磁盘读响应时间
+    source: system.io.r_await
+    metricName: 基础监控
+    dimension: devname
+-
+    type: Linux
+    metric: 磁盘读IOPS
+    source: system.io.r_s
+    metricName: 基础监控
+    dimension: devname
+-
+    type: Linux
+    metric: 磁盘繁忙程度
+    source: system.io.util
+    metricName: 基础监控
+    dimension: devname
+-
+    type: Linux
+    metric: 磁盘可用量
+    source: system.disk.free
+    metricName: 基础监控
+    dimension: devname
+-
+    type: Linux
+    metric: 磁盘使用率
+    source: system.disk.pct_usage
+    metricName: 基础监控
+    dimension: devname
+-
+    type: Linux
+    metric: 磁盘总量
+    source: system.disk.total
+    metricName: 基础监控
+    dimension: devname
+-
+    type: Linux
+    metric: 磁盘使用量
+    source: system.disk.used
+    metricName: 基础监控
+    dimension: devname
+-
+    type: Linux
+    metric: 进程数量
+    source: system.processes.number
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: 进程存活状态
+    source: system.processes.status
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Linux
+    metric: 运行时长
+    source: system.run_time
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Firewall
+    metric: CPU使用率
+    source: firewall.network.cpu.usage_multiple
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Firewall
+    metric: 内存使用率
+    source: firewall.network.memory.usage_multiple
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Firewall
+    metric: 主板温度
+    source: firewall.system.temperature
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Firewall
+    metric: 端口入速率
+    source: firewall.system.if.in.bit.speed
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Firewall
+    metric: 端口出速率
+    source: firewall.system.if.out.bit.speed
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Firewall
+    metric: 端口入包速
+    source: firewall.system.if.in.packet.speed
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Firewall
+    metric: 端口出包速
+    source: firewall.system.if.out.packet.speed
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Firewall
+    metric: 端口入丢包率
+    source: firewall.system.if.in.packet.discard.pct
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Firewall
+    metric: 端口出丢包率
+    source: firewall.system.if.out.packet.discard.pct
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Firewall
+    metric: 端口入错包率
+    source: firewall.system.if.in.packet.error.pct
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Firewall
+    metric: 端口出错包率
+    source: firewall.system.if.out.packet.error.pct
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Firewall
+    metric: 端口入带宽使用率
+    source: firewall.system.if.in.bandwidth.usage
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Firewall
+    metric: 端口出带宽使用率
+    source: firewall.system.if.out.bandwidth.usage
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Firewall
+    metric: 端口带宽使用率
+    source: firewall.system.if.bandwidth.usage
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Switch
+    metric: CPU使用率
+    source: switch.network.cpu.usage_multiple
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Switch
+    metric: 内存使用率
+    source: switch.network.memory.usage_multiple
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Switch
+    metric: 主板温度
+    source: switch.system.temperature
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Switch
+    metric: 端口入速率
+    source: switch.system.if.in.bit.speed
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Switch
+    metric: 端口出速率
+    source: switch.system.if.out.bit.speed
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Switch
+    metric: 端口入包速
+    source: switch.system.if.in.packet.speed
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Switch
+    metric: 端口出包速
+    source: switch.system.if.out.packet.speed
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Switch
+    metric: 端口入丢包率
+    source: switch.system.if.in.packet.discard.pct
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Switch
+    metric: 端口出丢包率
+    source: switch.system.if.out.packet.discard.pct
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Switch
+    metric: 端口入错包率
+    source: switch.system.if.in.packet.error.pct
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Switch
+    metric: 端口出错包率
+    source: switch.system.if.out.packet.error.pct
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Switch
+    metric: 端口入带宽使用率
+    source: switch.system.if.in.bandwidth.usage
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Switch
+    metric: 端口出带宽使用率
+    source: switch.system.if.out.bandwidth.usage
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: Switch
+    metric: 端口带宽使用率
+    source: switch.system.if.bandwidth.usage
+    metricName: 基础监控
+    dimension: ifname
+-
+    type: VM
+    metric: 未共享大小
+    source: vmware.vm.disk.unshared
+    metricName: 基础监控
+    dimension: ""
+-
+    type: VM
+    metric: 存储置备大小
+    source: vmware.vm.disk.total
+    metricName: 基础监控
+    dimension: ""
+-
+    type: VM
+    metric: 已分配大小
+    source: vmware.vm.disk.allocated
+    metricName: 基础监控
+    dimension: ""
+-
+    type: VM
+    metric: 已分配使用率
+    source: vmware.vm.disk.utlized
+    metricName: 基础监控
+    dimension: ""
+-
+    type: VM
+    metric: 虚拟机可已使用的内存量
+    source: vmware.vm.mem.used
+    metricName: 基础监控
+    dimension: ""
+-
+    type: VM
+    metric: 虚拟机的内存使用率
+    source: vmware.vm.mem.pct_usage
+    metricName: 基础监控
+    dimension: ""
+-
+    type: VM
+    metric: 虚拟机的内存总量
+    source: vmware.vm.mem.total
+    metricName: 基础监控
+    dimension: ""
+-
+    type: VM
+    metric: 虚拟机可使用的CPU数量
+    source: vmware.vm.cpu.num
+    metricName: 基础监控
+    dimension: ""
+-
+    type: VM
+    metric: 虚拟机的CPU使用率
+    source: vmware.vm.cpu.pct_usage
+    metricName: 基础监控
+    dimension: ""
+-
+    type: VM
+    metric: 平均发送包转发率
+    source: vmware.vm.net.sent.packets.forward.pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: VM
+    metric: 平均接受丢包率
+    source: vmware.vm.net.rcvd.packets.loss.pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: VM
+    metric: 平均接受包转发率
+    source: vmware.vm.net.rcvd.packets.forward.pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: VM
+    metric: 平均发送丢包率
+    source: vmware.vm.net.sent.packets.loss.pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: VM
+    metric: 平均接受速率
+    source: vmware.vm.net.bytes_rcvd
+    metricName: 基础监控
+    dimension: ""
+-
+    type: VM
+    metric: 平均发送误包率
+    source: vmware.vm.net.sent.packets.error.pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: VM
+    metric: 平均接受误包率
+    source: vmware.vm.net.rcvd.packets.error.pct
+    metricName: 基础监控
+    dimension: ""
+-
+    type: VM
+    metric: 平均发送速率
+    source: vmware.vm.net.bytes_sent
+    metricName: 基础监控
+    dimension: ""
+-
+    type: VM
+    metric: vm告警状态
+    source: vmware.vm.alert.status
+    metricName: 基础监控
+    dimension: ""
+-
+    type: VM
+    metric: vm电源状态
+    source: vmware.vm.power.state
+    metricName: 基础监控
+    dimension: ""
+-
+    type: PCServer
+    metric: esx主机CPU个数
+    source: pcserver.hypervisor.esx.cpu.count
+    metricName: 基础监控
+    dimension: ""
+-
+    type: PCServer
+    metric: esx主机CPU利用率
+    source: pcserver.hypervisor.esx.cpu.pct_usage
+    metricName: 基础监控
+    dimension: ""
+-
+    type: PCServer
+    metric: esx主机CPU预留量
+    source: pcserver.hypervisor.esx.cpu.reserved_capacity.size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: PCServer
+    metric: esx主机CPU总容量
+    source: pcserver.hypervisor.esx.cpu.total_capacity.size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: PCServer
+    metric: esx主机CPU使用量
+    source: pcserver.hypervisor.esx.cpu.used
+    metricName: 基础监控
+    dimension: ""
+-
+    type: PCServer
+    metric: esx主机内存授权量
+    source: pcserver.hypervisor.esx.mem.authorized_capacity.size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: PCServer
+    metric: esx主机内存预留量
+    source: pcserver.hypervisor.esx.mem.reserved_capacity.size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: PCServer
+    metric: esx主机内存总容量
+    source: pcserver.hypervisor.esx.mem.total_capacity.size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: PCServer
+    metric: esx主机内存利用率
+    source: pcserver.hypervisor.ram.esx.mem.pct_usage
+    metricName: 基础监控
+    dimension: ""
+-
+    type: PCServer
+    metric: esx主机内存使用量
+    source: pcserver.hypervisor.ram.esx.mem.used
+    metricName: 基础监控
+    dimension: ""
+-
+    type: PCServer
+    metric: esx主机中所有虚拟机的内存使用量
+    source: pcserver.hypervisor.ram.esx.vm.mem.used
+    metricName: 基础监控
+    dimension: ""
+-
+    type: PCServer
+    metric: esx主机网卡个数
+    source: pcserver.hypervisor.esx.network.cards.count
+    metricName: 基础监控
+    dimension: ""
+-
+    type: PCServer
+    metric: esx主机运行状态
+    source: pcserver.hypervisor.esx.running.status
+    metricName: 基础监控
+    dimension: ""
+-
+    type: PCServer
+    metric: esx主机中运行的虚拟机个数
+    source: pcserver.hypervisor.esx.running_vm.count
+    metricName: 基础监控
+    dimension: ""
+-
+    type: PCServer
+    metric: esx主机存储总容量
+    source: pcserver.hypervisor.esx.storage.total_capaticy
+    metricName: 基础监控
+    dimension: ""
+-
+    type: ESXi
+    metric: esx主机CPU个数
+    source: esxi.hypervisor.esx.cpu.count
+    metricName: 基础监控
+    dimension: ""
+-
+    type: ESXi
+    metric: esx主机CPU利用率
+    source: esxi.hypervisor.esx.cpu.pct_usage
+    metricName: 基础监控
+    dimension: ""
+-
+    type: ESXi
+    metric: esx主机CPU预留量
+    source: esxi.hypervisor.esx.cpu.reserved_capacity.size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: ESXi
+    metric: esx主机CPU总容量
+    source: esxi.hypervisor.esx.cpu.total_capacity.size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: ESXi
+    metric: esx主机CPU使用量
+    source: esxi.hypervisor.esx.cpu.used
+    metricName: 基础监控
+    dimension: ""
+-
+    type: ESXi
+    metric: esx主机内存授权量
+    source: esxi.hypervisor.esx.mem.authorized_capacity.size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: ESXi
+    metric: esx主机内存预留量
+    source: esxi.hypervisor.esx.mem.reserved_capacity.size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: ESXi
+    metric: esx主机内存总容量
+    source: esxi.hypervisor.esx.mem.total_capacity.size
+    metricName: 基础监控
+    dimension: ""
+-
+    type: ESXi
+    metric: esx主机网卡个数
+    source: esxi.hypervisor.esx.network.cards.count
+    metricName: 基础监控
+    dimension: ""
+-
+    type: ESXi
+    metric: esx主机运行状态
+    source: esxi.hypervisor.esx.running.status
+    metricName: 基础监控
+    dimension: ""
+-
+    type: ESXi
+    metric: esx主机中运行的虚拟机个数
+    source: esxi.hypervisor.esx.running_vm.count
+    metricName: 基础监控
+    dimension: ""
+-
+    type: ESXi
+    metric: esx主机存储总容量
+    source: esxi.hypervisor.esx.storage.total_capaticy
+    metricName: 基础监控
+    dimension: ""
+-
+    type: Kafka
+    metric: 当前kafka集群信息
+    source: kafka_broker_info
+    metricName: APM
+    dimension: ""
+-
+    type: Kafka
+    metric: 当前kafka集群节点个数
+    source: kafka_brokers
+    metricName: APM
+    dimension: ""
+-
+    type: Kafka
+    metric: 当前消费者组的所有分区的偏移量情况
+    source: kafka_consumergroup_current_offset_sum
+    metricName: APM
+    dimension: ""
+-
+    type: Kafka
+    metric: 当前消费者组在topic分区的积压情况
+    source: kafka_consumergroup_lag
+    metricName: APM
+    dimension: ""
+-
+    type: Kafka
+    metric: 当前消费者组的总的消息积压量
+    source: kafka_consumergroup_lag_sum
+    metricName: APM
+    dimension: ""
+-
+    type: Kafka
+    metric: 当前消费者组种的消费者个数
+    source: kafka_consumergroup_members
+    metricName: APM
+    dimension: ""
+-
+    type: Kafka
+    metric: producer入条数
+    source: kafka_topic_partition_current_offset
+    metricName: APM
+    dimension: ""
+-
+    type: Kafka
+    metric: consumer出流量
+    source: kafka_consumergroup_current_offset
+    metricName: APM
+    dimension: ""
+-
+    type: Kafka
+    metric: 'kafka topic分区数'
+    source: kafka_topic_partitions
+    metricName: APM
+    dimension: ""
+-
+    type: Nginx
+    metric: nginx启动状态
+    source: nginx_up
+    metricName: APM
+    dimension: ""
+-
+    type: Nginx
+    metric: 请求总数
+    source: nginx_http_requests_total
+    metricName: APM
+    dimension: ""
+-
+    type: Nginx
+    metric: 已经接收的连接总数
+    source: nginx_connections_accepted
+    metricName: APM
+    dimension: ""
+-
+    type: Nginx
+    metric: 活跃状态的连接数量
+    source: nginx_connections_active
+    metricName: APM
+    dimension: ""
+-
+    type: Nginx
+    metric: 已经处理的连接总数
+    source: nginx_connections_handled
+    metricName: APM
+    dimension: ""
+-
+    type: Nginx
+    metric: 正在读的连接数量
+    source: nginx_connections_reading
+    metricName: APM
+    dimension: ""
+-
+    type: Nginx
+    metric: 正在等待的连接数量
+    source: nginx_connections_waiting
+    metricName: APM
+    dimension: ""
+-
+    type: Nginx
+    metric: 正在写的连接数量
+    source: nginx_connections_writing
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 请求次数
+    source: tomcat.instance.throughput.requestCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 吞吐率
+    source: tomcat.instance.throughput.requestCountPerMinute
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 错误次数
+    source: tomcat.instance.error.errorCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 每分钟错误次数
+    source: tomcat.instance.error.errorCountPerMinute
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 错误请求次数
+    source: tomcat.instance.error.errorRequestCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 请求错误率
+    source: tomcat.instance.error.errorRequestRatio
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: Apdex
+    source: tomcat.instance.performance.apdex
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 响应时间
+    source: tomcat.instance.performance.responseTime
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 正常请求次数
+    source: tomcat.instance.performance.normalCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 较慢请求次数
+    source: tomcat.instance.performance.relativeSlowCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 很慢请求次数
+    source: tomcat.instance.performance.verySlowCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 较慢请求占比
+    source: tomcat.instance.performance.relativeSlowRatio
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 很慢请求占比
+    source: tomcat.instance.performance.verySlowRatio
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: GC总耗时
+    source: tomcat.instance.jvm.gcTimeTotal
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: GC次数
+    source: tomcat.instance.jvm.gcCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 内存使用率
+    source: tomcat.instance.jvm.memoryUsageRatio
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 堆内存使用率
+    source: tomcat.instance.jvm.heapMemoryusageRatio
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 已提交堆内存大小
+    source: tomcat.instance.jvm.committedHeap
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 已使用堆内存大小
+    source: tomcat.instance.jvm.usedHeap
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 堆内存最大值
+    source: tomcat.instance.jvm.maxHeap
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 已提交堆外内存大小
+    source: tomcat.instance.jvm.committedNonHeap
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 已使用堆外内存大小
+    source: tomcat.instance.jvm.usedNonHeap
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 堆外内存最大值
+    source: tomcat.instance.jvm.maxNonHeap
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 堆内存老年代大小
+    source: tomcat.instance.jvm.heapOldGen
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 堆内存年轻代Survivor区大小
+    source: tomcat.instance.jvm.heapYongGenSurvivor
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 堆内存年轻代Eden区大小
+    source: tomcat.instance.jvm.heapYongGenEden
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 元空间大小
+    source: tomcat.instance.jvm.metaspace
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 加载class数量
+    source: tomcat.instance.jvm.loadedClassCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 存活对象数量
+    source: tomcat.instance.jvm.liveObjectCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 对象占用内存大小
+    source: tomcat.instance.jvm.objectMemory
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 对象生命周期
+    source: tomcat.instance.jvm.objectLifecycle
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 对象引用计数
+    source: tomcat.instance.jvm.objectReferenceCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 线程总数量
+    source: tomcat.instance.thread.threadsCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 等待中线程数量
+    source: tomcat.instance.thread.waitingThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 新建线程数量
+    source: tomcat.instance.thread.newThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 超时等待线程数量
+    source: tomcat.instance.thread.timedWaitingCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 运行线程数
+    source: tomcat.instance.thread.runningThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 阻塞线程数
+    source: tomcat.instance.thread.blockedThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 死锁线程数
+    source: tomcat.instance.thread.deadlockThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 最大线程数
+    source: tomcat.threadpool.thread.maxThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 核心线程数
+    source: tomcat.threadpool.thread.coreThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 存在线程数
+    source: tomcat.threadpool.thread.currentThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 活跃线程数
+    source: tomcat.threadpool.thread.activeThreadCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 任务总数
+    source: tomcat.threadpool.task.taskCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 队列任务数量
+    source: tomcat.threadpool.task.queueTaskCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 队列剩余容量
+    source: tomcat.threadpool.task.queueRemainingCapacity
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 已完成任务数
+    source: tomcat.threadpool.task.completedTaskCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 等待任务数
+    source: tomcat.threadpool.task.waitingTaskCount
+    metricName: APM
+    dimension: ""
+-
+    type: Tomcat
+    metric: 拒绝任务数
+    source: tomcat.threadpool.task.refusedTaskCount
+    metricName: APM
+    dimension: ""

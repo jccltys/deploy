@@ -1,0 +1,465 @@
+Oracle,主库归档日志传输通道状态和GAP,oracle.primary.larchive_dest.status_gap,基础监控
+Oracle,主库备库日志差异,oracle.primary.sequence.diff,基础监控
+Oracle,备库的apply lag,oracle.standby.apply_lag,基础监控
+Oracle,备库角色,oracle.standby.database_role,基础监控
+Oracle,备库MRP进程数量,oracle.standby.mrp,基础监控
+Oracle,备库保护模式,oracle.standby.protection_mode,基础监控
+Oracle,备库恢复模式,oracle.standby.recover_mode,基础监控
+Oracle,备库RFS进程数量,oracle.standby.rfs,基础监控
+Oracle,备库的transport lag,oracle.standby.tranport_lag,基础监控
+Oracle,oracle_archived_log_applyDdel,oracle.archived.log.applyDdelay,基础监控
+Oracle,oracle_archived_log_shell,oracle.archived.log.shell,基础监控
+Oracle,ASM磁盘组剩余大小,oracle.asm.diskgroup.free_size,基础监控
+Oracle,ASM磁盘组冗余可用大小,oracle.asm.diskgroup.usable_file_size,基础监控
+Oracle,ASM磁盘组使用率,oracle.asm.diskgroup.used_pct,基础监控
+Oracle,ASM磁盘组已使用大小,oracle.asm.diskgroup.used_size,基础监控
+Oracle,IO延迟,oracle.io.latency,基础监控
+Oracle,IO吞吐量,oracle.io.throughout,基础监控
+Oracle,ASM-DiskGroup空闲量,oracle.asm.disk.group.free,基础监控
+Oracle,服务最大响应时间,oracle.base.service.response.time.max,基础监控
+Oracle,Buffer Get最多的SQL,oracle.topsql.buffer_gets,基础监控
+Oracle,最耗CPU时间的10个SQL,oracle.topsql.cpu_time,基础监控
+Oracle,最耗执行时间的10个SQL,oracle.topsql.elasped_time_pct,基础监控
+Oracle,最耗物理读的10个SQL,oracle.topsql.physical_reads,基础监控
+Oracle,超过60秒的会话等待,oracle.session.block,基础监控
+Oracle,会话阻塞详情,oracle.session.block.detail,基础监控
+Oracle,用户会话游标使用率,oracle.session.cursor_used_pct,基础监控
+Oracle,最耗CPU的10个session,oracle.topsession.cpu,基础监控
+Oracle,最耗逻辑读的10个session,oracle.topsession.logic_read,基础监控
+Oracle,最耗PGA内存的10个session,oracle.topsession.pga,基础监控
+Oracle,最耗物理读的10个session,oracle.topsession.phys_read,基础监控
+Oracle,Redo的active和current占比,oracle.redo.active_current.pct,基础监控
+Oracle,Undo表空间剩余大小,oracle.tbs.undo.free_size,基础监控
+Oracle,Undo表空间已使用大小,oracle.tbs.undo.used_size,基础监控
+Oracle,UNDO表空间active_unexpired占比,oracle.undo.active_unexpired.pct,基础监控
+Oracle,Oracle当前连接数,oracle.base.current.connections,基础监控
+Oracle,Oracle数据库实例状态,oracle.base.ins.status,基础监控
+Oracle,Oracle连接状态,oracle.can_connect,基础监控
+Oracle,oracle资源锁定时长,oracle.lock.time,基础监控
+Oracle,oracle锁等待秒数,oracle.lock.wait.second,基础监控
+Oracle,Oracle自由空间碎片索引比值,oracle.patchrate.fsfi,基础监控
+Oracle,Oracle PGA Cache命中率,oracle.pga.cache.hit.percentage,基础监控
+Oracle,Oracle PGA可用程序全局区百分比,oracle.pga.freeable.pct_usage,基础监控
+Oracle,Oracle PGA最大分配大小,oracle.pga.maximum.pga.allocated,基础监控
+Oracle,Oracle可用程序全局区百分比,oracle.process.freeable.pct_usage,基础监控
+Oracle,Oracle已分配程序全局区,oracle.process.total.pga.allocated,基础监控
+Oracle,Oracle已使用程序全局区,oracle.process.total.pga.inuse,基础监控
+Oracle,Oracle可用程序全局区,oracle.process.useable.total,基础监控
+Oracle,Oracle RAC状态,oracle.rac.rac.status,基础监控
+Oracle,Oracle高速缓存区命中率,oracle.ratio.cacheratio,基础监控
+Oracle,Oracle共享区字典缓存区命中率,oracle.ratio.dictionarycacheratio,基础监控
+Oracle,Oracle磁盘排序与内存排序比率,oracle.ratio.diskmemorysortratio,基础监控
+Oracle,Oracle共享区库缓存区命中率,oracle.ratio.librarycacheratio.hit_rate,基础监控
+Oracle,Oracle多次解析(重装)的条目比率,oracle.ratio.reloadstopingratio,基础监控
+Oracle,Oracle回退段等待次数与获取次数比率,oracle.ratio.rollbacksegmentheader,基础监控
+Oracle,Oracle时间间隔递归调用百分比,oracle.recursion.interval.recursive_calls.pct,基础监控
+Oracle,Oracle Willing-to-wait请求latch成功数,oracle.redo.willing.gets,基础监控
+Oracle,Oracle Willing-to-wait请求latch失败数,oracle.redo.willing.misses,基础监控
+Oracle,Oracle Willing-to-wait请求失败与获得的百分比,oracle.redo.willing.percent,基础监控
+Oracle,Oracle SGA数据字典缓存大小,oracle.sga.dictioncache,基础监控
+Oracle,Oracle SGA命中率,oracle.sga.hit.rate,基础监控
+Oracle,Oracle SGA高速缓冲区大小,oracle.sga.librarycache,基础监控
+Oracle,Oracle SGA重做日志缓冲区大小,oracle.sga.redolog,基础监控
+Oracle,Oracle SGA共享库缓存大小,oracle.sga.sharedcache,基础监控
+Oracle,Oracle SGA共享池大小,oracle.sga.sharepool,基础监控
+Oracle,Oracle SGA SQL缓存大小,oracle.sga.sqlcache,基础监控
+Oracle,Oracle用户等待状态,oracle.user.wait.state,基础监控
+Oracle,Oracle等待事件活跃session数,oracle.wait.event.act.session,基础监控
+Oracle,Oracle事件等待率,oracle.wait.event.rate,基础监控
+Oracle,临时表空间剩余大小,oracle.tbs.temp.free_size,基础监控
+Oracle,临时表空间使用率,oracle.tbs.temp.used_pct,基础监控
+Oracle,临时表空间已使用大小,oracle.tbs.temp.used_size,基础监控
+Oracle,最近一天rman归档日志备份,oracle.rman.archivelog.1d,基础监控
+Oracle,最近一天rman归档日志备份输入大小,oracle.rman.archivelog.1d.input_size,基础监控
+Oracle,最近一天rman归档日志备份输出大小,oracle.rman.archivelog.1d.output_size,基础监控
+Oracle,最近一周rman全备份,oracle.rman.full.7d,基础监控
+Oracle,最近一周rman全备份输入大小,oracle.rman.full.7d.input_size,基础监控
+Oracle,最近一周rman全备份输出大小,oracle.rman.full.7d.output_size,基础监控
+Oracle,状态异常的用户,oracle.user.account_status,基础监控
+Oracle,登录3次失败的用户,oracle.user.failed_login,基础监控
+Oracle,process当前连接数,oracle.process.current,基础监控
+Oracle,process占比,oracle.process.used_pct,基础监控
+Oracle,实例session当前active连接数,oracle.session.active,基础监控
+Oracle,实例session当前inactive连接数,oracle.session.inactive,基础监控
+Oracle,实例session当前连接数,oracle.session.total,基础监控
+Oracle,session占比,oracle.session.used_pct,基础监控
+Oracle,实例核心进程,oracle.instance.core_process,基础监控
+Oracle,DB time,oracle.instance.db_time,基础监控
+Oracle,实例本地连通性,oracle.local_connect,基础监控
+Oracle,回收站对象数量,oracle.recyclebin.count,基础监控
+Oracle,会话锁,oracle.session.lock,基础监控
+Oracle,正在运行的长时间会话,oracle.session.longtime,基础监控
+Oracle,近1小时耗费数据库资源最高的前15条SQL,oracle.sql.longtime,基础监控
+Oracle,被锁的表,oracle.table.lock,基础监控
+Oracle,归档空间使用率,oracle.archdest.used_pct,基础监控
+Oracle,最近一周每天生成的归档日志量,oracle.archivelog.size.day,基础监控
+Oracle,Buffer Cache命中率,oracle.buffercache.hitratio,基础监控
+Oracle,Libarary Cache命中率,oracle.librarycache.hitratio,基础监控
+Oracle,PGA 命中率,oracle.pga.cache_hitratio,基础监控
+Oracle,Row Cache命中率,oracle.rowcache.hitratio,基础监控
+Oracle,数据库占用空间,oracle.db.used_space,基础监控
+Oracle,Schema占用空间,oracle.schema.used_space,基础监控
+Oracle,ASM磁盘组大小,oracle.asm.diskgroup.total_size,基础监控
+Oracle,数据文件最大值,oracle.datafile.max,基础监控
+Oracle,process最大连接数,oracle.process.max,基础监控
+Oracle,session最大连接数,oracle.session.max,基础监控
+Oracle,临时表空间大小,oracle.tbs.temp.total_size,基础监控
+Oracle,表空间大小,oracle.tbs.total_size,基础监控
+Oracle,Undo表空间大小,oracle.tbs.undo.total_size,基础监控
+Oracle,当前数据文件个数,oracle.datafile.current,基础监控
+Oracle,数据文件个数占比,oracle.datafile.used_pct,基础监控
+Oracle,失效的索引及分区索引,oracle.index.unusable,基础监控
+Oracle,失效的索引及分区索引数量,oracle.index.unusable.count,基础监控
+Oracle,无效对象,oracle.objects.invalid,基础监控
+Oracle,无效对象数量,oracle.objects.invalid.count,基础监控
+Oracle,ASM磁盘状态,oracle.asm.disk.state,基础监控
+Oracle,ASM磁盘组状态,oracle.asm.diskgroup.state,基础监控
+Oracle,数据文件状态,oracle.datafile.status,基础监控
+Oracle,Grid监听日志大小,oracle.grid.listener_log.size,基础监控
+Oracle,Scan监听日志大小,oracle.grid.listener_scan_log.size,基础监控
+Oracle,Oracle监听日志大小,oracle.listener_log.size,基础监控
+Oracle,Oracle ASM-DiskGroup使用率,oracle.asm.disk.group.usage_pct,基础监控
+Oracle,失效索引个数,oracle.remote.monitor.index.unusable.count,基础监控
+Oracle,Oracle读表空间平均时间,oracle.tablespace.io.read.avg,基础监控
+Oracle,Oracle写表空间平均时间,oracle.tablespace.io.write.avg,基础监控
+Oracle,Oracle表空间允许的最大Extent数量,oracle.tablespace.max.extents_count,基础监控
+Oracle,Oracle表空间已使用大小,oracle.tablespace.space,基础监控
+Oracle,Oracle表空间已使用百分率,oracle.tablespace.used.percentage,基础监控
+Oracle,表空间剩余大小,oracle.tbs.free_size,基础监控
+Oracle,表空间使用率(可扩展最大值做分母),oracle.tbs.used_pct,基础监控
+Oracle,表空间使用率(当前大小做分母),oracle.tbs.used_pct.current_size_as_denominator,基础监控
+Oracle,表空间已使用大小,oracle.tbs.used_size,基础监控
+Oracle,Process占比,oracle.remote.monitor.process.used_pct,基础监控
+Oracle,Session占比,oracle.remote.monitor.session.used_pct,基础监控
+Oracle,运行时长,oracle.run_time,基础监控
+Oracle,集群process总数,oracle.rac.process,基础监控
+Oracle,集群process当前连接数,oracle.rac.process.current,基础监控
+Oracle,集群process占比,oracle.rac.process.used_pct,基础监控
+Oracle,集群session总数,oracle.rac.session,基础监控
+Oracle,集群session当前active连接数,oracle.rac.session.active,基础监控
+Oracle,集群session当前inactive数,oracle.rac.session.inactive,基础监控
+Oracle,集群session当前连接数,oracle.rac.session.total,基础监控
+Oracle,集群session占比,oracle.rac.session.used_pct,基础监控
+Oracle,cluster服务,oracle.cluster.svc,基础监控
+Oracle,集群CRS资源,oracle.crs.res,基础监控
+Oracle,CRS基础资源,oracle.crs.res.init,基础监控
+Oracle,has服务,oracle.has.svc,基础监控
+Linux,1分钟 CPU load,system.load.1,基础监控
+Linux,15分钟CPU Load,system.load.15,基础监控
+Linux,5分钟CPU Load,system.load.5,基础监控
+Linux,逻辑cpu使用率,system.cpu.core.pct_usage,基础监控
+Linux,CPU 空闲时间占比,system.cpu.idle,基础监控
+Linux,CPU使用率,system.cpu.pct_usage,基础监控
+Linux,CPU系统时间占比,system.cpu.system,基础监控
+Linux,CPU用户时间占比,system.cpu.user,基础监控
+Linux,ping延时,icmp.request.delayed_time,基础监控
+Linux,ping状态,ping.can_connect,基础监控
+Linux,swap分区剩余大小,system.swap.free,基础监控
+Linux,swap分区总大小,system.swap.total,基础监控
+Linux,swap分区已使用大小,system.swap.used,基础监控
+Linux,swap分区使用率,system.swap.used_pct,基础监控
+Linux,端口状态,tcp.can_connect,基础监控
+Linux,TCP端口的开启情况,tcp.port.status,基础监控
+Linux,响应时间,tcp.response_time,基础监控
+Linux,内存使用率(应用角度),system.mem.pct_usage,基础监控
+Linux,内存使用率(系统角度),system.mem.real.pct_useage,基础监控
+Linux,已使用内存(系统角度),system.mem.real.used,基础监控
+Linux,物理内存总量,system.mem.total,基础监控
+Linux,可用内存(应用角度),system.mem.usable,基础监控
+Linux,已使用内存(应用角度),system.mem.used,基础监控
+Linux,磁盘读响应时间,system.io.r_await,基础监控
+Linux,磁盘读IOPS,system.io.r_s,基础监控
+Linux,磁盘繁忙程度,system.io.util,基础监控
+Linux,磁盘可用量,system.disk.free,基础监控
+Linux,磁盘使用率,system.disk.pct_usage,基础监控
+Linux,磁盘总量,system.disk.total,基础监控
+Linux,磁盘使用量,system.disk.used,基础监控
+Linux,磁盘读响应时间,system.io.r_await,基础监控
+Linux,磁盘读IOPS,system.io.r_s,基础监控
+Linux,磁盘繁忙程度,system.io.util,基础监控
+Linux,磁盘可用量,system.disk.free,基础监控
+Linux,磁盘使用率,system.disk.pct_usage,基础监控
+Linux,磁盘总量,system.disk.total,基础监控
+Linux,磁盘使用量,system.disk.used,基础监控
+Linux,进程数量,system.processes.number,基础监控
+Linux,进程存活状态,system.processes.status,基础监控
+Linux,运行时长,system.run_time,基础监控
+Switch,CPU使用率,switch.network.cpu.usage_multiple,基础监控
+Switch,内存使用率,switch.network.memory.usage_multiple,基础监控
+Switch,主板温度,switch.system.temperature,基础监控
+Switch,端口入速率,switch.system.if.in.bit.speed,基础监控
+Switch,端口出速率,switch.system.if.out.bit.speed,基础监控
+Switch,端口入包速,switch.system.if.in.packet.speed,基础监控
+Switch,端口出包速,switch.system.if.out.packet.speed,基础监控
+Switch,端口入丢包率,switch.system.if.in.packet.discard.pct,基础监控
+Switch,端口出丢包率,switch.system.if.out.packet.discard.pct,基础监控
+Switch,端口入错包率,switch.system.if.in.packet.error.pct,基础监控
+Switch,端口出错包率,switch.system.if.out.packet.error.pct,基础监控
+Switch,端口入带宽使用率,switch.system.if.in.bandwidth.usage,基础监控
+Switch,端口出带宽使用率,switch.system.if.out.bandwidth.usage,基础监控
+Switch,端口带宽使用率,switch.system.if.bandwidth.usage,基础监控
+Switch,端口入速率,switch.system.if.in.bit.speed,基础监控
+Switch,端口出速率,switch.system.if.out.bit.speed,基础监控
+Switch,端口入包速,switch.system.if.in.packet.speed,基础监控
+Switch,端口出包速,switch.system.if.out.packet.speed,基础监控
+Switch,端口入丢包率,switch.system.if.in.packet.discard.pct,基础监控
+Switch,端口出丢包率,switch.system.if.out.packet.discard.pct,基础监控
+Switch,端口入错包率,switch.system.if.in.packet.error.pct,基础监控
+Switch,端口出错包率,switch.system.if.out.packet.error.pct,基础监控
+Switch,端口入带宽使用率,switch.system.if.in.bandwidth.usage,基础监控
+Switch,端口出带宽使用率,switch.system.if.out.bandwidth.usage,基础监控
+Switch,端口带宽使用率,switch.system.if.bandwidth.usage,基础监控
+Biz_system,分钟级总交易量,transCountByMinute,bpm
+Biz_system,分钟级总交易耗时,transDurationByMinute,bpm
+Biz_system,分钟级总响应笔数,transResponseCountByMinute,bpm
+Biz_system,分钟级总成功笔数,transSuccessCountByMinute,bpm
+Biz_system,分钟级响应成功率,transResponseRateByMinute,bpm
+Biz_system,分钟级交易成功率,transSuccessRateByMinute,bpm
+ModInstance,请求次数,mod.instance.throughput.requestCount,apm
+ModInstance,吞吐率,mod.instance.throughput.requestCountPerMinute,apm
+ModInstance,错误次数,mod.instance.error.errorCount,apm
+ModInstance,每分钟错误次数,mod.instance.error.errorCountPerMinute,apm
+ModInstance,错误请求次数,mod.instance.error.errorRequestCount,apm
+ModInstance,请求错误率,mod.instance.error.errorRequestRatio,apm
+ModInstance,Apdex,mod.instance.performance.apdex,apm
+ModInstance,响应时间,mod.instance.performance.responseTime,apm
+ModInstance,正常请求次数,mod.instance.performance.normalCount,apm
+ModInstance,较慢请求次数,mod.instance.performance.relativeSlowCount,apm
+ModInstance,很慢请求次数,mod.instance.performance.verySlowCount,apm
+ModInstance,较慢请求占比,mod.instance.performance.relativeSlowRatio,apm
+ModInstance,很慢请求占比,mod.instance.performance.verySlowRatio,apm
+ModInstance,GC总耗时,mod.instance.jvm.gcTimeTotal,apm
+ModInstance,GC次数,mod.instance.jvm.gcCount,apm
+ModInstance,内存使用率,mod.instance.jvm.memoryUsageRatio,apm
+ModInstance,堆内存使用率,mod.instance.jvm.heapMemoryusageRatio,apm
+ModInstance,已提交堆内存大小,mod.instance.jvm.committedHeap,apm
+ModInstance,已使用堆内存大小,mod.instance.jvm.usedHeap,apm
+ModInstance,堆内存最大值,mod.instance.jvm.maxHeap,apm
+ModInstance,已提交堆外内存大小,mod.instance.jvm.committedNonHeap,apm
+ModInstance,已使用堆外内存大小,mod.instance.jvm.usedNonHeap,apm
+ModInstance,堆外内存最大值,mod.instance.jvm.maxNonHeap,apm
+ModInstance,堆内存老年代大小,mod.instance.jvm.heapOldGen,apm
+ModInstance,堆内存年轻代Survivor区大小,mod.instance.jvm.heapYongGenSurvivor,apm
+ModInstance,堆内存年轻代Eden区大小,mod.instance.jvm.heapYongGenEden,apm
+ModInstance,元空间大小,mod.instance.jvm.metaspace,apm
+ModInstance,加载class数量,mod.instance.jvm.loadedClassCount,apm
+ModInstance,存活对象数量,mod.instance.jvm.liveObjectCount,apm
+ModInstance,对象占用内存大小,mod.instance.jvm.objectMemory,apm
+ModInstance,对象生命周期,mod.instance.jvm.objectLifecycle,apm
+ModInstance,对象引用计数,mod.instance.jvm.objectReferenceCount,apm
+ModInstance,线程总数量,mod.instance.thread.threadsCount,apm
+ModInstance,等待中线程数量,mod.instance.thread.waitingThreadCount,apm
+ModInstance,新建线程数量,mod.instance.thread.newThreadCount,apm
+ModInstance,超时等待线程数量,mod.instance.thread.timedWaitingCount,apm
+ModInstance,运行线程数,mod.instance.thread.runningThreadCount,apm
+ModInstance,阻塞线程数,mod.instance.thread.blockedThreadCount,apm
+ModInstance,死锁线程数,mod.instance.thread.deadlockThreadCount,apm
+ModInstance,最大线程数,mod.threadpool.thread.maxThreadCount,apm
+ModInstance,核心线程数,mod.threadpool.thread.coreThreadCount,apm
+ModInstance,存在线程数,mod.threadpool.thread.currentThreadCount,apm
+ModInstance,活跃线程数,mod.threadpool.thread.activeThreadCount,apm
+ModInstance,任务总数,mod.threadpool.task.taskCount,apm
+ModInstance,队列任务数量,mod.threadpool.task.queueTaskCount,apm
+ModInstance,队列剩余容量,mod.threadpool.task.queueRemainingCapacity,apm
+ModInstance,已完成任务数,mod.threadpool.task.completedTaskCount,apm
+ModInstance,等待任务数,mod.threadpool.task.waitingTaskCount,apm
+ModInstance,拒绝任务数,mod.threadpool.task.refusedTaskCount,apm
+ModInstance,CPU Time,mod.instance.java.cpuTime,apm
+ModInstance,Threads Created,mod.instance.java.threadsCreated,apm
+ModInstance,Thrown Exceptions,mod.instance.java.thrownExceptions,apm
+ModInstance,Allocated Memory,mod.instance.java.allocatedMemory,apm
+ModInstance,Allocations,mod.instance.java.allocations,apm
+ModInstance,Wall Time,mod.instance.java.wallTime,apm
+ModInstance,Lock Wait Time,mod.instance.java.lockWaitTime,apm
+ModInstance,Lock Wait Events,mod.instance.java.lockWaitEvents,apm
+ModInstance,Socket I/O Read Time,mod.instance.java.socketIoReadTime,apm
+ModInstance,Socket I/O Write Time,mod.instance.java.socketIoWriteTime,apm
+ModInstance,Socket I/O Read,mod.instance.java.socketIoRead,apm
+ModInstance,Socket I/O Written,mod.instance.java.socketIoWritten,apm
+ModInstance,File I/O Time,mod.instance.java.fileIoTime,apm
+ModInstance,File I/O Written,mod.instance.java.fileIoWritten,apm
+ModInstance,File I/O Read,mod.instance.java.fileIoRead,apm
+ModInstance,CPU Time,mod.instance.python.cpuTime,apm
+ModInstance,Thrown Exceptions,mod.instance.python.thrownExceptions,apm
+ModInstance,Heap Live Size,mod.instance.python.heapLiveSize,apm
+ModInstance,Allocated Memory,mod.instance.python.allocatedMemory,apm
+ModInstance,Allocations,mod.instance.python.allocations,apm
+ModInstance,Wall Time,mod.instance.python.wallTime,apm
+ModInstance,Lock Wait Time,mod.instance.python.lockWaitTime,apm
+ModInstance,Locked Time,mod.instance.python.lockedTime,apm
+ModInstance,Lock Acquisitions,mod.instance.python.lockAcquisitions,apm
+Redis,服务器状态,redis_up,apm
+Redis,已运行的时间,redis_uptime_in_seconds,apm
+Redis,已知节点数量,redis_cluster_known_nodes,apm
+Redis,集群的状态,redis_cluster_state,apm
+Redis,被阻塞的客户端数量,redis_blocked_clients,apm
+Redis,连接的客户端数量,redis_connected_clients,apm
+Redis,已使用内存总量,redis_memory_used_bytes,apm
+Redis,允许的最大内存总量,redis_memory_max_bytes,apm
+Redis,允许的最大客户端连接数,redis_config_maxclients,apm
+Redis,最近一次AOF写入状态,redis_aof_last_bgrewrite_status,apm
+Redis,最近一次bgsave保存RDB的状态,redis_rdb_last_bgsave_status,apm
+Redis,慢查询日志数量,redis_slowlog_length,apm
+Redis,接收到的命令总数,redis_commands_total,apm
+Redis,命中key总数,redis_keyspace_hits_total,apm
+Redis,未命中key总数,redis_keyspace_misses_total,apm
+Redis,网络接收总量,redis_net_input_bytes_total,apm
+Redis,网络发送总量,redis_net_output_bytes_total,apm
+Redis,key总数,redis_db_keys,apm
+Redis,设置过期时间的key总数,redis_db_keys_expiring,apm
+Redis,过期被淘汰的key总数,redis_expired_keys_total,apm
+Redis,被淘汰的key总数,redis_evicted_keys_total,apm
+Redis,处理命令花费总时间,redis_commands_duration_seconds_total,apm
+Apache,请求次数,apache.instance.throughput.requestCount,apm
+Apache,吞吐率,apache.instance.throughput.requestCountPerMinute,apm
+Apache,错误次数,apache.instance.error.errorCount,apm
+Apache,每分钟错误次数,apache.instance.error.errorCountPerMinute,apm
+Apache,错误请求次数,apache.instance.error.errorRequestCount,apm
+Apache,请求错误率,apache.instance.error.errorRequestRatio,apm
+Apache,Apdex,apache.instance.performance.apdex,apm
+Apache,响应时间,apache.instance.performance.responseTime,apm
+Apache,正常请求次数,apache.instance.performance.normalCount,apm
+Apache,较慢请求次数,apache.instance.performance.relativeSlowCount,apm
+Apache,很慢请求次数,apache.instance.performance.verySlowCount,apm
+Apache,较慢请求占比,apache.instance.performance.relativeSlowRatio,apm
+Apache,很慢请求占比,apache.instance.performance.verySlowRatio,apm
+Apache,GC总耗时,apache.instance.jvm.gcTimeTotal,apm
+Apache,GC次数,apache.instance.jvm.gcCount,apm
+Apache,内存使用率,apache.instance.jvm.memoryUsageRatio,apm
+Apache,堆内存使用率,apache.instance.jvm.heapMemoryusageRatio,apm
+Apache,已提交堆内存大小,apache.instance.jvm.committedHeap,apm
+Apache,已使用堆内存大小,apache.instance.jvm.usedHeap,apm
+Apache,堆内存最大值,apache.instance.jvm.maxHeap,apm
+Apache,已提交堆外内存大小,apache.instance.jvm.committedNonHeap,apm
+Apache,已使用堆外内存大小,apache.instance.jvm.usedNonHeap,apm
+Apache,堆外内存最大值,apache.instance.jvm.maxNonHeap,apm
+Apache,堆内存老年代大小,apache.instance.jvm.heapOldGen,apm
+Apache,堆内存年轻代Survivor区大小,apache.instance.jvm.heapYongGenSurvivor,apm
+Apache,堆内存年轻代Eden区大小,apache.instance.jvm.heapYongGenEden,apm
+Apache,元空间大小,apache.instance.jvm.metaspace,apm
+Apache,加载class数量,apache.instance.jvm.loadedClassCount,apm
+Apache,存活对象数量,apache.instance.jvm.liveObjectCount,apm
+Apache,对象占用内存大小,apache.instance.jvm.objectMemory,apm
+Apache,对象生命周期,apache.instance.jvm.objectLifecycle,apm
+Apache,对象引用计数,apache.instance.jvm.objectReferenceCount,apm
+Apache,线程总数量,apache.instance.thread.threadsCount,apm
+Apache,等待中线程数量,apache.instance.thread.waitingThreadCount,apm
+Apache,新建线程数量,apache.instance.thread.newThreadCount,apm
+Apache,超时等待线程数量,apache.instance.thread.timedWaitingCount,apm
+Apache,运行线程数,apache.instance.thread.runningThreadCount,apm
+Apache,阻塞线程数,apache.instance.thread.blockedThreadCount,apm
+Apache,死锁线程数,apache.instance.thread.deadlockThreadCount,apm
+Apache,最大线程数,apache.threadpool.thread.maxThreadCount,apm
+Apache,核心线程数,apache.threadpool.thread.coreThreadCount,apm
+Apache,存在线程数,apache.threadpool.thread.currentThreadCount,apm
+Apache,活跃线程数,apache.threadpool.thread.activeThreadCount,apm
+Apache,任务总数,apache.threadpool.task.taskCount,apm
+Apache,队列任务数量,apache.threadpool.task.queueTaskCount,apm
+Apache,队列剩余容量,apache.threadpool.task.queueRemainingCapacity,apm
+Apache,已完成任务数,apache.threadpool.task.completedTaskCount,apm
+Apache,等待任务数,apache.threadpool.task.waitingTaskCount,apm
+Apache,拒绝任务数,apache.threadpool.task.refusedTaskCount,apm
+Apache,CPU Time,apache.instance.java.cpuTime,apm
+Apache,Threads Created,apache.instance.java.threadsCreated,apm
+Apache,Thrown Exceptions,apache.instance.java.thrownExceptions,apm
+Apache,Allocated Memory,apache.instance.java.allocatedMemory,apm
+Apache,Allocations,apache.instance.java.allocations,apm
+Apache,Wall Time,apache.instance.java.wallTime,apm
+Apache,Lock Wait Time,apache.instance.java.lockWaitTime,apm
+Apache,Lock Wait Events,apache.instance.java.lockWaitEvents,apm
+Apache,Socket I/O Read Time,apache.instance.java.socketIoReadTime,apm
+Apache,Socket I/O Write Time,apache.instance.java.socketIoWriteTime,apm
+Apache,Socket I/O Read,apache.instance.java.socketIoRead,apm
+Apache,Socket I/O Written,apache.instance.java.socketIoWritten,apm
+Apache,File I/O Time,apache.instance.java.fileIoTime,apm
+Apache,File I/O Written,apache.instance.java.fileIoWritten,apm
+Apache,File I/O Read,apache.instance.java.fileIoRead,apm
+Zookeeper,节点是否是leader,zk_server_leader,apm
+Zookeeper,服务是否启动,zk_up,apm
+Zookeeper,发送网络包数量,zk_packets_sent,apm
+Zookeeper,接收网络包数量,zk_packets_received,apm
+Zookeeper,临时节点的数量,zk_ephemerals_count,apm
+Zookeeper,znode数量,zk_znode_count,apm
+Zookeeper,观察者数量,zk_watch_count,apm
+Zookeeper,节点删除的次数,zk_cnt_node_deleted_watch_count,apm
+Zookeeper,节点结构变化的次数,zk_cnt_node_children_watch_count,apm
+Zookeeper,节点更新的次数,zk_cnt_node_changed_watch_count,apm
+Zookeeper,节点创建的次数,zk_cnt_node_created_watch_count,apm
+Zookeeper,请求的平均延迟时间,zk_avg_latency,apm
+Zookeeper,请求的最小延迟时间,zk_min_latency,apm
+Zookeeper,请求的最大延迟时间,zk_max_latency,apm
+Zookeeper,读取操作时延,zk_cnt_readlatency,apm
+Zookeeper,提案处理时延,zk_cnt_proposal_latency,apm
+Zookeeper,写入操作时延,zk_cnt_updatelatency,apm
+Zookeeper,未处理的请求数量,zk_outstanding_requests,apm
+Zookeeper,zk打开文件描述符的数量,zk_open_file_descriptor_count,apm
+Zookeeper,zk允许打开文件描述符的最大数量,zk_max_file_descriptor_count,apm
+Zookeeper,存储数据大小,zk_approximate_data_size,apm
+Zookeeper,客户端活跃连接数,zk_num_alive_connections,apm
+Zookeeper,全局会话数,zk_global_sessions,apm
+Zookeeper,本地会话数,zk_local_sessions,apm
+Zookeeper,节点状态,zk_server_state,apm
+Weblogic,请求次数,webLogic.instance.throughput.requestCount,apm
+Weblogic,吞吐率,webLogic.instance.throughput.requestCountPerMinute,apm
+Weblogic,错误次数,webLogic.instance.error.errorCount,apm
+Weblogic,每分钟错误次数,webLogic.instance.error.errorCountPerMinute,apm
+Weblogic,错误请求次数,webLogic.instance.error.errorRequestCount,apm
+Weblogic,请求错误率,webLogic.instance.error.errorRequestRatio,apm
+Weblogic,Apdex,webLogic.instance.performance.apdex,apm
+Weblogic,响应时间,webLogic.instance.performance.responseTime,apm
+Weblogic,正常请求次数,webLogic.instance.performance.normalCount,apm
+Weblogic,较慢请求次数,webLogic.instance.performance.relativeSlowCount,apm
+Weblogic,很慢请求次数,webLogic.instance.performance.verySlowCount,apm
+Weblogic,较慢请求占比,webLogic.instance.performance.relativeSlowRatio,apm
+Weblogic,很慢请求占比,webLogic.instance.performance.verySlowRatio,apm
+Weblogic,GC总耗时,webLogic.instance.jvm.gcTimeTotal,apm
+Weblogic,GC次数,webLogic.instance.jvm.gcCount,apm
+Weblogic,内存使用率,webLogic.instance.jvm.memoryUsageRatio,apm
+Weblogic,堆内存使用率,webLogic.instance.jvm.heapMemoryusageRatio,apm
+Weblogic,已提交堆内存大小,webLogic.instance.jvm.committedHeap,apm
+Weblogic,已使用堆内存大小,webLogic.instance.jvm.usedHeap,apm
+Weblogic,堆内存最大值,webLogic.instance.jvm.maxHeap,apm
+Weblogic,已提交堆外内存大小,webLogic.instance.jvm.committedNonHeap,apm
+Weblogic,已使用堆外内存大小,webLogic.instance.jvm.usedNonHeap,apm
+Weblogic,堆外内存最大值,webLogic.instance.jvm.maxNonHeap,apm
+Weblogic,堆内存老年代大小,webLogic.instance.jvm.heapOldGen,apm
+Weblogic,堆内存年轻代Survivor区大小,webLogic.instance.jvm.heapYongGenSurvivor,apm
+Weblogic,堆内存年轻代Eden区大小,webLogic.instance.jvm.heapYongGenEden,apm
+Weblogic,元空间大小,webLogic.instance.jvm.metaspace,apm
+Weblogic,加载class数量,webLogic.instance.jvm.loadedClassCount,apm
+Weblogic,存活对象数量,webLogic.instance.jvm.liveObjectCount,apm
+Weblogic,对象占用内存大小,webLogic.instance.jvm.objectMemory,apm
+Weblogic,对象生命周期,webLogic.instance.jvm.objectLifecycle,apm
+Weblogic,对象引用计数,webLogic.instance.jvm.objectReferenceCount,apm
+Weblogic,线程总数量,webLogic.instance.thread.threadsCount,apm
+Weblogic,等待中线程数量,webLogic.instance.thread.waitingThreadCount,apm
+Weblogic,新建线程数量,webLogic.instance.thread.newThreadCount,apm
+Weblogic,超时等待线程数量,webLogic.instance.thread.timedWaitingCount,apm
+Weblogic,运行线程数,webLogic.instance.thread.runningThreadCount,apm
+Weblogic,阻塞线程数,webLogic.instance.thread.blockedThreadCount,apm
+Weblogic,死锁线程数,webLogic.instance.thread.deadlockThreadCount,apm
+Weblogic,最大线程数,webLogic.threadpool.thread.maxThreadCount,apm
+Weblogic,核心线程数,webLogic.threadpool.thread.coreThreadCount,apm
+Weblogic,存在线程数,webLogic.threadpool.thread.currentThreadCount,apm
+Weblogic,活跃线程数,webLogic.threadpool.thread.activeThreadCount,apm
+Weblogic,任务总数,webLogic.threadpool.task.taskCount,apm
+Weblogic,队列任务数量,webLogic.threadpool.task.queueTaskCount,apm
+Weblogic,队列剩余容量,webLogic.threadpool.task.queueRemainingCapacity,apm
+Weblogic,已完成任务数,webLogic.threadpool.task.completedTaskCount,apm
+Weblogic,等待任务数,webLogic.threadpool.task.waitingTaskCount,apm
+Weblogic,拒绝任务数,webLogic.threadpool.task.refusedTaskCount,apm
+Weblogic,CPU Time,webLogic.instance.java.cpuTime,apm
+Weblogic,Threads Created,webLogic.instance.java.threadsCreated,apm
+Weblogic,Thrown Exceptions,webLogic.instance.java.thrownExceptions,apm
+Weblogic,Allocated Memory,webLogic.instance.java.allocatedMemory,apm
+Weblogic,Allocations,webLogic.instance.java.allocations,apm
+Weblogic,Wall Time,webLogic.instance.java.wallTime,apm
+Weblogic,Lock Wait Time,webLogic.instance.java.lockWaitTime,apm
+Weblogic,Lock Wait Events,webLogic.instance.java.lockWaitEvents,apm
+Weblogic,Socket I/O Read Time,webLogic.instance.java.socketIoReadTime,apm
+Weblogic,Socket I/O Write Time,webLogic.instance.java.socketIoWriteTime,apm
+Weblogic,Socket I/O Read,webLogic.instance.java.socketIoRead,apm
+Weblogic,Socket I/O Written,webLogic.instance.java.socketIoWritten,apm
+Weblogic,File I/O Time,webLogic.instance.java.fileIoTime,apm
+Weblogic,File I/O Written,webLogic.instance.java.fileIoWritten,apm
+Weblogic,File I/O Read,webLogic.instance.java.fileIoRead,apm

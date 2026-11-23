@@ -1,0 +1,13 @@
+# 公共基础设施配置文件
+# 仅配置 MySQL/Kafka 基础设施地址，topic 名称使用 config_loader.py 中的内置默认值
+
+mysql:
+  host: 192.168.103.201
+  port: 3306
+  user: root
+  password: "MySQL@123"
+
+kafka:
+  brokers: "192.168.103.198:29092,192.168.103.199:29092,192.168.103.200:29092"
+
+

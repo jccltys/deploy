@@ -1,0 +1,30 @@
+<div class="editor-header">
+  <div><span class="filename">config.yaml</span> <span class="path"></span></div>
+</div>
+<div class="editor-wrap">
+  <div class="editor-gutter" id="gutter"></div>
+  <textarea id="config-editor" name="config_content" form="config-form"
+    spellcheck="false" wrap="off">{{ config_raw }}</textarea>
+</div>
+<div class="card" style="margin-top:16px">
+  <div class="card-header">
+    <h4>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      Deploy Settings
+    </h4>
+  </div>
+  <div class="card-body">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="form-group">
+        <label for="install_dir">Install Directory</label>
+        <input type="text" id="install_dir" name="install_dir" form="config-form"
+          value="{{ install_dir }}" placeholder="/data/install">
+      </div>
+      <div class="form-group">
+        <label for="package_dir">Package Directory</label>
+        <input type="text" id="package_dir" name="package_dir" form="config-form"
+          value="{{ package_dir }}" placeholder="/data/packages">
+      </div>
+    </div>
+  </div>
+</div>

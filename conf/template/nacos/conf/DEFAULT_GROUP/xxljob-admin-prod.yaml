@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      validation-query: select 1
+#项目模块集中配置
+origin:
+  #工作流模块开发生产环境数据库地址
+  datasource:
+    job:
+      prod:
+        # MySql （需要修改）
+        url: jdbc:mysql://192.168.31.171:3306/xxl_job?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=GMT%2B8
+        # 账号 （需要修改）
+        username: root
+        # 密码 （需要修改）
+        password: MySQL@123
+  #多租户配置
+  tenant:
+    #动态数据源功能
+    dynamic-datasource: false
+    #动态数据源全局扫描
+    dynamic-global: false

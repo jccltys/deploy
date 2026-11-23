@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Hosts - 主机管理{% endblock %}
+
+{% block nav_hosts %}active{% endblock %}
+
+{% block head %}
+<style>
+.host-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:16px}
+.hc{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all var(--transition)}
+.hc:hover{border-color:var(--border-light)}
+.hc-head{display:flex;align-items:center;gap:14px;padding:16px 18px;border-bottom:1px solid var(--border)}
+.hc-head .h-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--accent-dim);color:var(--accent)}
+.hc-head .h-info{flex:1;min-width:0}
+.hc-head .h-info .ip{font-family:var(--font-mono);font-size:0.9rem;font-weight:600;color:var(--fg)}
+.hc-head .h-info .desc{font-size:0.78rem;color:var(--fg-muted);display:flex;align-items:center;gap:8px;margin-top:1px}
+.hc-body{padding:14px 18px}
+.hc-section{margin-bottom:14px}
+.hc-section:last-child{margin-bottom:0}
+.hc-section .s-label{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--fg-muted);margin-bottom:6px}
+.comp-tag-cloud{display:flex;gap:4px;flex-wrap:wrap}
+.comp-tag-cloud .ct{font-size:0.7rem;padding:3px 10px;border-radius:4px;background:var(--accent-dim);color:var(--accent);border:1px solid transparent}
+.summary-bar{display:flex;gap:24px;padding:16px 20px;background:var(--bg-elevated);border-radius:var(--radius-sm);margin-bottom:20px;flex-wrap:wrap}
+.summary-bar .s-item{display:flex;align-items:center;gap:8px;font-size:0.85rem}
+.summary-bar .s-item .num{font-weight:700;font-size:1.1rem}
+.summary-bar .s-item .num.green{color:var(--accent)}
+.summary-bar .s-item .lbl{color:var(--fg-secondary);font-size:0.78rem}
+@media(max-width:768px){.host-grid{grid-template-columns:1fr}}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="topbar">
+  <div>
+    <div class="breadcrumb">
+      <a href="/dashboard/">Dashboard</a>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      <span>Hosts</span>
+    </div>
+    <h2>主机管理 <span>目标主机配置信息</span></h2>
+  </div>
+</div>
+
+<div class="summary-bar">
+  <div class="s-item"><span class="num green">{{ host_count }}</span><span class="lbl">节点</span></div>
+  <div class="s-item"><span class="num">{{ component_count }}</span><span class="lbl">组件实例</span></div>
+</div>
+
+<div class="host-grid">
+{% for host in hosts %}
+  <div class="hc">
+    <div class="hc-head">
+      <div class="h-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16"/><path d="M4 20V4"/><path d="M8 8h8"/><path d="M8 12h6"/><path d="M8 16h10"/></svg>
+      </div>
+      <div class="h-info">
+        <div class="ip">{{ host.ip }}</div>
+        <div class="desc"><span>{{ host.hostname }}</span><span>&middot;</span><span>ssh:{{ host.ssh_port }}</span></div>
+      </div>
+    </div>
+    <div class="hc-body">
+      <div class="hc-section">
+        <div class="s-label">Deployed Components</div>
+        <div class="comp-tag-cloud">
+          {% for comp in host.components %}
+          <span class="ct">{{ comp.name }}</span>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="hc-section">
+        <div class="s-label">SSH Config</div>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.82rem;color:var(--fg-secondary);">
+          <span>User: <strong style="font-weight:500;">{{ host.ssh_user }}</strong></span>
+          <span>Auth: <strong style="font-weight:500;">{{ host.ssh_auth }}</strong></span>
+          <span>Port: <strong style="font-weight:500;">{{ host.ssh_port }}</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+</div>
+{% endblock %}

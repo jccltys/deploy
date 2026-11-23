@@ -1,0 +1,423 @@
+server:
+  port: 9091
+  tomcat:
+    connection-timeout: 3000
+spring:
+  application:
+    name: warRoom
+  cloud:
+    nacos:
+      # 注册中心配置
+      discovery:
+        namespace: 
+        password: nacos
+        register-enabled: true
+        server-addr: 192.168.31.170:8848
+        username: nacos
+  data:
+    neo4j:
+      uri: bolt://192.168.31.170:7687/neo4j
+      username: neo4j
+      password: 78uiJKM<
+  clickhouse:
+    druid:
+      username: default
+      password: Hsbk@123
+      url: jdbc:clickhouse://192.168.31.170:8123/refiner_pro?failover=1&load_balancing_policy=roundRobin
+      driver-class-name: com.clickhouse.jdbc.ClickHouseDriver
+  datasource:
+    # MySQL数据源配置
+    username: root
+    password: MySQL@123
+    url: jdbc:mysql://192.168.31.171:3306/refiner_pro?useSSL=false&allowMultiQueries=true&characterEncoding=utf8&rewriteBatchedStatements=true&useAffectedRows=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      # 初始化连接池数量
+      initial-size: 10
+      # 最小连接池数量
+      min-idle: 1
+      # 最大连接池数量
+      maxActive: 10
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 30000
+      # 用来检测连接是否有效，要求是一个查询语句。
+      #      validationQuery: SELECT 1 FROM DUAL
+      #      validationQuery: SELECT 1
+      # 连接空闲时执行validationQuery检测(是否空闲根据timeBetweenEvictionRunsMillis等判断)
+      testWhileIdle: true
+      # 申请连接时执行validationQuery检测
+      testOnBorrow: false
+      # 归还连接时执行validationQuery检测
+      testOnReturn: false
+      # 关闭druid监控
+      filter:
+        config:
+          enabled: false
+      web-stat-filter:
+        enabled: false
+      stat-view-servlet:
+        enabled: false
+  flyway: # 自动执行sql变更脚本
+    #    baseline-version: 5.5.0
+    #    baseline-on-migrate: true
+    enabled: false
+    table: refiner_flyway_schema_history
+  #    locations: db/migration/postgresql
+  #    locations: db/migration/dm
+    locations: db/migration/mysql
+  kafka: # kafka相关配置
+    bootstrap-servers: 192.168.31.172:9092,192.168.31.173:9092,192.168.31.174:9092
+    consumer:
+      auto-offset-reset: latest
+      group-id: refiner
+      max-poll-records: 500
+    producer:
+      # 每次批量发送消息的数量
+      batch-size: 1000
+      # 发送失败重试次数
+      retries: 3
+
+  redis:
+    host: 192.168.31.170
+    database: 1
+    port: 6379
+    password: Reids@123
+
+  # 架构数据库
+  arch:
+    jdbc-url: jdbc:mysql://192.168.31.171:3306/ARCH?useSSL=false&allowMultiQueries=true&characterEncoding=utf8&rewriteBatchedStatements=true&useAffectedRows=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+  system-report:
+    jdbc-url: jdbc:mysql://192.168.31.171:3306/SYSTEM_REPORT?useSSL=false&allowMultiQueries=true&characterEncoding=utf8&rewriteBatchedStatements=true&useAffectedRows=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+  # OPSDATA数据库
+  ops:
+    jdbc-url: jdbc:mysql://192.168.31.171:3306/OPSDATA?useSSL=false&allowMultiQueries=true&characterEncoding=utf8&rewriteBatchedStatements=true&useAffectedRows=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+
+  #一体化监控视图指标
+  ods-metric:
+    jdbc-url: jdbc:clickhouse://192.168.31.170:8123,192.168.31.171:8123/refiner_pro?failover=1&load_balancing_policy=roundRobin
+    driver-class-name: com.clickhouse.jdbc.ClickHouseDriver
+    username: default
+    password: 123456
+
+  #风险详情指标
+  system-metric:
+    jdbc-url: jdbc:clickhouse://192.168.31.170:8123,192.168.31.171:8123/refiner_pro?failover=1&load_balancing_policy=roundRobin
+    driver-class-name: com.clickhouse.jdbc.ClickHouseDriver
+    username: default
+    password: 123456
+  #自研指标
+  self-dev:
+    jdbc-url: jdbc:clickhouse://192.168.31.170:8123,192.168.31.171:8123/refiner_pro?failover=1&load_balancing_policy=roundRobin
+    driver-class-name: com.clickhouse.jdbc.ClickHouseDriver
+    username: default
+    password: 123456
+
+  influxdb:
+    url: http://192.168.31.170:8086
+    username: admin
+    password: admin
+    database: dwd_all_metric
+
+
+cmdb:
+  workType: first
+  table:
+    max: 20
+    reserveTime: 5
+platform:
+  jax: 数字运维中台
+  refiner: 告警辨析中心
+  authentication: 夏洛克AIOps运营平台
+  gateway: 网关
+  processor: 告警处理引擎
+
+
+refiner:
+  centerName: odmp
+  kafka:
+    groupId: refiner-dev
+#    topic-prefix: dev-
+    topic-suffix: _test
+    topic:
+      itsm-order: refiner_create_itsm_order_data
+      im-push: G_P_LINK_IMMSG_PUSH
+      im-chat: G_P_LINK_IMMSG_CHAT
+    group:
+      # 自定义通知
+      custom-notify: custom1111
+      custom-notify-prop:
+        max.poll.records: 55
+        max.poll.interval.ms: 8888888
+      im-chat-prop:
+        max.poll.records: 100
+  filterPath:
+    - /api/v3.1/alert/*
+    - /api/v3.1/cicc/*
+  enableCk: true
+  coincideDay: 7
+  ck:
+    clusterName: ck_cluster
+    localSuffix: _local
+  plugin:
+    path: /apps/refiner-pro/plugins/custom     # 自定义二开插件的存放目录，注意与下方的`plugin.pluginPath` 的系统内置插件目录区分
+  processMode: jax
+  coordination:
+    feishu:
+      domain: https://open.feishu.cn
+  calendar:
+    # 运维日历事件计算保留T日
+    holdDay: 7
+  management:
+    tools:
+      port: 9529
+    processor:
+      port: 9528
+  csrf:
+    enable: false
+  cross:
+    enable: false
+  chameleon:
+    # 聚类算法zk配置
+    configDir: config/chameleon_zk.json
+    # 聚类算法指定zookeeper地址，聚类算法模板信息将会存储在该zookeeper上
+    zookeeper: 192.168.31.175:2181
+    # 不同的告警系统，在升级(告警版本>=5.6)的时候才需要配置，默认不用修改
+    oldClusterName: chameleon/refiner
+    # 不同的告警系统，需要配置不同的集群名称
+    clusterName: chameleon/v2/refiner/dev
+    # zookeeper: 192.168.31.175:2181
+
+  shell:
+    # 指定shell脚本的执行用于,默认为root
+    user: root
+
+  unified: # 统一门户
+    # 调试模式 仅限于开发时才能设置为true
+    debug-mode: true
+    # 门户token私钥
+    privateKey: MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAL0gBFpckY8s4uxWodUIj3EtKdrgRopZTqccRQ4cW9gb0tssyb2HoNjxcmwL+J47jBFlypCdQ5u6GbjZKzuUN/Va+z1xRlpSXOe3r6JvLR6HCP+KSnrundHs2PKDQsLEBucklgr3z9wW4qbWHnHriJRvmBi9QvRiv3NIXDaD7tnxAgMBAAECgYEAsIyB48TEUQ7K62tX+WHbXgCWMO/qid4i0VdPk4OfrVcT+GyQC3DgE4UZlol6VmQqNld6yJM2eNo6htecRyrvLG4FwLQcWIBqJQySoyYeekKLQVsnYU4vGjvA92E8cUHfnTJ/ZSTUFLRDinzCMRvL4mHaINVQSizBTAnZpA3eqAECQQDhxQRX71uJGAP8v9bEJy5jvdidhGxYFaQLfUik4rDxkOr+4RaNSWGAcKLfPrfk6zHvXbp6UkKZsk7uMpj42WSBAkEA1nLj5m6DcUFI6lfzonrpnCvsiaQhvOOXPsMpNoNPFdBvgOeACIVCSv2QQUD0+N1fXRjz243/iDhEic7WqKb9cQJAN/rb+tnUvod/5ZnDrNtyOzUFkvkUzDqBdH/aFVhIO32NZyl0qA+751cGa4hnnJFczldVN6NR9D4sKA/PslRlAQJBAJAOw+vTB3d4TLwn8yGOAgqIMzDPUl6qYLqnrbLSCLl1uMHWQdr3ce4gYdyD/0yCoYJPtdkijar7aYdNrEPFUfECQCxkn830hLKQM9GCdEkJEI3bW6UqzoUWweExul1AD5R9E8wKvjkBSUaaTuyQQpxw/xqJBveMYWJmNiKKQxSG72A=
+    # 门户token公钥
+    publicKey: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC9IARaXJGPLOLsVqHVCI9xLSna4EaKWU6nHEUOHFvYG9LbLMm9h6DY8XJsC/ieO4wRZcqQnUObuhm42Ss7lDf1Wvs9cUZaUlznt6+iby0ehwj/ikp67p3R7Njyg0LCxAbnJJYK98/cFuKm1h5x64iUb5gYvUL0Yr9zSFw2g+7Z8QIDAQAB
+  website: # 前端代码路径配置
+    indexPath: ${refiner.website.rootPath}/index.html
+    rootPath: config/static
+
+  web:
+    client:
+      pending-acquire-timeout: 60
+      max-connections: 1000
+      pending-acquire-max-count: 10000
+    rest-template:
+      read-timeout: 3000
+      connect-timeout: 21000
+      async-executor:
+        core-poolSize: 11
+        max-pool-size: 21
+        queue-capacity: 30
+
+  # 告警作战室
+  war-room:
+    mock: true
+    api: http://192.168.31.170:8002
+    secret: mvDsEQac
+    source: ALCC
+    net-username:
+      - yaokaijun
+      - cuimingbo
+    cloud-username:
+      - zhangliang020532
+      - xieyangjun
+    event-username:
+      - maodacheng
+    default-group:
+      - group-id: rtXsLpJ1RvklNxvKsta-t8
+        group-name: 重点系统保障群
+      - group-id: rtXsLpJ1RvklNxvKsta-t6
+        group-name: 测试系统保障群-1
+      - group-id: rtXsLpJ1RvklNxvKsta-t4
+        group-name: 测试系统保障群-2
+    default-user:
+      - "027045"
+      - "018615"
+    robot: robot_znyw
+    # 多少天之前的作战室自动关闭
+    auto-close-day: 7
+    im:
+      kafka:
+        bootstrap-servers: 192.168.31.172:9092,192.168.31.173:9092,192.168.31.174:9092
+      redirect-url: https://applink.gtja.net
+      secret-push: mvDsEQac
+      secret-chat: ba60cb8f41c8b28e54e73ff19226da19
+    ai-model:
+      api: http://192.168.102.181:8100/
+      poll-times: 10
+
+  #拓扑关联
+  topo:
+    metric-name:
+      - port
+      - telnet
+      - mem
+      - memory
+      - 内存
+      - tcp
+      - cpu
+      - disk
+      - 磁盘
+      - 进程
+      - process
+
+  #日志查询
+  log:
+    api: http://paas.onlyone.com
+    similar-api: http://10.240.9.50:23458
+    basic-auth:
+      username: onlyone
+      password: onlyone
+    params:
+      username: liangkai027045
+      password: KQPibjY+xoh9dluPexoM5w==
+      grant_type: password
+      scope: server
+  
+  # 电话外呼
+  call-out:
+    url: http://101.181.161.184:6060/ka_ivrCallList
+
+
+# xxl-job
+xxl:
+  job:
+#    admin:
+#      address: http://192.168.31.171:28080/xxl-job-admin  #当采用去中台部署方式(即 `refiner.processMode != jax`)，需要指定该项,举例: http://192.168.31.171:28080/xxl-job-admin
+#    login:
+#      username:      #当采用去中台部署方式(即 `refiner.processMode != jax`)，需要指定该项，xxl-job的登录用户
+#      password:     #当采用去中台部署方式(即 `refiner.processMode != jax`)，需要指定该项，xxl-job的登录密码
+    executor:
+      port: 19099         #保证与其他进程端口不冲突即可
+    access-token: qwer!
+
+  schedule.batchupdatesql.enabled: false
+  schedule.batchupdatesql.size: 1000
+  triggerpool.job.max: 5000
+  triggerpool.queue.max: 50000
+  triggerpool.fast.max: 200
+  triggerpool.slow.max: 100
+  logretentionrecords: 100
+  logretentiondays: 7
+  accessToken: qwer!
+  admin.addresses:
+  executor.ip:
+  executor.port: 9998
+  executor.logpath: logs/xxl
+  executor.logretentiondays: 7
+  # 提供给自监控中心的信息，不需要改动
+  #management:
+
+# 分表
+sharding:
+  enabled: false
+  properties:
+    sql-show: false
+    sharding-type: year
+    retention: 2
+    tables:
+      tb_event:
+        sharding-column: arrive_time
+      tb_extend:
+        sharding-column: arrive_time
+      tb_alert:
+        sharding-column: arrive_time
+      tb_alert_extend:
+        sharding-column: arrive_time
+    bind-tables:
+      - tb_event,tb_extend
+      - tb_alert,tb_alert_extend
+
+logging:
+  file:
+    # 当日志归档文件的总大小超过该阈值时，将删除备份。
+    clean-history-on-start: true
+    name: ${user.dir}/logs/${spring.application.name}.log
+    # 单日志文件大小，默认为10M
+    max-size: 20MB
+    # 日志档案的总大小
+    total-size-cap: 200MB
+    # 生成的日志文件压缩包的存档时间，默认是0，表示永远存档，如果大于0表示最多保留x天。和 max-size 一同使用
+    max-history: 30
+  level:
+    com:
+      eoi:
+        refiner:
+          dao:
+            clickhouse:
+              mapper: debug
+
+management:
+  server:
+    port: 0
+    ssl:
+      enabled: false
+  endpoint:
+    health:
+      show-details: ALWAYS
+    logfile:
+      external-file: ${user.dir}/logs/${spring.application.name}.log
+  endpoints:
+    web:
+      base-path: /${spring.application.name}
+      exposure:
+        include: health,info
+  health:
+    ldap:
+      enabled: false
+    mail:
+      enabled: false
+    neo4j:
+      enabled: false
+
+plugin:
+  mode: dev
+  pluginPath: /apps/refier-pro/plugins/system     #插件包的存放目录，建议用绝对路径
+  pluginConfigFilePath: /apps/refiner-pro/plugins/config # 系统插件包的配置存放目录
+
+knife4j:
+  enable: true
+  production: false
+  basic:
+    enable: false
+    username: test
+    password: 123123
+
+
+mybatis-plus:
+  db:
+    type: mysql
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+ip:
+  whitelist: 192.168.1.2,192.168.0.4
+
+voice:
+  permission:
+    user:
+      list: liangkai,admin
+headless:
+  url: http://192.168.31.171
+  port: 8080
+  upload:
+    path: ./temp/upload/
+  auth:
+    password: admin123

@@ -1,0 +1,560 @@
+{% extends "base.html" %}
+
+{% block title %}Service Manager - 服务管理{% endblock %}
+
+{% block nav_service_manager %}active{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/css/service_manager.css">
+<style>
+.sidebar-nav a[href="/service-manager/"] { background: var(--accent-dim); color: var(--accent); font-weight: 500; }
+.sidebar-nav a[href="/service-manager/"]::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 20px; background: var(--accent); border-radius: 0 3px 3px 0; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="topbar">
+  <div>
+    <div class="breadcrumb">
+      <a href="/dashboard/">Dashboard</a>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      <span>Service Manager</span>
+    </div>
+    <h2>Service Manager <span>服务启停管理</span></h2>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <span class="sm-refresh-time" id="refreshTime"></span>
+    <button class="sm-refresh-btn" id="refreshBtn" onclick="refreshAllStatus(true)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      <span class="spinner"></span>
+      刷新状态
+    </button>
+  </div>
+</div>
+
+<div class="sm-tabs">
+  <div class="sm-tab active" data-tab="byhost" onclick="switchTab(this, 'byhost')">By Host</div>
+  <div class="sm-tab" data-tab="bycomp" onclick="switchTab(this, 'bycomp')">By Component</div>
+</div>
+
+{# ─── By Host Tab ─── #}
+<div class="sm-pane active" id="pane-byhost">
+  <div class="sm-sidebar" id="hostSidebar">
+    <div class="sm-sidebar-title">主机列表</div>
+    <ul class="sm-sidebar-list" id="hostList">
+      {% for h in hosts %}
+      <li data-ip="{{ h.ip }}" onclick="selectHost(this)"{% if loop.first %} class="active"{% endif %}>
+        {{ h.ip }}
+      </li>
+      {% endfor %}
+      {% if not hosts %}
+      <li style="cursor:default;color:var(--fg-muted);font-size:0.78rem;">暂无可管理的主机</li>
+      {% endif %}
+    </ul>
+  </div>
+
+  <div class="sm-main" id="hostMain">
+    {% if hosts %}
+    <div class="sm-host-info">
+      <span class="ip" id="hostTitle">{{ hosts[0].ip if hosts else '' }}</span>
+      <span class="count" id="hostSvcCount"></span>
+    </div>
+    <div class="sm-toolbar">
+      <label class="check-all"><input type="checkbox" onchange="toggleAllCheckbox(this, 'hostSvcTable')"> 全选</label>
+      <div class="sep"></div>
+      <button class="sm-btn sm-btn-start" onclick="batchOperate('host','start')" disabled id="hostBatchStart">批量启动</button>
+      <button class="sm-btn sm-btn-stop" onclick="batchOperate('host','stop')" disabled id="hostBatchStop">批量停止</button>
+      <button class="sm-btn sm-btn-restart" onclick="batchOperate('host','restart')" disabled id="hostBatchRestart">批量重启</button>
+    </div>
+    <table class="sm-table" id="hostSvcTable">
+      <thead>
+        <tr>
+          <th class="chk"></th>
+          <th>Service</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="hostSvcBody"></tbody>
+    </table>
+    {% else %}
+    <div class="sm-empty">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      <p>暂无已部署的组件</p>
+      <p class="sub">请先在 config.yaml 中配置组件与主机</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{# ─── By Component Tab ─── #}
+<div class="sm-pane" id="pane-bycomp">
+  <div class="sm-sidebar" id="compSidebar">
+    <div class="sm-sidebar-title">组件列表</div>
+    <ul class="sm-sidebar-list" id="compList">
+      {# 按字母排序：分组（可展开）+ 独立服务 #}
+      {% for item in sidebar %}
+      {% if item.type == 'group' %}
+      <li class="sm-group-header" onclick="toggleGroup(this)">
+        <span style="display:flex;align-items:center;gap:7px;">
+          <span class="sm-group-arrow">▶</span>
+          {{ item.name }}
+        </span>
+        <span class="count">{{ item.children|length }}</span>
+      </li>
+      <ul class="sm-group-children">
+        {% for child in item.children %}
+        <li data-comp="{{ child.name }}" onclick="selectComponent(this)">
+          <span style="display:flex;align-items:center;gap:7px;padding-left:20px;">{% if child.icon %}{{ child.icon|safe }}{% endif %}{{ child.name }}</span>
+          <span class="count">{{ child.hosts|length }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <li data-comp="{{ item.name }}" onclick="selectComponent(this)">
+        <span style="display:flex;align-items:center;gap:7px;">{% if item.icon %}{{ item.icon|safe }}{% endif %}{{ item.name }}</span>
+        <span class="count">{{ item.hosts|length }}</span>
+      </li>
+      {% endif %}
+      {% endfor %}
+      {% if not groups and not standalone %}
+      <li style="cursor:default;color:var(--fg-muted);font-size:0.78rem;">暂无可管理的组件</li>
+      {% endif %}
+    </ul>
+  </div>
+
+  <div class="sm-main" id="compMain">
+    {% if services %}
+    <div class="sm-host-info">
+      <span style="display:flex;align-items:center;gap:7px;font-weight:600;" id="compTitle">{{ services[0].icon|safe if services[0].icon else '' }} {{ services[0].name if services else '' }}</span>
+      <span class="count" id="compHostCount"></span>
+    </div>
+    <div class="sm-toolbar">
+      <label class="check-all"><input type="checkbox" onchange="toggleAllCheckbox(this, 'compSvcTable')"> 全选</label>
+      <div class="sep"></div>
+      <button class="sm-btn sm-btn-start" onclick="batchOperate('comp','start')" disabled id="compBatchStart">批量启动</button>
+      <button class="sm-btn sm-btn-stop" onclick="batchOperate('comp','stop')" disabled id="compBatchStop">批量停止</button>
+      <button class="sm-btn sm-btn-restart" onclick="batchOperate('comp','restart')" disabled id="compBatchRestart">批量重启</button>
+    </div>
+    <table class="sm-table" id="compSvcTable">
+      <thead>
+        <tr>
+          <th class="chk"></th>
+          <th>Host</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="compSvcBody"></tbody>
+    </table>
+    {% else %}
+    <div class="sm-empty" style="grid-column:1/-1;">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      <p>暂无已部署的组件</p>
+      <p class="sub">请先在 config.yaml 中配置组件与主机</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="sm-toast" id="toastContainer"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// ─── data ───
+var SERVICES = {{ services|tojson|safe }};
+var GROUPS = {{ groups|tojson|safe }};
+var STANDALONE = {{ standalone|tojson|safe }};
+var SIDEBAR = {{ sidebar|tojson|safe }};
+var HOSTS = {{ hosts|tojson|safe }};
+var CURRENT_HOST = HOSTS.length > 0 ? HOSTS[0].ip : null;
+// 第一个可选中的项（独立服务 或 分组的第一个子服务）
+var CURRENT_COMP = (function(){
+  for (var i = 0; i < SIDEBAR.length; i++) {
+    var item = SIDEBAR[i];
+    if (item.type === 'item') return item.name;
+    if (item.type === 'group' && item.children.length > 0) return item.children[0].name;
+  }
+  return null;
+})();
+
+// ─── tab switch ───
+function switchTab(el, name) {
+  document.querySelectorAll('.sm-tab').forEach(function(t){t.classList.remove('active')});
+  document.querySelectorAll('.sm-pane').forEach(function(p){p.classList.remove('active')});
+  el.classList.add('active');
+  document.getElementById('pane-'+name).classList.add('active');
+  if (name === 'byhost' && CURRENT_HOST) renderHostServices(CURRENT_HOST);
+  if (name === 'bycomp' && CURRENT_COMP) renderCompHosts(CURRENT_COMP);
+}
+
+// ─── host selection ───
+function selectHost(el) {
+  document.querySelectorAll('#hostList li').forEach(function(li){li.classList.remove('active')});
+  el.classList.add('active');
+  CURRENT_HOST = el.dataset.ip;
+  renderHostServices(CURRENT_HOST);
+}
+
+function renderHostServices(ip) {
+  var body = document.getElementById('hostSvcBody');
+  document.getElementById('hostTitle').textContent = ip;
+  
+  var hostSvcs = SERVICES.filter(function(s){ return s.hosts.indexOf(ip) !== -1; });
+  document.getElementById('hostSvcCount').textContent = hostSvcs.length + ' services';
+  
+  if (hostSvcs.length === 0) {
+    body.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:40px;color:var(--fg-muted);">该主机无已部署的组件</td></tr>';
+    return;
+  }
+  
+  body.innerHTML = hostSvcs.map(function(s) {
+    return '<tr data-comp="' + s.name + '" data-host="' + ip + '">' +
+      '<td class="chk"><input type="checkbox" onchange="updateBatchButtons(\'host\')"></td>' +
+      '<td><span class="svc-name">' + (s.icon || '') + s.name + '</span></td>' +
+      '<td><span class="sm-status" id="hs-' + s.name + '"><span class="dot unknown"></span> 未知</span></td>' +
+      '<td class="sm-actions" id="ha-' + s.name + '">' +
+        '<button class="sm-btn sm-btn-start" onclick="operate(\'' + ip + '\',\'' + s.name + '\',\'start\',this)">启动</button>' +
+        '<button class="sm-btn sm-btn-stop" onclick="operate(\'' + ip + '\',\'' + s.name + '\',\'stop\',this)">停止</button>' +
+        '<button class="sm-btn sm-btn-restart" onclick="operate(\'' + ip + '\',\'' + s.name + '\',\'restart\',this)">重启</button>' +
+      '</td></tr>';
+  }).join('');
+  
+  // 切换主机时重置全选状态
+  document.querySelector('#pane-byhost .check-all input').checked = false;
+  updateBatchButtons('host');
+  
+  // 自动刷新状态
+  refreshHostStatus(ip, hostSvcs.map(function(s){return s.name;}));
+}
+
+// ─── tree toggle ───
+function toggleGroup(el) {
+  var ul = el.nextElementSibling;
+  if (!ul || !ul.classList.contains('sm-group-children')) return;
+  var hidden = ul.style.display === 'none';
+  ul.style.display = hidden ? 'block' : 'none';
+  el.querySelector('.sm-group-arrow').textContent = hidden ? '▼' : '▶';
+}
+
+// ─── component selection ───
+function selectComponent(el) {
+  document.querySelectorAll('#compList li').forEach(function(li){li.classList.remove('active')});
+  el.classList.add('active');
+  CURRENT_COMP = el.dataset.comp;
+  renderCompHosts(CURRENT_COMP);
+}
+
+function renderCompHosts(comp) {
+  var body = document.getElementById('compSvcBody');
+  var svc = SERVICES.find(function(s){return s.name === comp;});
+  if (!svc) { body.innerHTML = ''; return; }
+
+  document.getElementById('compTitle').innerHTML = (svc.icon || '') + ' ' + comp;
+  document.getElementById('compHostCount').textContent = svc.hosts.length + ' hosts';
+
+  if (svc.hosts.length === 0) {
+    body.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:40px;color:var(--fg-muted);">该组件未部署到任何主机</td></tr>';
+    return;
+  }
+
+  body.innerHTML = svc.hosts.map(function(ip) {
+    return '<tr data-comp="' + comp + '" data-host="' + ip + '">' +
+      '<td class="chk"><input type="checkbox" onchange="updateBatchButtons(\'comp\')"></td>' +
+      '<td><span style="font-family:var(--font-mono);font-size:0.82rem;">' + ip + '</span></td>' +
+      '<td><span class="sm-status" id="cs-' + comp + '-' + ip + '"><span class="dot unknown"></span> 未知</span></td>' +
+      '<td class="sm-actions" id="ca-' + comp + '-' + ip + '">' +
+        '<button class="sm-btn sm-btn-start" onclick="operate(\'' + ip + '\',\'' + comp + '\',\'start\',this)">启动</button>' +
+        '<button class="sm-btn sm-btn-stop" onclick="operate(\'' + ip + '\',\'' + comp + '\',\'stop\',this)">停止</button>' +
+        '<button class="sm-btn sm-btn-restart" onclick="operate(\'' + ip + '\',\'' + comp + '\',\'restart\',this)">重启</button>' +
+      '</td></tr>';
+  }).join('');
+
+  // 切换组件时重置全选状态
+  document.querySelector('#pane-bycomp .check-all input').checked = false;
+  updateBatchButtons('comp');
+
+  refreshCompStatus(comp, svc.hosts);
+}
+
+// ─── status ───
+function setStatus(elId, status) {
+  var el = document.getElementById(elId);
+  if (!el) return;
+  var dots = {'running':'dot running','stopped':'dot stopped','degraded':'dot degraded','unknown':'dot unknown','error':'dot error','timeout':'dot error'};
+  var labels = {'running':'● 运行','stopped':'○ 停止','degraded':'▲ 异常','unknown':'? 未知','error':'! 连接失败','timeout':'! 超时'};
+  var cls = dots[status] || 'dot unknown';
+  var lbl = labels[status] || '? 未知';
+  el.innerHTML = '<span class="' + cls + '"></span> ' + lbl;
+}
+
+// ─── refresh time ───
+var LAST_REFRESH = null;
+function updateRefreshTime() {
+  var el = document.getElementById('refreshTime');
+  if (!el) return;
+  var now = new Date();
+  var t = now.toLocaleTimeString('zh-CN', {hour12:false, hour:'2-digit', minute:'2-digit', second:'2-digit'});
+  if (LAST_REFRESH) {
+    el.textContent = '上次刷新: ' + t;
+  } else {
+    el.textContent = '';
+  }
+}
+
+// ─── retry helper ───
+var RETRY_COUNTS = {};
+function retryOnce(host, comps, mode, force) {
+  // 只重试状态为 error/timeout/unknown 的组件
+  var failed = [];
+  var self = this;
+  comps.forEach(function(c){
+    // By Host: id = hs-{comp}  |  By Comp: id = cs-{comp}-{host_ip}
+    var id = mode === 'host' ? 'hs-' + c : 'cs-' + host + '-' + c;
+    var el = document.getElementById(id);
+    if (el && (el.textContent.indexOf('连接失败') !== -1 || el.textContent.indexOf('超时') !== -1 || el.textContent.indexOf('未知') !== -1)) {
+      failed.push(c);
+    }
+  });
+  if (failed.length === 0) return;
+  var key = host + ':' + mode;
+  RETRY_COUNTS[key] = (RETRY_COUNTS[key] || 0) + 1;
+  if (RETRY_COUNTS[key] > 3) return; // 最多重试3次
+  setTimeout(function(){
+    if (mode === 'host') {
+      refreshHostStatus(host, failed, true);
+    } else {
+      refreshCompStatus(host, failed, true);
+    }
+  }, 2000);
+}
+
+function setLoading(elId) {
+  var el = document.getElementById(elId);
+  if (el) el.innerHTML = '<span class="dot loading"></span> 查询中...';
+}
+
+function refreshAllStatus(force) {
+  document.getElementById('refreshBtn').classList.add('loading');
+  LAST_REFRESH = new Date();
+  if (document.getElementById('pane-byhost').classList.contains('active')) {
+    if (CURRENT_HOST) {
+      var rows = document.querySelectorAll('#hostSvcBody tr');
+      var comps = Array.from(rows).map(function(r){return r.dataset.comp;}).filter(Boolean);
+      refreshHostStatus(CURRENT_HOST, comps, force);
+    }
+  } else {
+    if (CURRENT_COMP) {
+      var svc = SERVICES.find(function(s){return s.name === CURRENT_COMP;});
+      if (svc) refreshCompStatus(CURRENT_COMP, svc.hosts, force);
+    }
+  }
+  updateRefreshTime();
+}
+
+function refreshHostStatus(host, comps, force) {
+  if (!comps || comps.length === 0) {
+    document.getElementById('refreshBtn').classList.remove('loading');
+    return;
+  }
+  comps.forEach(function(c){ setLoading('hs-' + c); });
+  fetch('/service-manager/api/status', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({host: host, components: comps, force: !!force}),
+  }).then(function(r){return r.json();}).then(function(data){
+    if (data.ok && data.results) {
+      Object.keys(data.results).forEach(function(comp){
+        var r = data.results[comp];
+        var st = r.status || 'unknown';
+        if (r.error) st = 'error';
+        setStatus('hs-' + comp, st);
+      });
+    } else {
+      comps.forEach(function(c){ setStatus('hs-' + c, 'error'); });
+    }
+    document.getElementById('refreshBtn').classList.remove('loading');
+    if (!force) retryOnce(host, comps, 'host', false);
+  }).catch(function(){
+    comps.forEach(function(c){ setStatus('hs-' + c, 'timeout'); });
+    document.getElementById('refreshBtn').classList.remove('loading');
+    if (!force) retryOnce(host, comps, 'host', false);
+  });
+}
+
+function refreshCompStatus(comp, hosts, force) {
+  if (!hosts || hosts.length === 0) {
+    document.getElementById('refreshBtn').classList.remove('loading');
+    return;
+  }
+  var pending = hosts.length;
+  hosts.forEach(function(h){ setLoading('cs-' + comp + '-' + h); });
+  Promise.all(hosts.map(function(h){
+    return fetch('/service-manager/api/status', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({host: h, components: [comp], force: !!force}),
+    }).then(function(r){return r.json();}).then(function(data){
+      if (data.ok && data.results && data.results[comp]) {
+        var r = data.results[comp];
+        var st = r.status || 'unknown';
+        if (r.error) st = 'error';
+        setStatus('cs-' + comp + '-' + h, st);
+      } else {
+        setStatus('cs-' + comp + '-' + h, 'error');
+      }
+    }).catch(function(){
+      setStatus('cs-' + comp + '-' + h, 'timeout');
+    }).finally(function(){
+      pending--;
+      if (pending === 0) {
+        document.getElementById('refreshBtn').classList.remove('loading');
+        if (!force) retryOnce(comp, hosts, 'comp', false);
+      }
+    });
+  }));
+}
+
+// ─── operate ───
+function operate(host, comp, action, btn) {
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner" style="width:12px;height:12px;border-width:2px;"></span>';
+  
+  // 禁用该行的所有操作按钮
+  var row = btn.closest('tr');
+  if (row) {
+    row.querySelectorAll('.sm-btn').forEach(function(b){ b.disabled = true; });
+  }
+
+  var statusId = 'hs-' + comp;
+  if (document.getElementById('pane-bycomp').classList.contains('active')) {
+    statusId = 'cs-' + comp + '-' + host;
+  }
+  setLoading(statusId);
+
+  fetch('/service-manager/api/operate', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({host: host, component: comp, action: action}),
+  }).then(function(r){return r.json();}).then(function(data){
+    var st = 'error';
+    if (data.ok) st = data.status || 'error';
+    setStatus(statusId, st);
+    showToast(action + ' ' + comp + ' @ ' + host + ' → ' + st, st === 'running' || st === 'stopped' ? 'success' : 'error');
+    // 恢复按钮
+    if (row) {
+      row.querySelectorAll('.sm-btn').forEach(function(b){ b.disabled = false; });
+    }
+    btn.innerHTML = {'start':'启动','stop':'停止','restart':'重启'}[action] || action;
+    btn.disabled = false;
+  }).catch(function(e){
+    setStatus(statusId, 'error');
+    showToast('操作失败: ' + e.message, 'error');
+    if (row) {
+      row.querySelectorAll('.sm-btn').forEach(function(b){ b.disabled = false; });
+    }
+    btn.innerHTML = {'start':'启动','stop':'停止','restart':'重启'}[action] || action;
+    btn.disabled = false;
+  });
+}
+
+// ─── batch ───
+function toggleAllCheckbox(el, tableId) {
+  var table = document.getElementById(tableId);
+  if (!table) return;
+  table.querySelectorAll('tbody input[type=checkbox]').forEach(function(cb){cb.checked = el.checked;});
+  var mode = tableId === 'hostSvcTable' ? 'host' : 'comp';
+  updateBatchButtons(mode);
+}
+
+function updateBatchButtons(mode) {
+  var prefix = mode === 'host' ? 'host' : 'comp';
+  var table = document.getElementById(prefix + 'SvcTable');
+  var checked = table.querySelectorAll('tbody input[type=checkbox]:checked').length;
+  document.getElementById(prefix + 'BatchStart').disabled = checked === 0;
+  document.getElementById(prefix + 'BatchStop').disabled = checked === 0;
+  document.getElementById(prefix + 'BatchRestart').disabled = checked === 0;
+}
+
+function batchOperate(mode, action) {
+  var prefix = mode === 'host' ? 'host' : 'comp';
+  var table = document.getElementById(prefix + 'SvcTable');
+  var btn = document.getElementById(prefix + 'Batch' + action.charAt(0).toUpperCase() + action.slice(1));
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner" style="width:12px;height:12px;border-width:2px;"></span> 执行中...';
+
+  var rows = [];
+  table.querySelectorAll('tbody tr').forEach(function(tr){
+    var cb = tr.querySelector('input[type=checkbox]');
+    if (cb && cb.checked) {
+      rows.push({comp: tr.dataset.comp, host: tr.dataset.host});
+    }
+  });
+
+  if (rows.length === 0) {
+    btn.disabled = false;
+    btn.innerHTML = {start:'批量启动',stop:'批量停止',restart:'批量重启'}[action] || action;
+    return;
+  }
+
+  var completed = 0;
+  var results = [];
+
+  rows.forEach(function(r){
+    var statusId = mode === 'host' ? 'hs-' + r.comp : 'cs-' + r.comp + '-' + r.host;
+    setLoading(statusId);
+    var rowEl = table.querySelector('tr[data-comp="' + r.comp + '"][data-host="' + r.host + '"]');
+    if (rowEl) rowEl.querySelectorAll('.sm-btn').forEach(function(b){b.disabled = true;});
+
+    fetch('/service-manager/api/operate', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({host: r.host, component: r.comp, action: action}),
+    }).then(function(rr){return rr.json();}).then(function(data){
+      var st = data.ok ? (data.status || 'error') : 'error';
+      setStatus(statusId, st);
+      results.push({host: r.host, comp: r.comp, status: st});
+      if (rowEl) rowEl.querySelectorAll('.sm-btn').forEach(function(b){b.disabled = false;});
+      completed++;
+      if (completed === rows.length) {
+        btn.disabled = false;
+        btn.innerHTML = {start:'批量启动',stop:'批量停止',restart:'批量重启'}[action] || action;
+        var okCount = results.filter(function(x){return x.status === 'running' || x.status === 'stopped';}).length;
+        showToast('批量 ' + action + ' 完成: ' + okCount + '/' + results.length + ' 成功', okCount === results.length ? 'success' : 'error');
+        updateBatchButtons(mode);
+      }
+    }).catch(function(e){
+      results.push({host: r.host, comp: r.comp, status: 'error'});
+      setStatus(statusId, 'error');
+      completed++;
+      if (completed === rows.length) {
+        btn.disabled = false;
+        btn.innerHTML = {start:'批量启动',stop:'批量停止',restart:'批量重启'}[action] || action;
+        showToast('批量 ' + action + ' 部分失败', 'error');
+        updateBatchButtons(mode);
+      }
+    });
+  });
+}
+
+// ─── toast ───
+function showToast(msg, type) {
+  var container = document.getElementById('toastContainer');
+  var el = document.createElement('div');
+  el.className = 'sm-toast-item ' + (type || 'success');
+  el.textContent = msg;
+  container.appendChild(el);
+  setTimeout(function(){ el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; }, 3000);
+  setTimeout(function(){ el.remove(); }, 3300);
+}
+
+// ─── init ───
+document.addEventListener('DOMContentLoaded', function() {
+  if (CURRENT_HOST && SERVICES.length > 0) {
+    renderHostServices(CURRENT_HOST);
+  }
+});
+</script>
+{% endblock %}

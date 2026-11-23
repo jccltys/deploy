@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block title %}部署向导{% endblock %}
+{% block nav_wizard %}active{% endblock %}
+
+{% block head %}
+<style>
+.wizard-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+.step-card{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:28px 20px;text-align:center;cursor:pointer;transition:all var(--transition);position:relative}
+.step-card:hover{border-color:var(--accent);background:var(--accent-dim);transform:translateY(-2px)}
+.step-card.disabled{opacity:0.4;cursor:not-allowed;pointer-events:none}
+.step-card.done{border-color:var(--accent);background:rgba(34,197,94,0.06)}
+.step-card .step-num{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:1rem;font-weight:700;transition:all var(--transition)}
+.step-card.active .step-num{background:var(--accent);color:#fff}
+.step-card.pending .step-num{background:var(--bg-elevated);color:var(--fg-muted);border:2px solid var(--border)}
+.step-card.done .step-num{background:var(--accent);color:#fff}
+.step-card.disabled .step-num{background:var(--bg-elevated);color:var(--fg-muted);border:2px solid var(--border)}
+.step-card h3{font-size:0.95rem;font-weight:600;color:var(--fg);margin:0 0 6px}
+.step-card p{font-size:0.78rem;color:var(--fg-muted);margin:0}
+.step-card .step-badge{display:inline-block;font-size:0.65rem;padding:2px 10px;border-radius:10px;margin-top:10px;font-weight:500}
+.step-card.active .step-badge{background:var(--accent-dim);color:var(--accent)}
+.step-card.pending .step-badge{background:var(--bg-elevated);color:var(--fg-muted);border:1px solid var(--border)}
+.step-card.done .step-badge{background:rgba(34,197,94,0.12);color:var(--accent)}
+.step-card.disabled .step-badge{background:var(--bg-elevated);color:var(--fg-muted);border:1px solid var(--border)}
+.step-card .skip-btn{display:none;margin-top:12px;padding:4px 14px;font-size:0.72rem;border-radius:var(--radius-sm);background:transparent;border:1px solid var(--border);color:var(--fg-muted);cursor:pointer;transition:all var(--transition)}
+.step-card .skip-btn:hover{background:var(--bg-elevated);color:var(--fg);border-color:var(--fg-muted)}
+.step-card.active .skip-btn{display:inline-block}
+.deploy-notice{margin-top:24px;padding:14px 20px;border-radius:var(--radius-sm);font-size:0.82rem}
+.deploy-notice.not-deployed{background:var(--accent-dim);color:var(--accent);border:1px solid rgba(34,197,94,0.2)}
+.deploy-notice.deployed{background:rgba(34,197,94,0.08);color:var(--accent);border:1px solid rgba(34,197,94,0.2)}
+@media(max-width:768px){.wizard-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.wizard-grid{grid-template-columns:1fr}}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="topbar">
+  <div>
+    <div class="breadcrumb"><span>Dashboard</span><span>/</span><span>Wizard</span></div>
+    <h2>部署向导 <span>首次部署引导流程</span></h2>
+  </div>
+</div>
+
+<div class="wizard-grid">
+  {% for step in steps %}
+  <div class="step-card {{ step.status }}"
+       onclick="openStep('{{ step.target }}', '{{ step.status }}')"
+       data-step="{{ step.step }}">
+    <div class="step-num">{{ '%02d' | format(step.step) }}</div>
+    <h3>{% if step.step == 1 %}修改 config.yaml{% elif step.step == 2 %}修改配置文件{% else %}指定参数并开始部署{% endif %}</h3>
+    <p>
+      {% if step.step == 1 %}编辑集群主配置文件{% elif step.step == 2 %}调整组件配置模板（可跳过）{% else %}设置参数并执行组件部署{% endif %}
+    </p>
+    <span class="step-badge">
+      {% if step.status == 'active' %}当前步骤
+      {% elif step.status == 'pending' %}待处理
+      {% elif step.status == 'done' %}已完成
+      {% elif step.status == 'disabled' %}已禁用
+      {% endif %}
+    </span>
+    {% if step.step == 2 and step.status == 'active' %}
+    <button class="skip-btn" onclick="event.stopPropagation();skipStep2(this)">跳过此步骤</button>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+<div class="deploy-notice {{ 'deployed' if deployed else 'not-deployed' }}">
+  {% if deployed %}
+  ✅ 部署已完成。所有步骤已锁定，如需重新部署请手动删除部署标记。
+  {% else %}
+  ℹ️ 请按顺序完成 4 个步骤。点击卡片将在新窗口打开对应功能页面。
+  {% endif %}
+</div>
+
+<script>
+var pollTimer = null;
+
+function openStep(url, status) {
+  if (status === 'disabled') return;
+  window.open(url, '_blank');
+}
+
+function skipStep2(btn) {
+  btn.disabled = true;
+  btn.textContent = '跳过中…';
+  fetch('/wizard/skip-step2', { method: 'POST' })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.ok) {
+        refreshStatus();
+      }
+    });
+}
+
+function refreshStatus() {
+  fetch('/wizard/status')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      renderSteps(data.steps, data.deployed);
+    });
+}
+
+function renderSteps(steps, deployed) {
+  var container = document.querySelector('.wizard-grid');
+  if (!container) return;
+  container.innerHTML = '';
+  steps.forEach(function(step) {
+    var div = document.createElement('div');
+    div.className = 'step-card ' + step.status;
+    div.setAttribute('onclick', "openStep('" + step.target + "','" + step.status + "')");
+    var label = '';
+    var desc = '';
+    if (step.step === 1) { label = '修改 config.yaml'; desc = '编辑集群主配置文件'; }
+    else if (step.step === 2) { label = '修改配置文件'; desc = '调整组件配置模板（可跳过）'; }
+    else { label = '指定参数并开始部署'; desc = '设置参数并执行组件部署'; }
+    var badge = '';
+    if (step.status === 'active') badge = '当前步骤';
+    else if (step.status === 'pending') badge = '待处理';
+    else if (step.status === 'done') badge = '已完成';
+    else badge = '已禁用';
+    var skipHtml = '';
+    if (step.step === 2 && step.status === 'active') {
+      skipHtml = '<button class="skip-btn" onclick="event.stopPropagation();skipStep2(this)">跳过此步骤</button>';
+    }
+    div.innerHTML =
+      '<div class="step-num">' + (step.step < 10 ? '0' : '') + step.step + '</div>' +
+      '<h3>' + label + '</h3>' +
+      '<p>' + desc + '</p>' +
+      '<span class="step-badge">' + badge + '</span>' +
+      skipHtml;
+    container.appendChild(div);
+  });
+
+  var notice = document.querySelector('.deploy-notice');
+  if (notice) {
+    if (deployed) {
+      notice.className = 'deploy-notice deployed';
+      notice.innerHTML = '✅ 部署已完成。所有步骤已锁定，如需重新部署请手动删除部署标记。';
+    } else {
+      notice.className = 'deploy-notice not-deployed';
+      notice.innerHTML = 'ℹ️ 请按顺序完成 3 个步骤。点击卡片将在新窗口打开对应功能页面。';
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  refreshStatus();
+  pollTimer = setInterval(refreshStatus, 5000);
+});
+</script>
+{% endblock %}

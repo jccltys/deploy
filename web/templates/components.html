@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}Components - 组件管理{% endblock %}
+
+{% block nav_components %}active{% endblock %}
+
+{% block head %}
+<style>
+/* Search bar */
+.search-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.search-input{flex:1;min-width:200px;padding:9px 14px 9px 36px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-xs);color:var(--fg);font-family:var(--font-sans);font-size:0.85rem;outline:none;transition:border var(--transition)}
+.search-input:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-dim)}
+.search-input::placeholder{color:var(--fg-muted)}
+.search-wrap{position:relative;flex:1;min-width:200px}
+.search-wrap .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;opacity:0.4}
+
+/* Filter pills */
+.filter-group{display:flex;gap:6px;flex-wrap:wrap}
+.filter-group .filt{padding:5px 14px;border-radius:14px;font-size:0.78rem;font-weight:500;cursor:pointer;transition:all var(--transition);user-select:none;background:var(--bg-card);color:var(--fg-secondary);border:1px solid var(--border)}
+.filter-group .filt:hover{border-color:var(--border-light);color:var(--fg)}
+.filter-group .filt.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+
+/* Component table */
+.component-table{width:100%;border-collapse:collapse;font-size:0.85rem}
+.component-table th{text-align:left;padding:12px 14px;font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em;color:var(--fg-muted);border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
+.component-table th:hover{color:var(--fg-secondary)}
+.component-table td{padding:14px;border-bottom:1px solid var(--border);color:var(--fg-secondary)}
+.component-table tr:last-child td{border-bottom:none}
+.component-table tr:hover td{background:rgba(255,255,255,0.02)}
+.component-table .col-name{display:flex;align-items:center;gap:10px;color:var(--fg);font-weight:500}
+.component-table .col-name .icon-wrap{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.7rem;font-weight:700}
+.component-table .col-group{font-size:0.72rem;padding:3px 10px;border-radius:10px;display:inline-block}
+.col-group.common{background:rgba(107,114,128,0.1);color:var(--fg-muted)}
+.col-group.core{background:var(--accent-dim);color:var(--accent)}
+.col-group.custom{background:rgba(168,85,247,0.12);color:#A855F7}
+
+/* Status dots */
+.status-dot{display:inline-flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:500}
+.status-dot .d{width:7px;height:7px;border-radius:50%}
+.status-dot.green{color:var(--accent)}.status-dot.green .d{background:var(--accent)}
+.status-dot.yellow{color:var(--warning)}.status-dot.yellow .d{background:var(--warning)}
+.status-dot.red{color:var(--danger)}.status-dot.red .d{background:var(--danger)}
+.status-dot.gray{color:var(--fg-muted)}.status-dot.gray .d{background:var(--fg-muted)}
+
+/* Version tag */
+.version-tag{font-family:var(--font-mono);font-size:0.75rem;color:var(--fg-secondary);background:var(--bg-elevated);padding:2px 8px;border-radius:4px}
+
+/* Host pills */
+.host-pills{display:flex;gap:3px;flex-wrap:wrap}
+.host-pills .hp{font-size:0.68rem;padding:2px 8px;border-radius:4px;background:var(--bg-elevated);color:var(--fg-muted)}
+
+/* Health mini bars */
+.health-mini{display:flex;align-items:center;gap:6px}
+.health-mini .hm{width:24px;height:4px;border-radius:2px}
+.health-mini .hm.ok{background:var(--accent)}
+.health-mini .hm.warn{background:var(--warning)}
+.health-mini .hm.bad{background:var(--danger)}
+.health-mini .hm.na{background:var(--border)}
+
+/* Group header */
+.group-header{font-size:0.8rem;font-weight:600;color:var(--fg-muted);padding:20px 14px 8px;text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid var(--border);background:var(--bg-elevated)}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="topbar">
+  <div>
+    <div class="breadcrumb">
+      <a href="/dashboard/">Dashboard</a>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      <span>Components</span>
+    </div>
+    <h2>组件目录 <span>已注册组件与安装器</span></h2>
+  </div>
+  <div style="display:flex;gap:10px;">
+    <button class="btn btn-secondary btn-sm">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      刷新
+    </button>
+  </div>
+</div>
+
+<div class="search-bar">
+  <div class="search-wrap">
+    <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input class="search-input" type="text" placeholder="搜索组件..." oninput="filterTable(this.value)">
+  </div>
+  <div class="filter-group">
+    <span class="filt active" onclick="filterGroup(this,'all')">全部</span>
+    <span class="filt" onclick="filterGroup(this,'core')">Core</span>
+    <span class="filt" onclick="filterGroup(this,'common')">Common</span>
+    <span class="filt" onclick="filterGroup(this,'custom')">Custom</span>
+  </div>
+</div>
+
+<div class="card">
+  <div style="overflow-x:auto;">
+    <table class="component-table" id="compTable">
+      <thead>
+        <tr>
+          <th>组件</th>
+          <th>分组</th>
+          <th>安装器</th>
+          <th>版本</th>
+          <th>状态</th>
+          <th>主机</th>
+          <th>健康</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {% set ns = namespace(last_group='') %}
+        {% for comp in components %}
+        {% if comp.group != ns.last_group %}
+        {% if ns.last_group %}
+        {% endif %}
+        <tr class="group-row"><td colspan="8" class="group-header">
+          {% if comp.group == 'core' %}Core Infrastructure — 按序部署
+          {% elif comp.group == 'common' %}Common — 按字母序部署
+          {% else %}Business Applications — 按固定顺序部署{% endif %}
+        </td></tr>
+        {% set ns.last_group = comp.group %}
+        {% endif %}
+
+        <tr data-group="{{ comp.group }}" data-name="{{ comp.name }}" data-hosts="{{ comp.hosts|join(',') }}">
+          <td><span class="col-name"><span class="icon-wrap" style="background:var(--accent-dim);color:var(--accent);">{{ comp.name[:1]|upper }}</span>{{ comp.name|capitalize }}</span></td>
+          <td><span class="col-group {{ comp.group }}">{{ comp.group }}</span></td>
+          <td><span style="font-family:var(--font-mono);font-size:0.75rem;">{{ comp.group }}_installer</span></td>
+          <td><span class="version-tag">—</span></td>
+          <td><span class="status-dot gray"><span class="d"></span> 已配置</span></td>
+          <td><div class="host-pills">{% for hp in comp.hosts %}<span class="hp">{{ hp.split('.')[-1] if '.' in hp else hp }}</span>{% endfor %}</div></td>
+          <td><div class="health-mini">{% for hp in comp.hosts %}<span class="hm ok"></span>{% endfor %}</div></td>
+          <td><button class="btn btn-ghost btn-xs" onclick="showDetail(this)">详情</button></td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+</div>
+<div id="detailModal" class="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;" onclick="closeModal(event)">
+  <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);width:520px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,0.3);" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;gap:10px;padding:18px 22px;border-bottom:1px solid var(--border);">
+      <span id="dmIcon" style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700;background:var(--accent-dim);color:var(--accent);flex-shrink:0;"></span>
+      <div>
+        <div id="dmTitle" style="font-size:0.95rem;font-weight:600;color:var(--fg);"></div>
+        <div id="dmGroup" style="font-size:0.72rem;color:var(--fg-muted);margin-top:1px;"></div>
+      </div>
+      <button style="margin-left:auto;background:none;border:none;color:var(--fg-muted);cursor:pointer;padding:4px;" onclick="document.getElementById('detailModal').style.display='none'">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div style="padding:20px 22px;">
+      <div style="display:grid;grid-template-columns:100px 1fr;gap:10px 0;font-size:0.85rem;">
+        <span style="color:var(--fg-muted);">安装器</span>
+        <span id="dmInstaller" style="color:var(--fg);font-family:var(--font-mono);font-size:0.8rem;"></span>
+        <span style="color:var(--fg-muted);">版本</span>
+        <span id="dmVersion" style="color:var(--fg);">—</span>
+        <span style="color:var(--fg-muted);">状态</span>
+        <span id="dmStatus" style="color:var(--fg);"></span>
+        <span style="color:var(--fg-muted);">主机数</span>
+        <span id="dmHostCount" style="color:var(--fg);font-weight:500;"></span>
+      </div>
+      <div style="margin-top:16px;">
+        <div style="font-size:0.75rem;font-weight:600;color:var(--fg-muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">主机列表</div>
+        <div id="dmHosts" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+      </div>
+    </div>
+    <div style="padding:12px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;">
+      <button class="btn btn-sm" onclick="document.getElementById('detailModal').style.display='none'">关闭</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function filterTable(val) {
+  const q = val.toLowerCase();
+  document.querySelectorAll('#compTable tbody tr[data-group]').forEach(r => {
+    r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+function filterGroup(el, group) {
+  document.querySelectorAll('.filter-group .filt').forEach(f => f.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('#compTable tbody tr[data-group]').forEach(r => {
+    if (group === 'all') { r.style.display = ''; return; }
+    r.style.display = r.getAttribute('data-group') === group ? '' : 'none';
+  });
+}
+
+function closeModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById('detailModal').style.display = 'none';
+}
+
+function showDetail(btn) {
+  const tr = btn.closest('tr');
+  const name = tr.getAttribute('data-name');
+  const group = tr.getAttribute('data-group');
+  const hostsStr = tr.getAttribute('data-hosts') || '';
+  const hosts = hostsStr ? hostsStr.split(',') : [];
+
+  const icon = name.charAt(0).toUpperCase();
+  let groupLabel = group;
+  if (group === 'core') groupLabel = 'Core Infrastructure';
+  else if (group === 'common') groupLabel = 'Common';
+  else if (group === 'custom') groupLabel = 'Business Applications';
+
+  document.getElementById('dmIcon').textContent = icon;
+  document.getElementById('dmTitle').textContent = name.charAt(0).toUpperCase() + name.slice(1);
+  document.getElementById('dmGroup').textContent = groupLabel;
+  document.getElementById('dmInstaller').textContent = group + '_installer';
+  document.getElementById('dmVersion').textContent = '—';
+  document.getElementById('dmStatus').innerHTML = '<span class="status-dot gray"><span class="d"></span> 已配置</span>';
+  document.getElementById('dmHostCount').textContent = hosts.length + ' 台';
+
+  const hostsEl = document.getElementById('dmHosts');
+  hostsEl.innerHTML = '';
+  hosts.forEach(ip => {
+    const tag = document.createElement('span');
+    tag.className = 'hp';
+    tag.style.cssText = 'font-size:0.78rem;padding:3px 10px;border-radius:4px;background:var(--bg-elevated);color:var(--fg-secondary);font-family:var(--font-mono);';
+    tag.textContent = ip;
+    hostsEl.appendChild(tag);
+  });
+
+  document.getElementById('detailModal').style.display = 'flex';
+}
+</script>
+{% endblock %}

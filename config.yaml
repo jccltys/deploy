@@ -1,0 +1,196 @@
+# ============================================================================
+# 组件化集群部署平台 — 配置文件
+# ============================================================================
+# 使用方法:
+#
+#   CLI 部署模式:
+#     python3 install.py --localaddr 192.168.1.100 --nodesfile config.yaml --install-dir /data/service
+#
+#   Web 管理界面（推荐）:
+#     python3 install.py --localaddr 192.168.1.100 --nodesfile config.yaml --web --web-port 18080
+#
+# 完整 CLI 参数参见 AGENTS.md 或 docs/deployment.md
+# ============================================================================
+
+# ---------------------------------------------------------------------------
+# 安装包文件名映射（服务名: 文件名）
+# ---------------------------------------------------------------------------
+# 规则：
+#   - java / java11 / java21 的包名不含 "java" 字样（如 jdk-8u201-xxx.tar.gz），
+#     因此需要显式指定文件名
+#   - 其余组件（mysql / redis / zookeeper / kafka / hadoop）自动在安装包目录中
+#     按组件名忽略大小写匹配，无需在此列出
+# 包文件需提前放到 --package-dir 目录（默认 {install-dir}/softs/）
+#
+# MySQL
+mysql:
+  password: MySQL@123
+  port: 3306
+  # 数据目录（可选，默认 {install-dir}/comms/mysql/data，需 mysql 用户可写，安装时自动创建并授权）
+  data_dir: /data/mysql/data
+  # 错误日志目录（可选，默认 {install-dir}/comms/mysql/logs，需 mysql 用户可写，安装时自动创建并授权）
+  # log_dir: /data/service/comms/mysql/logs
+  # pid 文件目录（可选，默认同 log_dir，安装时自动创建并授权）
+  # pid_dir: /data/service/comms/mysql/logs
+  # 需要自动分发 mysql 客户端的组件列表
+  # 这些组件所在的主机会在 MySQL 安装阶段自动部署 mysql 客户端
+  client_components:
+    - nacos
+    - sso
+    - aimeter
+    - odmp
+
+# Redis
+redis:
+  password: Redis@123
+  port: 6379
+  sentinel_port: 26379
+  sentinel_password: Redis@123
+  sentinel_name: mymaster
+
+# ZooKeeper
+zookeeper:
+  port: 2181
+  election_port: 2888
+  quorum_port: 3888
+  admin_port: 8081
+
+# Kafka
+kafka:
+  port: 9092
+
+# Nacos
+nacos:
+  port: 8848
+  #password: nacos
+  password: 0192023A7BBD73250516F069DF18B500
+
+# Ckman
+ckman:
+  port: 8808
+
+# ClickHouse cluster和logic_cluster配置不建议修改，目前只支持密钥认证部署集群
+clickhouse:
+  cluster: ckcluster
+  logic_cluster: cklogic
+  tcp_port: 9000
+  http_port: 8123
+  keeper_tcp_port: 9181
+  keeper_raft_port: 9234
+  path: /data/clickhouse/
+  password: EoiCK@123
+  force: false
+  ssh_user: root
+  ssh_port: 22
+  authenticate_type: 2
+
+# Nebula
+nebula:
+  meta_port: 9559
+  graphd_port: 9669
+  storaged_port: 9779
+  space: cmdb
+  edge: cmdb_object_relation
+
+# Nebula Studio
+nebula_studio:
+  port: 7001
+
+# Nginx
+nginx:
+  listen_port: 10082
+
+# 3.各组件使用的 Java 环境（可选，未指定则默认使用 java / JDK 8）
+# # 键为组件名，值为 comms 目录下的 Java 软链接名（java / java11 / java21）
+java_env:
+  zookeeper: java
+  kafka: java
+  hadoop: java
+  nacos: java
+  sso: java
+packages:
+  java: jdk-8u201-linux-x64.tar.gz
+  java11: amazon-corretto-11.0.14.10.1-linux-x64.tar.gz
+  java21: jdk-21.0.6_linux-x64_bin.tar.gz
+
+# ---------------------------------------------------------------------------
+# SSH 服务器配置（密钥认证）
+# ---------------------------------------------------------------------------
+servers:
+  - host: 192.168.102.180
+    port: 3222
+    username: eoi
+    # key_file: ~/.ssh/id_rsa
+
+  - host: 192.168.102.181
+    port: 3222
+    username: eoi
+
+  - host: 192.168.102.182
+    port: 3222
+    username: eoi
+
+  - host: 192.168.102.183
+    port: 3222
+    username: eoi
+
+  - host: 192.168.103.245
+    port: 3222
+    username: eoi
+
+  - host: 192.168.103.246
+    port: 3222
+    username: eoi
+
+  - host: 192.168.103.247
+    port: 3222
+    username: eoi
+
+# ---------------------------------------------------------------------------
+# 组件部署映射（主机: 组件列表）
+# ---------------------------------------------------------------------------
+# 安装顺序（按依赖关系固定，不可在此配置中修改）:
+#   默认顺序: java → mysql → redis → zookeeper → kafka → hadoop
+#   + 额外 java 版本: java11, java21 等（按字母序，不覆盖 JAVA_HOME）
+#   + 其他自定义组件: ckman 等（按字母序，在最后安装）
+#
+# 注意事项:
+#   - java（JDK 8）自动安装在所有主机上，无需显式列出
+#   - java11 / java21 等额外版本需要显式声明才会安装
+#   - hadoop 集群中第一个列出的主机自动成为 NameNode Master（NN1）
+#   - kafka broker.id 按主机名排序自动分配（0, 1, 2...）
+
+deploy:
+  192.168.102.180:
+    - sso
+    - ckman
+    - nacos
+    - aimeter
+  192.168.102.181:
+    - java11
+    - java21
+    - odc
+    - nginx
+  192.168.102.182:
+    - odmp
+    - refiner
+  192.168.102.183:
+    - nebula_studio
+    - nebula
+    - dolphinscheduler
+    - redis
+    - mysql
+  192.168.103.245:
+    - zookeeper
+    - clickhouse
+    - kafka
+    - hadoop
+  192.168.103.246:
+    - zookeeper
+    - clickhouse
+    - kafka
+    - hadoop
+  192.168.103.247:
+    - zookeeper
+    - kafka
+    - hadoop

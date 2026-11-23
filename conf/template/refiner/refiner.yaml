@@ -1,0 +1,95 @@
+server:
+  port: 9091
+spring:
+  cloud:
+    nacos:
+      # 注册中心配置
+      discovery:
+        namespace: 
+        password: znyw@123
+        register-enabled: true
+        server-addr: 192.168.31.170:8848
+        username: nacos
+
+  # 数据源配置
+  datasource:
+    username: root
+    password: MySQL@123
+    # 由于部分逻辑涉及到更新是否成功,需要启用`useAffectedRows=true`属性
+    url: jdbc:mysql://192.168.31.171:3306/refiner_pro?useSSL=false&allowMultiQueries=true&characterEncoding=utf8&rewriteBatchedStatements=true&useAffectedRows=true
+  clickhouse:
+    druid:
+      username: default
+      password: znyw@123
+      url: jdbc:clickhouse://192.168.31.170:8123,192.168.31.171:8123/refiner_pro
+      driver-class-name: com.clickhouse.jdbc.ClickHouseDriver
+  # 是否通过flyway自动控制数据库脚本，默认为true，非特殊需要不更改, 达梦数据库请关闭
+  flyway:
+    enabled: true
+
+  # kafka相关配置
+  kafka:
+    bootstrap-servers: 192.168.31.172:9092,192.168.31.173:9092,192.168.31.174:9092
+
+  # redis相关配置
+  redis:
+    host: 192.168.31.170
+    port: 6379
+    password: Redis@123
+    database: 0
+    #sentinel:
+    #  master: mymaster
+    #  nodes: redis-host1:26379,redis-host2:26379,redis-host3:26379
+
+
+refiner:
+  # 是否开启ck true 开启 false 不开
+  enableCk: false
+  # ck 与mysql 重复数据天数
+  coincideDay: 7
+  ck:
+    # ck 集群名称
+    clusterName: demo-clickhouse
+    # ck 本地表后缀
+    localSuffix: _local
+  #处理模式 jax - 代表依赖中台来进行流处理，需要部署中台服务，self - 代表不依赖中台，需要通过后续部署refiner-processor进行流处理
+  processMode: jax
+  centerName: odmp
+  management:
+    tools:
+      port: 9529       #监控用，保证与其他进程端口不冲突即可
+  chameleon:
+    # 聚类算法指定zookeeper地址，聚类算法模板信息将会存储在该zookeeper上
+    zookeeper: 192.168.31.172:2181,192.168.31.173:2181,192.168.31.174:2181
+  kafka:
+    groupId: refiner
+
+    # kafka topic的统一后缀, 除去`手工指定`的topic,告警系统中使用的topic都会加上此后缀, 强烈建议配置统一的后缀，方便应对在同一个kafka中部署多套告警环境的情形
+    topic-suffix: _test
+  plugin:
+    path: /home/app/refiner-pro/customPlugins     # 自定义二开插件的存放目录，注意与下方的`plugin.pluginPath` 的系统内置插件目录区分
+
+  filter-path:                                   # 自定义某些特殊接口不需要登录，通常用于二开需求
+    - /api/v3.1/topology-node/**
+
+# xxl-job
+xxl:
+  job:
+    admin:
+      address: http://127.0.0.1:28080/xxl-job-admin  #当采用去中台部署方式(即 `refiner.processMode != jax`)，需要指定该项,举例: http://192.168.31.171:28080/xxl-job-admin
+    login:
+      username: admin     #当采用去中台部署方式(即 `refiner.processMode != jax`)，需要指定该项，xxl-job的登录用户
+      password: 123456    #当采用去中台部署方式(即 `refiner.processMode != jax`)，需要指定该项，xxl-job的登录密码
+    executor:
+      port: 19099         #保证与其他进程端口不冲突即可
+
+management:
+  server:
+    port: 9527             #监控用，端口不冲突即可
+
+plugin:
+  pluginPath: /home/app/refiner-pro/plugins     #插件包的存放目录，建议用绝对路径
+  pluginConfigFilePath: /home/app/refiner-pro/plugins-config # 系统插件包的配置存放目录
+
+sharding:
+  enabled: false         # 是否开启分表，除非有特殊需要，默认不开启

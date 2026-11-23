@@ -1,0 +1,52 @@
+server:
+  port: 19091
+
+spring:
+  cloud:
+    nacos:
+      # 注册中心配置
+      discovery:
+        namespace: 
+        password: znyw@123
+        register-enabled: true
+        server-addr: 192.168.31.170:8848
+        username: nacos
+
+  # 数据源配置
+  datasource:
+    username: root
+    password: MySQL@123
+    # 由于部分逻辑涉及到更新是否成功,需要启用`useAffectedRows=true`属性
+    url: jdbc:mysql://192.168.31.171:3306/refiner_pro?useSSL=false&allowMultiQueries=true&characterEncoding=utf8&rewriteBatchedStatements=true&useAffectedRows=true
+
+  kafka: # kafka相关配置
+    bootstrap-servers: 192.168.31.172:9092,192.168.31.173:9092,192.168.31.174:9092
+
+management:
+  server:
+    port: 8082
+    ssl:
+      enabled: false
+  endpoint:
+    health:
+      show-details: ALWAYS
+    logfile:
+      external-file: ${user.dir}/logs/${spring.application.name}.log
+  endpoints:
+    web:
+      base-path: /${spring.application.name}
+      exposure:
+        include: '*'
+  health:
+    ldap:
+      enabled: false
+    mail:
+      enabled: false
+
+
+# 此部分配置，除了`refiner.kafka.groupId` 一项外，其他应当同告警主程序中的 `refiner.kafka` 相关配置保持一致
+refiner:
+  kafka:
+    groupId: refiner_etl
+     # kafka topic的统一后缀, 除去`手工指定`的topic,告警系统中使用的topic都会加上此后缀, 强烈建议配置统一的后缀，方便应对在同一个kafka中部署多套告警环境的情形
+    topic-suffix: _test

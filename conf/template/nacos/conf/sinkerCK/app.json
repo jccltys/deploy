@@ -1,0 +1,496 @@
+{
+    "clickhouse": {
+        "cluster": "hsbk",
+        "hosts": [
+            [
+                "192.168.31.170",
+                "192.168.31.171"
+            ]
+        ],
+        "port": 9000,
+        "db": "aimeter",
+        "username": "default",
+        "password": "Hsbk@123"
+    },
+    "kafka": {
+        "brokers": "192.168.31.172:9092,192.168.31.173:9092,192.168.31.174:9092",
+        "version": "2.8.1"
+    },
+    "reloadSeriesMapInterval": 86400,
+    "activeSeriesRange":3600, 
+    "tasks": [
+        {
+            "name": "aimeter_metric_ck",
+            "topic": "aimeter_metric_ck",
+            "consumerGroup": "aimeter_sinker_metric_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "prometheusSchema": true,
+            "promLabelsBlackList": "^(value|__help__|__type__|__series_key__|__item_id__|__item_key__|__item_name__|__template_id__|__template_name__|__parent_item_id__|__parent_key__|__metric_flag__|__agent_host__|__host_id__|__host_name__|__join_name__|__mgmt_id__|__field_key__|__ttl__|__value_flag__)$",
+            "dynamicSchema": {
+                "enable": true,
+                "blackList": "^@.*"
+            },
+            "excludeColumns": [
+                
+            ],
+      
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_metric_ck_text",
+            "topic": "aimeter_metric_ck_text",
+            "consumerGroup": "aimeter_sinker_metric_ck_text_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "metric_text",
+            "seriesTableName": "metric_series",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "prometheusSchema": true,
+            "promLabelsBlackList": "^(value|__help__|__type__|__series_key__|__item_id__|__item_key__|__item_name__|__template_id__|__template_name__|__parent_item_id__|__parent_key__|__metric_flag__|__agent_host__|__host_id__|__host_name__|__join_name__|__mgmt_id|__field_key__|__ttl__|__value_flag__)$",
+            "dynamicSchema": {
+                "enable": true,
+                "blackList": "^@.*"
+            },
+            "excludeColumns": [
+                
+            ],
+     
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_process_metric",
+            "topic": "aimeter_process_metric",
+            "consumerGroup": "aimeter_sinker_process__group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "process_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_container_metric",
+            "topic": "aimeter_container_metric",
+            "consumerGroup": "aimeter_sinker_container_metri_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "container_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_kube_cluster",
+            "topic": "aimeter_kube_cluster",
+            "consumerGroup": "aimeter_sinker_kube_cluster_group_004",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "kube_cluster_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_kube_daemonset",
+            "topic": "aimeter_kube_daemonset",
+            "consumerGroup": "aimeter_sinker_kube_daemonSet_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "kube_daemonset_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_kube_deployment",
+            "topic": "aimeter_kube_deployment",
+            "consumerGroup": "aimeter_sinker_kube_deployment_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "kube_deployment_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_kube_node",
+            "topic": "aimeter_kube_node",
+            "consumerGroup": "aimeter_sinker_kube_node_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "kube_node_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_kube_pod",
+            "topic": "aimeter_kube_pod",
+            "consumerGroup": "aimeter_sinker_kube_pod_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "kube_pod_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_kube_replicaset",
+            "topic": "aimeter_kube_replicaset",
+            "consumerGroup": "aimeter_sinker_kube_replicaset_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "kube_replicaset_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_kube_service",
+            "topic": "aimeter_kube_service",
+            "consumerGroup": "aimeter_sinker_kube_service_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "kube_service_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_kube_statefulset",
+            "topic": "aimeter_kube_statefulset",
+            "consumerGroup": "aimeter_sinker_kube_statefulset_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "kube_statefulset_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_kube_clusterrole",
+            "topic": "aimeter_kube_clusterrole",
+            "consumerGroup": "aimeter_sinker_kube_clusterrole_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "kube_clusterrole_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_kube_clusterrolebinding",
+            "topic": "aimeter_kube_clusterrolebinding",
+            "consumerGroup": "aimeter_sinker_kube_clusterrolebinding_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "kube_clusterrolebinding_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_kube_role",
+            "topic": "aimeter_kube_role",
+            "consumerGroup": "aimeter_sinker_kube_role_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "kube_role_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_kube_rolebinding",
+            "topic": "aimeter_kube_rolebinding",
+            "consumerGroup": "aimeter_sinker_kube_rolebinding_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "kube_rolebinding_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_kube_namespace",
+            "topic": "aimeter_kube_namespace",
+            "consumerGroup": "aimeter_sinker_kube_namespace_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "kube_namespace_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_servicecheck_metric",
+            "topic": "aimeter_servicecheck_metric",
+            "consumerGroup": "aimeter_sinker_servicecheck_metric_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "servicecheck_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true,
+                "blackList": "^@.*"
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_event_metric",
+            "topic": "aimeter_event_metric",
+            "consumerGroup": "aimeter_sinker_event_metric_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "event_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true,
+                "blackList": "^@.*"
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_alg_prediction_offline",
+            "topic": "aimeter_alg_prediction_offline",
+            "consumerGroup": "aimeter_sinker_alg_prediction_offline_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "prediction_offline_result",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": false,
+                "blackList": "^@.*"
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_alert_alg_online_detection",
+            "topic": "aimeter_alert_alg_online_detection",
+            "consumerGroup": "aimeter_sinker_alert_alg_online_detection_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "detection_online_result",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": false,
+                "blackList": "^@.*"
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_alg_detection_offline",
+            "topic": "aimeter_alg_detection_offline",
+            "consumerGroup": "aimeter_sinker_alg_detection_offline_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "detection_offline_result",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": false,
+                "blackList": "^@.*"
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_row_column",
+            "topic": "aimeter_row_column",
+            "consumerGroup": "aimeter_sinker_row_column_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "row_column_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": false,
+                "blackList": "^@.*"
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "__series_id__",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_object_instance",
+            "topic": "aimeter_object_instance",
+            "consumerGroup": "aimeter_sinker_object_instance_group_002",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "object_instance",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": false,
+                "blackList": "^@.*"
+            },
+            "excludeColumns": [
+                
+            ],
+            "shardingKey": "id",
+            "timeUnit": 0.001
+        } 
+    ],
+    "logLevel": "info"
+}

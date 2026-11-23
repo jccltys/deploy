@@ -1,0 +1,90 @@
+spring:
+  datasource:
+    hikari:
+      # 自动提交从池中返回的连接
+      auto-commit: true
+      # 连接池中维护的最小空闲连接数
+      minimum-idle: 10
+      # 连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count)
+      maximum-pool-size: 60
+      # 空闲连接超时时间，默认值600000（10分钟），大于等于max-lifetime且max-lifetime>0，会被重置为0；不等于0且小于10秒，会被重置为10秒。
+      # 只有空闲连接数大于最大连接数且空闲时间超过该值，才会被释放
+      idle-timeout: 30000
+      # 连接最大存活时间.不等于0且小于30秒，会被重置为默认值30分钟.设置应该比mysql设置的超时时间短
+      max-lifetime: 1800000
+      # 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQLException， 缺省:30秒
+      connection-timeout: 30000
+      # 连接测试查询
+      connection-test-query: select 1
+      #connection-test-query: select 1 from dual
+  redis:
+    # 单机模式
+    host: 192.168.31.170
+    port: 6379
+    password: eoi@123
+    database: 9
+    ssl: false
+    # 哨兵模式（使用哨兵时放开，注释掉上面的 host/port）
+    #sentinel:
+    #  master: mymaster
+    #  nodes: redis-host1:26379,redis-host2:26379,redis-host3:26379
+
+#项目模块集中配置
+origin:
+  #多租户配置
+  tenant:
+    #多租户增强
+    enhance: true
+    #动态数据源功能
+    dynamic-datasource: false
+    #动态数据源全局扫描
+    dynamic-global: false
+    # 租户级的编辑应用权限，id是注册在数据库的应用编辑权限ID
+    app:
+      edit: 1654305558207729666
+  odc:
+    service:
+      # odc服务地址（需要修改）
+      nginx: http://192.168.31.170:10082
+      # odc 启动应用服务dao命令目录
+      dao-path: /eoi/odc/dao
+    gitlab:
+      # 需要修改gitlab地址，gitlab的token信息（需要修改）
+      url: http://192.168.31.171:180/
+      # gitlab的token信息（需要修改）
+      token: YOUR_GITLAB_TOKEN
+            # gitlab账号（需要修改）
+      username: root
+      # gitlab密码（需要修改）
+      password: YOUR_GITLAB_PASSWORD
+      # gitlab群组（需要修改）默认，odc
+      namespace: odc
+      # 所有应用gitla默认分支（需要修改）
+      branchName: main
+      # 模板项目名称
+      templateProject: app-template-new
+      # 文本文件后缀名称
+      text-file: js,txt
+      # 非文本文件后缀名称
+      not-text-file: mp3,mp4
+      # 新建项目（模板项目），需要初始化数据的sql
+      init-data: 
+        - INSERT INTO {dbName}.role(id, name, created_at, updated_at, __restore_data) VALUES (664437320623181824, '管理员', '2024-01-08 11:56:41', '2024-01-08 11:56:41', NULL)
+        - INSERT INTO {dbName}.user(id, name, en_name, job_number, union_id, open_id, userid, email, org_email, mobile, telephone, avatar, position, work_place, password, status, gender, department_id, created_at, updated_at, __restore_data) VALUES (664417630513385472, '管理员', 'admin', '100001', '100001', '100001', '100001', 'admin@qq.com', '', '13888888887', '13888888887', '', '', '', '123456', '启用', '男', 123,'2024-01-08 10:38:27', '2024-01-31 02:14:12', NULL)
+        - INSERT INTO {dbName}.role_menu(id, role_id, menu_id, created_at, updated_at, __restore_data) VALUES (672706006853181440, 664437320623181824, 'RoleAuth', '2024-01-31 07:33:30', '2024-01-31 07:33:30', NULL)
+        - INSERT INTO {dbName}.role_menu(id, role_id, menu_id, created_at, updated_at, __restore_data) VALUES (672706006861570047, 664437320623181824, 'MainLayout', '2024-01-31 07:33:30', '2024-01-31 07:33:30', NULL)
+        - INSERT INTO {dbName}.role_menu(id, role_id, menu_id, created_at, updated_at, __restore_data) VALUES (672706006861570048, 664437320623181824, 'UserManagement', '2024-01-31 07:33:30', '2024-01-31 07:33:30', NULL)
+        - INSERT INTO {dbName}.user_role(id, user_id, role_id, created_at, updated_at, __restore_data) VALUES (664417630513385473, 664417630513385472, 664437320623181824, NULL, NULL, NULL)
+    # 启动应用端口号范围（需要修改）
+    app:
+      port-range: 5000,5600
+# xxl-job相关配置
+xxl:
+  job:
+    executor:
+      # 执行器名称
+      appname: odc-job
+      # 和xxl-job通信端口
+      port: 9099
+    group:
+      autoadd: 11

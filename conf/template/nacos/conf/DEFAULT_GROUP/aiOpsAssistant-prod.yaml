@@ -1,0 +1,124 @@
+#项目模块集中配置
+origin:
+  #多租户配置
+  tenant:
+    #多租户增强
+    enhance: true
+    #动态数据源功能
+    dynamic-datasource: false
+    #动态数据源全局扫描
+    dynamic-global: false
+  datasource:
+    prod:
+      # MySql (必须修改)
+      url: jdbc:mysql://192.168.31.171:3306/odc?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+      username: root
+      password: MySQL@123
+
+  # AI助手相关配置
+  aiOpsAssistant:
+    dify:
+      # 不用修改
+      url: "http://192.168.31.170:10082/chatV/api/v1/prediction/d55729a9-4595-4c08-aa53-a19ccbd56a2f"
+      apiKey: "Bearer app-kq9n7q6Ub3nCbdocZKBQTkyy"
+    knowledge:
+      # aiops-assistant 服务ip端口 (必须修改)
+      url: "http://192.168.31.170:8100/assistant/knowledge?type=1&alertId="
+      # odc 启动的服务ip端口 (必须修改)
+      url2: "http://192.168.31.170:10082/chatRag/api/knowledge/cml0mkquw000611moas6sblz2"
+      # 使用 odc 用户 qiuyun 账号，登录的token（接口Header里面的Origin——Auth）, 这个可能会失效，演示前记得更新一下
+      Authorization: bearer eyJhbGciOiJIUzI1NiJ9.eyJjbGllbnRfaWQiOiJvcmlnaW4iLCJ1c2VyX2lkIjoiMTY1OTA4OTc3NDcwODYwNDkyOSIsImRlcHRfaWQiOiIxNjg0NDg1NTAyMjkxNDM1NTIxIiwicG9zdF9pZCI6IiIsInJvbGVfaWQiOiIyMDM2MzEzMzIxOTg0ODY0MjU4LDE2Mjc1NTg2ODA2NTE4MjEwNTgiLCJ0ZW5hbnRfaWQiOiI2MTExNDkiLCJvYXV0aF9pZCI6IiIsImFjY291bnQiOiJxaXV5dW4iLCJ1c2VyX25hbWUiOiJxaXV5dW4iLCJuaWNrX25hbWUiOiJxaXV5dW4iLCJyZWFsX25hbWUiOiJxaXV5dW4iLCJyb2xlX25hbWUiOiJhcHBBZG1pbixhZG1pbiIsImF2YXRhciI6IiIsImRldGFpbCI6eyJ0eXBlIjoid2ViIiwiZXh0Ijoie1wicGhvbmVcIjpcIlwiLFwiZW1haWxcIjpcIlwifSIsImVtYWlsIjoiIn0sImxpY2Vuc2UiOiJwb3dlcmVkIGJ5IG9yaWdpbiIsImFwcCI6Imh1aXNoYW5nIiwic2hhcmVOYW1lIjpmYWxzZSwic3ViIjoiT3JpZ2luIiwiaWF0IjoxNzc1MDk5MzMzLCJleHAiOjE3NzUxMDY1MzN9.ObQw4u-ABTuB-Ze2v-FLtBF20zn_mAtGZ5Qm5jsJIS0
+    agent:
+       # odc 启动的服务ip端口 (必须修改)
+      url: "http://192.168.31.170:10082/chatV/api/v1/prediction/1d926f03-f613-40b6-a7d2-4e9af3af7d39"
+      id: "c8f25496-0a3f-4bb5-940f-3104759c67ea"
+    chat:
+       # odc 启动的服务ip端口 (必须修改)
+      url: "http://192.168.31.170:10082/chatV/api/v1/prediction/7e8c1084-a71a-4a7a-aff1-105f1a2decdb"
+    #自动根因分析后创建作战室  
+    war-room:
+      # true-开启 false-关闭
+      enabled: false
+      url: http://192.168.107.157:9091/api/v3.1/war-room
+    
+  rootCause:
+    layerScore: '{"应用部署层":10,"资源规划层":60,"图层3":80,"图层4":100}'
+    depthScore: '{"1":1, "2":1}'
+    cmdb:
+      # 没用这个配置
+      url: "http://192.168.107.193:13344/v2/chat/completions"
+    alert:
+      # 单条规则内按 AND 匹配，多条规则按 OR 匹配；未命中规则的告警不进入后续分析流程
+      # 例: [{"business":"南网在线","severity":[2,3]},{"objectInstance":"100033165"}]
+      filter-rules: >-
+        [{"business":"南网在线","severity":[2,3],"objectInstance":["oracle_instance1648202533600661504_0","oracle_instance1648202536935133184_0","oracle_instance1648202535362269184_0"]}]
+
+    
+# spring 相关配置
+spring:
+  # Kafka配置
+  kafka:
+    # Kafka服务器地址，多个地址用逗号分隔 (必须修改)
+    bootstrap-servers: 192.168.31.172:9092,192.168.31.173:9092,192.168.31.174:9092
+    # 生产者配置
+    producer:
+      # 重试次数
+      retries: 3
+      # 批处理大小
+      batch-size: 16384
+      # 缓冲区内存大小
+      buffer-memory: 33554432
+      # 消息键的序列化方式
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # 消息值的序列化方式
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # 消息确认机制
+      acks: all
+    # 消费者配置
+    consumer:
+      # 消费者分组ID
+      group-id: aiops-assistant-group
+      # 是否自动提交偏移量
+      enable-auto-commit: false
+      # 自动提交偏移量的间隔时间
+      auto-commit-interval: 1000
+      # 当分区没有偏移量时，从哪里开始消费
+      auto-offset-reset: earliest
+      # 消息键的反序列化方式
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      # 消息值的反序列化方式
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    # 监听器配置
+    listener:
+      # 消费者ACK模式：手动或自动确认消息消费
+      ack-mode: manual
+      # 消费者拉取超时时间
+      poll-timeout: 3000
+      # 并发数
+      concurrency: 3
+      # 最大拉取记录数量
+      max-poll-records: 500
+
+# Redis配置
+  redis:
+    mode: single
+    host: 192.168.31.170
+    port: 6379
+    database: 0
+    password: Reids@123
+
+kafka:
+  # 普通消息主题
+  topic:
+    name: aiops-topic
+  # 批量消息主题
+  batch:
+    topic:
+      name: aiops-batch-topic
+llm:
+  # root-case地址
+  base_url: http://192.168.31.170:8099
+ai:
+  url: https://api.deepseek.com
+  model: deepseek-v4-pro
+  token: sk-d7f341b9d88644139a9f5310ec389169

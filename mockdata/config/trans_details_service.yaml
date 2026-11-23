@@ -1,0 +1,86 @@
+bklink:
+  "{object_name_0}":
+    - service_name: "{object_name_0}-WEB负载"
+      up_link: ""
+      ms: 101
+      src_ip: ["6.0.0.1", "6.0.0.11"]
+      dst_ip: ["10.0.0.2", "10.0.0.12"]
+      center: ["一中心", "二中心"]
+      time_abnormal_range:
+        start: "10:01:00"
+        end: "10:04:00"
+    - service_name: "{object_name_0}-WEB"
+      up_link: "{object_name_0}-WEB负载"
+      ms: 121
+      src_ip: ["10.0.0.2", "10.0.0.12"]
+      dst_ip: ["10.0.0.3", "10.0.0.13"]
+      center: ["一中心", "二中心"]
+      time_abnormal_range:
+        start: "10:01:00"
+        end: "10:04:00"
+    - service_name: "{object_name_0}-应用负载"
+      up_link: "{object_name_0}-WEB"
+      ms: 201
+      src_ip: ["6.0.0.3", "6.0.0.13"]
+      dst_ip: ["10.0.0.4", "10.0.0.14"]
+      center: ["一中心", "二中心"]
+      time_abnormal_range:
+        start: "10:01:00"
+        end: "10:04:00"
+    - service_name: "{object_name_0}-应用"
+      up_link: "{object_name_0}-应用负载"
+      ms: 211
+      src_ip: ["10.0.0.4", "10.0.0.14"]
+      dst_ip: ["10.0.0.5", "10.0.0.15"]
+      center: ["一中心", "二中心"]
+      time_abnormal_range:
+        start: "10:01:00"
+        end: "10:04:00"
+
+  "{object_name_1}":
+    - service_name: "{object_name_1}-负载"
+      up_link: "{object_name_0}-应用"
+      ms: 321
+      src_ip: ["6.0.1.1", "6.0.1.10"]
+      dst_ip: ["10.0.1.2", "10.0.1.11"]
+      center: ["一中心", "二中心"]
+      time_abnormal_range:
+        start: "07:00:00"
+        end: "07:02:00"
+    - service_name: "{object_name_1}-应用"
+      up_link: "{object_name_1}-负载"
+      ms: 331
+      src_ip: ["10.0.1.2", "10.0.1.11"]
+      dst_ip: ["10.0.2.3", "10.0.2.13"]
+      center: ["一中心", "二中心"]
+      time_abnormal_range:
+        start: "07:00:00"
+        end: "07:02:00"
+
+  "{object_name_2}":
+    - service_name: "{object_name_2}-负载"
+      up_link: "{object_name_1}-应用"
+      ms: 351
+      src_ip: ["6.0.2.3", "6.0.2.13"]
+      dst_ip: ["10.0.2.2", "10.0.2.12"]
+      center: ["一中心", "二中心"]
+    - service_name: "{object_name_2}-应用"
+      up_link: "{object_name_2}-负载"
+      ms: 391
+      src_ip: ["10.0.2.2", "10.0.2.12"]
+      dst_ip: ["10.0.3.1", "10.0.3.10", "10.0.3.20"]
+      center: ["一中心", "二中心"]
+
+  "{object_name_3}":
+    - service_name: "{object_name_3}-负载"
+      up_link: "{object_name_1}-应用"
+      ms: 411
+      src_ip: ["6.0.3.1", "6.0.3.11"]
+      dst_ip: ["10.0.3.2", "10.0.3.12"]
+      center: ["一中心", "二中心"]
+    - service_name: "{object_name_3}-应用"
+      up_link: "{object_name_3}-负载"
+      ms: 431
+      src_ip: ["10.0.3.2", "10.0.3.12"]
+      dst_ip: ["10.0.4.1", "10.0.4.10", "10.0.4.20"]
+      center: ["一中心", "二中心"]

@@ -1,0 +1,72 @@
+cases:
+  # {object_id_N} 映射到 instances[N]，N 从 0 开始
+  "{object_id_0}":
+    baseline:
+      - time: "09:10"
+        count: 2000
+        duration: 0.6
+        resp_rate: 98.0
+        succ_rate: 97.0
+      - time: "09:59"
+        count: 2060
+        duration: 0.6
+        resp_rate: 98.0
+        succ_rate: 97.0
+    special:
+      - baseline_time: "09:10"
+        times: ["09:11", "09:12"]
+        count: [1908, 1890]
+        duration: [1.6, 2.6]
+        resp_rate: [90.0, 80.0]
+        succ_rate: [95.0, 90.0]
+      - baseline_time: "09:59"
+        times: ["10:00", "10:01", "10:02", "10:03", "10:04"]
+        count: [1800, 1700, 1680, 1600, 1507]
+        duration: [0.8, 0.92, 1.22, 1.33, 1.87]
+        resp_rate: [91.0, 90.0, 88.3, 86.2, 85.1]
+        succ_rate: [92.0, 91.0, 89.0, 87.2, 86.2]
+
+  "{object_id_1}":
+    baseline:
+      - time: "09:59"
+        count: 2040
+        duration: 0.6
+        resp_rate: 98.0
+        succ_rate: 97.0
+    special:
+      - baseline_time: "09:59"
+        times: ["10:00", "10:01", "10:02", "10:03", "10:04"]
+        count: [1840, 1690, 1580, 1502, 1370]
+        duration: [0.82, 0.99, 1.12, 1.32, 1.62]
+        resp_rate: [91.5, 89.0, 85.0, 83.2, 82.2]
+        succ_rate: [92.5, 90.0, 86.0, 85.1, 83.2]
+
+  "{object_id_2}":
+    baseline:
+      - time: "09:59"
+        count: 2020
+        duration: 0.6
+        resp_rate: 98.0
+        succ_rate: 97.0
+    special:
+      - baseline_time: "09:59"
+        times: ["10:00", "10:01", "10:02", "10:03", "10:04"]
+        count: [1750, 1660, 1570, 1407, 1350]
+        duration: [0.83, 1.23, 1.43, 1.67, 1.98]
+        resp_rate: [93.0, 88.0, 85.0, 83.2, 82.1]
+        succ_rate: [92.0, 89.0, 87.0, 85.1, 83.2]
+
+  "{object_id_3}":
+    baseline:
+      - time: "09:59"
+        count: 2000
+        duration: 0.6
+        resp_rate: 98.0
+        succ_rate: 97.0
+    special:
+      - baseline_time: "09:59"
+        times: ["10:00", "10:01", "10:02", "10:03", "10:04"]
+        count: [1700, 1620, 1550, 1480, 1400]
+        duration: [0.85, 1.05, 1.30, 1.50, 1.80]
+        resp_rate: [92.0, 89.5, 86.0, 84.0, 83.0]
+        succ_rate: [93.0, 90.5, 88.0, 86.0, 84.0]

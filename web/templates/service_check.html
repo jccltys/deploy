@@ -1,0 +1,356 @@
+{% extends "base.html" %}
+
+{% block title %}Service Check - 服务巡检{% endblock %}
+
+{% block nav_service_check %}active{% endblock %}
+
+{% block head %}
+<style>
+.summary-bar{
+  display:flex;gap:24px;padding:16px 20px;background:var(--bg-elevated);
+  border-radius:var(--radius-sm);margin-bottom:20px;flex-wrap:wrap;
+}
+.summary-bar .s-item{display:flex;align-items:center;gap:8px;font-size:0.85rem}
+.summary-bar .s-item .num{font-weight:700;font-size:1.1rem}
+.summary-bar .s-item .num.green{color:var(--accent)}
+.summary-bar .s-item .num.red{color:var(--danger)}
+.summary-bar .s-item .num.gray{color:var(--fg-muted)}
+.summary-bar .s-item .lbl{color:var(--fg-secondary);font-size:0.78rem}
+
+.filter-bar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 16px;background:var(--bg-elevated);border-radius:var(--radius-sm);
+  margin-bottom:20px;
+}
+.filter-bar .filter-label{font-size:0.8rem;color:var(--fg-muted);font-weight:500}
+.filter-pills{display:flex;gap:6px;flex-wrap:wrap}
+.filter-pills .pill{
+  padding:4px 14px;border-radius:14px;font-size:0.78rem;font-weight:500;
+  cursor:pointer;transition:all var(--transition);user-select:none;
+  background:var(--bg-card);color:var(--fg-secondary);border:1px solid var(--border);
+}
+.filter-pills .pill:hover{border-color:var(--border-light);color:var(--fg)}
+.filter-pills .pill.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+.filter-pills .pill.gray.active{background:rgba(107,114,128,0.1);border-color:var(--fg-muted);color:var(--fg-muted)}
+.filter-pills .pill .count-tag{
+  font-size:0.6rem;background:rgba(255,255,255,0.08);padding:0 6px;
+  border-radius:8px;margin-left:4px;
+}
+.filter-pills .pill.active .count-tag{background:rgba(0,0,0,0.15)}
+
+.health-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;
+}
+
+.service-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;transition:all var(--transition);
+  cursor:default;
+}
+.service-card:hover{border-color:var(--border-light)}
+.service-card .sc-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;border-bottom:1px solid var(--border);
+}
+.service-card .sc-head .sc-name{
+  display:flex;align-items:center;gap:8px;font-size:0.9rem;font-weight:600;
+}
+.service-card .sc-head .sc-name svg{flex-shrink:0}
+.service-card .sc-body{padding:12px 16px}
+.service-card .sc-meta{font-size:0.75rem;color:var(--fg-muted);margin-bottom:8px}
+.service-card .sc-meta span{margin-right:12px}
+.service-card .sc-hosts{list-style:none}
+.service-card .sc-hosts li{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.03);font-size:0.82rem;
+}
+.service-card .sc-hosts li:last-child{border-bottom:none}
+.service-card .sc-hosts .ip{font-family:var(--font-mono);font-size:0.78rem;color:var(--fg)}
+.service-card .sc-hosts .info{font-size:0.72rem;color:var(--fg-muted)}
+
+.status-badge{
+  display:inline-flex;align-items:center;gap:5px;font-size:0.72rem;
+  font-weight:500;padding:2px 10px;border-radius:10px;
+}
+.status-badge .sm{width:5px;height:5px;border-radius:50%}
+.status-badge.healthy{background:var(--accent-dim);color:var(--accent)}
+.status-badge.healthy .sm{background:var(--accent)}
+.status-badge.unhealthy{background:var(--danger-dim);color:var(--danger)}
+.status-badge.unhealthy .sm{background:var(--danger)}
+.status-badge.pending{background:rgba(107,114,128,0.06);color:var(--fg-muted)}
+.status-badge.pending .sm{background:var(--fg-muted)}
+
+.service-card.border-healthy{border-left:3px solid var(--accent)}
+.service-card.border-down{border-left:3px solid var(--danger)}
+.service-card.border-pending{border-left:3px solid var(--border)}
+
+.check-output{margin-top:20px;display:none}
+.check-output.show{display:block}
+.check-output .co-head{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;
+}
+.check-output .co-head h4{font-size:0.9rem;font-weight:600;display:flex;align-items:center;gap:8px}
+.check-log{
+  background:#000;border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:14px 18px;font-family:var(--font-mono);font-size:0.75rem;
+  line-height:1.8;max-height:300px;overflow-y:auto;
+}
+.check-log .ln{color:var(--fg-muted)}
+.check-log .ln.ok{color:var(--accent)}
+.check-log .ln.fail{color:var(--danger)}
+.check-log .ln.warn{color:var(--warning)}
+.check-log .ln.info{color:var(--info)}
+
+@media(max-width:768px){
+  .health-grid{grid-template-columns:1fr}
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="topbar">
+  <div>
+    <div class="breadcrumb">
+      <a href="/dashboard/">Dashboard</a>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      <span>Service Check</span>
+    </div>
+    <h2>Service Health <span>组件健康巡检</span></h2>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <button class="btn btn-primary" id="runCheckBtn" onclick="runServiceCheck(this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Run Check
+    </button>
+  </div>
+</div>
+
+<div class="summary-bar">
+  <div class="s-item"><span class="num green" id="sumHealthy">0</span><span class="lbl">正常</span></div>
+  <div class="s-item"><span class="num red" id="sumUnhealthy">0</span><span class="lbl">异常</span></div>
+  <div class="s-item"><span class="num gray" id="sumPending">{{ summary.total }}</span><span class="lbl">待检测</span></div>
+  <div class="s-item"><span class="num" style="font-weight:700;">{{ summary.hosts }}</span><span class="lbl">主机数</span></div>
+  <div class="s-item"><span class="num" style="font-weight:700;">{{ summary.total }}</span><span class="lbl">组件数</span></div>
+  {% if summary.last_check %}
+   <div class="s-item" style="margin-left:auto;"><span id="lastCheckTime" style="font-size:0.75rem;color:var(--accent);">上次检测时间: {{ summary.last_check or '—' }}</span></div>
+  {% endif %}
+</div>
+
+<div class="filter-bar">
+  <span class="filter-label">筛选:</span>
+  <div class="filter-pills">
+    <span class="pill active" onclick="filterHealth(this,'all')">全部 <span class="count-tag" id="filtAll">{{ summary.total }}</span></span>
+    <span class="pill active" onclick="filterHealth(this,'healthy')">正常 <span class="count-tag" id="filtHealthy">0</span></span>
+    <span class="pill danger" onclick="filterHealth(this,'unhealthy')">异常 <span class="count-tag" id="filtUnhealthy">0</span></span>
+    <span class="pill gray" onclick="filterHealth(this,'pending')">待检测 <span class="count-tag" id="filtPending">{{ summary.total }}</span></span>
+  </div>
+</div>
+
+<div class="health-grid" id="healthGrid">
+  {% for svc in services %}
+  <div class="service-card border-pending" data-comp="{{ svc.name }}" data-status="pending">
+    <div class="sc-head">
+      <div class="sc-name">
+        {% if svc.icon %}{{ svc.icon|safe }}{% endif %}
+        <span>{{ svc.name }}</span>
+      </div>
+      <span class="status-badge pending" id="badge-{{ svc.name }}"><span class="sm"></span> {{ svc.status_label }}</span>
+    </div>
+    <div class="sc-body">
+      <div class="sc-meta">
+        <span>Checker: {{ svc.checker }}</span>
+        {% if svc.port %}<span>Port: {{ svc.port }}</span>{% endif %}
+      </div>
+      <ul class="sc-hosts">
+        {% for host in svc.hosts %}
+        <li>
+          <span class="ip">{{ host.ip }}</span>
+          <span class="status-badge pending" style="font-size:0.65rem;padding:1px 8px;" id="hbadge-{{ svc.name }}-{{ host.ip }}"><span class="sm"></span> {{ host.status_label }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endfor %}
+
+  {% if not services %}
+  <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--fg-muted);">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+    <p style="margin-top:12px;font-size:0.9rem;">暂无可巡检的组件</p>
+    <p style="font-size:0.78rem;">请先在 config.yaml 中配置组件与主机</p>
+  </div>
+  {% endif %}
+</div>
+
+<div class="check-output card" id="checkOutput">
+  <div class="co-head card-header">
+    <h4>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Check Output
+    </h4>
+    <span style="font-size:0.75rem;color:var(--fg-muted);" id="checkStatus">Running...</span>
+  </div>
+  <div class="card-body" style="padding:0;">
+    <div class="check-log" id="checkLog"></div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block modals %}
+<div id="errorModal" class="modal-overlay" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;">
+  <div style="background:var(--bg-card);border-radius:var(--radius);width:420px;max-width:90vw;padding:0;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="display:flex;align-items:center;gap:8px;padding:16px 20px;border-bottom:1px solid var(--border);">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span style="font-weight:600;font-size:0.9rem;">配置校验未通过</span>
+    </div>
+    <div style="padding:20px;font-size:0.85rem;color:var(--fg-secondary);line-height:1.6;" id="errorModalBody"></div>
+    <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;">
+      <button class="btn btn-primary btn-sm" onclick="document.getElementById('errorModal').style.display='none'">知道了</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function loadLastCheck() {
+  try {
+    var resp = await fetch('/service-check/last');
+    var data = await resp.json();
+    if (data.checked_at) {
+      _updateResults(data.results || {}, data.host_results || {});
+      document.getElementById('checkStatus').textContent = 'Last check: ' + data.checked_at;
+      // 如果卡片更新后状态都是 "待检测"，说明没有保存过结果
+    }
+  } catch(e) {
+    // 忽略加载失败，保持待检测状态
+  }
+}
+loadLastCheck();
+
+function filterHealth(el, status) {
+  el.classList.toggle('active');
+  const activeFilters = Array.from(document.querySelectorAll('.filter-pills .pill.active'))
+    .map(p => {
+      if (p.classList.contains('danger')) return 'unhealthy';
+      if (p.classList.contains('gray')) return 'pending';
+      return p.textContent.trim().split(' ')[0].toLowerCase();
+    });
+  const showAll = activeFilters.length === 0 || activeFilters.includes('all');
+  document.querySelectorAll('.service-card').forEach(card => {
+    const st = card.dataset.status || 'pending';
+    card.style.display = (showAll || activeFilters.includes(st)) ? '' : 'none';
+  });
+}
+
+function updateSummary(healthy, unhealthy, pending) {
+  document.getElementById('sumHealthy').textContent = healthy;
+  document.getElementById('sumUnhealthy').textContent = unhealthy;
+  document.getElementById('sumPending').textContent = pending;
+  document.getElementById('filtHealthy').textContent = healthy;
+  document.getElementById('filtUnhealthy').textContent = unhealthy;
+  document.getElementById('filtPending').textContent = pending;
+  document.getElementById('filtAll').textContent = healthy + unhealthy + pending;
+}
+
+function _updateResults(results, hostResults) {
+  var healthy = 0, unhealthy = 0, pending = 0;
+  document.querySelectorAll('.service-card').forEach(function(card) {
+    var comp = card.dataset.comp.toLowerCase();
+    var r = results[comp];
+    if (!r) { pending++; return; }
+
+    var badge = document.getElementById('badge-' + comp);
+    if (r.status === 'healthy') {
+      card.dataset.status = 'healthy';
+      card.className = card.className.replace(/border-\w+/, 'border-healthy');
+      if (badge) { badge.className = 'status-badge healthy'; badge.innerHTML = '<span class="sm"></span> \u6b63\u5e38'; }
+      healthy++;
+    } else {
+      card.dataset.status = 'unhealthy';
+      card.className = card.className.replace(/border-\w+/, 'border-down');
+      if (badge) { badge.className = 'status-badge unhealthy'; badge.innerHTML = '<span class="sm"></span> \u5f02\u5e38'; }
+      unhealthy++;
+    }
+
+    card.querySelectorAll('.sc-hosts li').forEach(function(li) {
+      var ip = li.querySelector('.ip');
+      if (!ip) return;
+      var hkey = comp + '-' + ip.textContent.trim();
+      var hr = hostResults[hkey];
+      var hbadge = li.querySelector('.status-badge');
+      if (!hbadge || !hr) return;
+      if (hr.status === 'healthy') {
+        hbadge.className = 'status-badge healthy'; hbadge.style.cssText = 'font-size:0.65rem;padding:1px 8px;';
+        hbadge.innerHTML = '<span class="sm"></span> \u6b63\u5e38';
+      } else {
+        hbadge.className = 'status-badge unhealthy'; hbadge.style.cssText = 'font-size:0.65rem;padding:1px 8px;';
+        hbadge.innerHTML = '<span class="sm"></span> \u5f02\u5e38';
+      }
+    });
+  });
+  updateSummary(healthy, unhealthy, pending);
+}
+
+function runServiceCheck(btn) {
+  var protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+  var wsUrl = protocol + window.location.host + '/service-check/ws';
+
+  var panel = document.getElementById('checkOutput');
+  var log = document.getElementById('checkLog');
+  panel.classList.add('show');
+  log.innerHTML = '';
+  document.getElementById('checkStatus').textContent = 'Connecting...';
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Checking...';
+
+  var ws = new WebSocket(wsUrl);
+  ws._btn = btn;
+  ws._panel = panel;
+
+  ws.onopen = function() {
+    document.getElementById('checkStatus').textContent = 'Running...';
+  };
+
+  ws.onmessage = function(evt) {
+    var msg;
+    try { msg = JSON.parse(evt.data); } catch(e) { return; }
+
+    if (msg.type === 'log') {
+      var d = document.createElement('div');
+      d.className = 'ln ' + (msg.class || 'info');
+      d.textContent = msg.text;
+      log.appendChild(d);
+      log.scrollTop = log.scrollHeight;
+    } else if (msg.type === 'result') {
+      _updateResults(msg.results || {}, msg.host_results || {});
+      document.getElementById('checkStatus').textContent = 'Completed (exit ' + msg.returncode + ')';
+      var now = new Date();
+      var ts = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + ':' + String(now.getSeconds()).padStart(2,'0');
+      document.getElementById('lastCheckTime').textContent = '上次检测时间: ' + ts;
+      ws._btn.disabled = false;
+      ws._btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Run Check';
+    } else if (msg.type === 'error') {
+      ws._panel.classList.remove('show');
+      document.getElementById('errorModalBody').textContent = msg.message || '未知错误';
+      document.getElementById('errorModal').style.display = 'flex';
+    }
+  };
+
+  ws.onerror = function() {
+    ws._panel.classList.remove('show');
+    document.getElementById('errorModalBody').textContent = 'WebSocket 连接失败';
+    document.getElementById('errorModal').style.display = 'flex';
+    ws._btn.disabled = false;
+    ws._btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Run Check';
+  };
+
+  ws.onclose = function() {
+    ws._btn.disabled = false;
+    ws._btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Run Check';
+  };
+}
+</script>
+{% endblock %}

@@ -1,0 +1,743 @@
+{
+    "clickhouse": {
+        "cluster": "demo-clickhouse",
+        "hosts": [
+            [
+                "192.168.31.170",
+                "192.168.31.171"
+            ]
+        ],
+        "port": 19000,
+        "db": "aimeter",
+        "username": "default",
+        "password": "znyw@123"
+    },
+    "kafka": {
+        "brokers": "192.168.31.172:9092,192.168.31.173:9092,192.168.31.174:9092"
+    },
+    "reloadSeriesMapInterval": 86400,
+    "activeSeriesRange": 3600,
+    "tasks": [
+        {
+            "name": "apm_span_index_trace_id",
+            "topic": "apm_span",
+            "consumerGroup": "aimeter_apm_span_index_trace_id_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_span_index_trace_id",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "trace_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_client_to_peer",
+            "topic": "apm_client_to_peer",
+            "consumerGroup": "aimeter_apm_object_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_client_to_peer",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_client_to_peer_metric",
+            "topic": "apm_client_to_peer_metric",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_client_to_peer_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "object_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_client_to_peer_span",
+            "topic": "apm_client_to_peer_span",
+            "consumerGroup": "aimeter_apm_object_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_client_to_peer_span",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_client_to_peer_span_metric",
+            "topic": "apm_client_to_peer_span_metric",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_client_to_peer_span_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "object_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_service",
+            "topic": "apm_service",
+            "consumerGroup": "aimeter_apm_object_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_service",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_service_accept_client",
+            "topic": "apm_service_accept_client",
+            "consumerGroup": "aimeter_apm_object_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_service_accept_client",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_service_accept_client_metric",
+            "topic": "apm_service_accept_client_metric",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_service_accept_client_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "object_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_service_client_metric",
+            "topic": "apm_service_client_metric",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_service_client_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "object_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_service_instance",
+            "topic": "apm_service_instance",
+            "consumerGroup": "aimeter_apm_object_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_service_instance",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_service_instance_metric",
+            "topic": "apm_service_instance_metric",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_service_instance_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "object_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_service_server_metric",
+            "topic": "apm_service_server_metric",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_service_server_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "object_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_service_span",
+            "topic": "apm_service_span",
+            "consumerGroup": "aimeter_apm_object_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_service_span",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_service_span_metric",
+            "topic": "apm_service_span_metric",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_service_span_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "object_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_topology",
+            "topic": "apm_topology",
+            "consumerGroup": "aimeter_apm_object_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_topology",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_topology_metric",
+            "topic": "apm_topology_metric",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_topology_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "object_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_peer",
+            "topic": "apm_peer",
+            "consumerGroup": "aimeter_apm_object_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_peer",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_peer_metric",
+            "topic": "apm_peer_metric",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_peer_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "object_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_peer_statement",
+            "topic": "apm_peer_statement",
+            "consumerGroup": "aimeter_apm_object_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_peer_statement",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_peer_statement_metric",
+            "topic": "apm_peer_statement_metric",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_peer_statement_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "object_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_jvm_metric",
+            "topic": "apm_jvm_metric",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_jvm_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "object_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_path_with_trace",
+            "topic": "apm_path_with_trace",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_path_with_trace",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "path_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_span_error",
+            "topic": "apm_span_error",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_span_error",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "trace_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_log_template_detail",
+            "topic": "apm_log_template",
+            "consumerGroup": "aimeter_apm_detail_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_log_template_detail",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_scene_path",
+            "topic": "apm_scene_path",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_scene_path",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "scene_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_scene_path_metric",
+            "topic": "apm_scene_path_metric",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_scene_path_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "scene_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_scene_metric",
+            "topic": "apm_scene_metric",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_scene_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "scene_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_scene",
+            "topic": "apm_scene",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_scene",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "scene_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_server_path",
+            "topic": "apm_server_path",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_server_path",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "server_path_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_server_path_metric",
+            "topic": "apm_server_path_metric",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_server_path_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "server_path_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_server_trace_path",
+            "topic": "apm_server_trace_path",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_server_trace_path",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "server_path_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_server_trace_path_metric",
+            "topic": "apm_server_trace_path_metric",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_server_trace_path_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "server_path_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_scene_server_path",
+            "topic": "apm_scene_server_path",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_scene_server_path",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "scene_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_scene_server_path_metric",
+            "topic": "apm_scene_server_path_metric",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_scene_server_path_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "scene_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_scene_server_trace_path",
+            "topic": "apm_scene_server_trace_path",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_scene_server_trace_path",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "scene_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_scene_server_trace_path_metric",
+            "topic": "apm_scene_server_trace_path_metric",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_scene_server_trace_path_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "scene_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_scene_trans_path",
+            "topic": "apm_scene_trans_path",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_scene_trans_path",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "scene_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "apm_scene_trans_path_metric",
+            "topic": "apm_scene_trans_path_metric",
+            "consumerGroup": "aimeter_apm_metric_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_scene_trans_path_metric",
+            "flushInterval": 10,
+            "bufferSize": 10000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "scene_id",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_skywalking_instance",
+            "topic": "apm_managements",
+            "consumerGroup": "aimeter_apm_agent_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_skywalking_agent",
+            "flushInterval": 10,
+            "bufferSize": 5000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "service",
+            "timeUnit": 0.001
+        },
+        {
+            "name": "aimeter_tranc_mapping_detail",
+            "topic": "apm_service_tranc_mapping_detail",
+            "consumerGroup": "aimeter_apm_agent_group_01",
+            "earliest": false,
+            "parser": "json",
+            "autoSchema": true,
+            "tableName": "apm_service_tranc_mapping_detail",
+            "flushInterval": 10,
+            "bufferSize": 5000,
+            "dynamicSchema": {
+                "enable": true
+            },
+            "excludeColumns": [
+            ],
+            "shardingKey": "trace_id",
+            "timeUnit": 0.001
+        }
+    ],
+    "logLevel": "info"
+}

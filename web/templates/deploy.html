@@ -1,0 +1,513 @@
+{% extends "base.html" %}
+{% block title %}执行部署{% endblock %}
+{% block nav_deploy %}active{% endblock %}
+
+{% block head %}
+<style>
+.deploy-layout{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start}
+.order-pipeline{display:flex;flex-wrap:wrap;gap:4px;padding:8px 0}
+.order-pipeline .step{display:flex;align-items:center;gap:4px;font-size:0.72rem;padding:3px 10px;border-radius:4px;background:var(--bg-elevated);color:var(--fg-muted);border:1px solid var(--border)}
+.order-pipeline .step.core{background:var(--accent-dim);color:var(--accent);border-color:transparent}
+.order-pipeline .step.common{border-color:var(--border-light);color:var(--fg-secondary)}
+.order-pipeline .step.custom{background:rgba(168,85,247,0.12);color:#A855F7;border-color:transparent}
+.order-pipeline .arrow{display:flex;align-items:center;color:var(--fg-muted);font-size:0.6rem;padding:0 2px}
+.order-summary{font-size:0.72rem;color:var(--fg-muted);margin-top:8px}
+.tag-selector{display:flex;flex-wrap:wrap;gap:6px}
+.tag-selector .tag{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:var(--radius-xs);font-size:0.78rem;font-weight:500;background:var(--bg-elevated);color:var(--fg-secondary);border:1px solid var(--border);cursor:pointer;transition:all var(--transition);user-select:none}
+.tag-selector .tag:hover{border-color:var(--border-light);color:var(--fg)}
+.tag-selector .tag.selected{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+.tag-group-label{font-size:0.7rem;font-weight:600;color:var(--fg-muted);text-transform:uppercase;letter-spacing:0.04em;margin:8px 0 4px;width:100%}
+.host-assign{list-style:none}
+.host-assign li{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:0.85rem}
+.host-assign li:last-child{border-bottom:none}
+.host-assign .ip{font-family:var(--font-mono);font-size:0.8rem;color:var(--fg);font-weight:500;min-width:140px}
+.host-assign .count-badge{font-size:0.7rem;background:var(--accent-dim);color:var(--accent);padding:1px 8px;border-radius:10px;font-weight:500}
+.host-assign .comp-pills{display:flex;gap:3px;flex-wrap:wrap;flex:1}
+.host-assign .comp-pills .pill{font-size:0.65rem;padding:1px 8px;border-radius:4px;background:var(--bg-elevated);color:var(--fg-muted);border:1px solid var(--border)}
+.host-assign .comp-pills .pill.selected{background:var(--accent-dim);color:var(--accent);border-color:transparent}
+.exec-panel{position:sticky;top:28px}
+.exec-summary{margin-bottom:20px}
+.exec-summary .row{display:flex;justify-content:space-between;padding:6px 0;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.04)}
+.exec-summary .row:last-child{border-bottom:none}
+.exec-summary .label{color:var(--fg-muted)}
+.exec-summary .value{color:var(--fg);font-weight:500}
+.exec-output{background:#000;border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;font-family:var(--font-mono);font-size:0.75rem;line-height:1.7;max-height:320px;overflow-y:auto;margin-top:16px}
+.exec-output .line{color:var(--fg-muted)}
+.exec-output .line.info{color:var(--info)}
+.exec-output .line.ok{color:var(--accent)}
+.exec-output .line.warn{color:var(--warning)}
+.exec-output .line.err{color:var(--danger)}
+.exec-output .line .ts{color:var(--fg-muted);opacity:0.5;margin-right:8px}
+.cursor-blink{animation:blink 1s step-end infinite;display:inline-block;width:6px;height:14px;background:var(--accent);vertical-align:middle;margin-left:4px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:0}
+.tabs .tab{padding:10px 20px;font-size:0.82rem;font-weight:500;color:var(--fg-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all var(--transition)}
+.tabs .tab:hover{color:var(--fg-secondary)}
+.tabs .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+@media(max-width:1100px){.deploy-layout{grid-template-columns:1fr}}
+@media(max-width:768px){.topbar{flex-wrap:wrap}}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="topbar">
+  <div>
+    <div class="breadcrumb"><span>Dashboard</span><span>/</span><span>Deploy</span></div>
+    <h2>New Deployment <span>配置并执行组件部署</span></h2>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <span id="deployStatus" style="font-size:0.8rem;color:var(--fg-muted);display:flex;align-items:center;gap:6px;">
+      <span class="dot" style="width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block;"></span>
+      Idle
+    </span>
+  </div>
+</div>
+
+<div class="deploy-layout">
+
+  <!-- Left: Configuration -->
+  <div>
+
+    <!-- Component Selection -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header">
+        <h4>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Select Components
+        </h4>
+        <span style="font-size:0.75rem;color:var(--fg-muted);" id="compCount">0 selected</span>
+      </div>
+      <div class="card-body">
+        <div class="tag-selector" id="tagSelector">
+          <span class="tag-group-label">Core Infrastructure</span>
+          <span class="tag" onclick="toggleComp(this)">MySQL</span>
+          <span class="tag" onclick="toggleComp(this)">Redis</span>
+          <span class="tag" onclick="toggleComp(this)">ZooKeeper</span>
+          <span class="tag" onclick="toggleComp(this)">Kafka</span>
+          <span class="tag" onclick="toggleComp(this)">Hadoop</span>
+          <span class="tag" onclick="toggleComp(this)">Nacos</span>
+          <span class="tag" onclick="toggleComp(this)">CKMan</span>
+          <span class="tag" onclick="toggleComp(this)">ClickHouse</span>
+          <span class="tag" onclick="toggleComp(this)">Nebula</span>
+          <span class="tag" onclick="toggleComp(this)">Nebula Studio</span>
+
+          <span class="tag-group-label">Common</span>
+          <span class="tag" onclick="toggleComp(this)">Nginx</span>
+          <span class="tag" onclick="toggleComp(this)">Java 11</span>
+          <span class="tag" onclick="toggleComp(this)">Java 21</span>
+
+          <span class="tag-group-label">Business Applications</span>
+          <span class="tag" onclick="toggleComp(this)">SSO</span>
+          <span class="tag" onclick="toggleComp(this)">ODMP</span>
+          <span class="tag" onclick="toggleComp(this)">DolphinScheduler</span>
+          <span class="tag" onclick="toggleComp(this)">DataX</span>
+          <span class="tag" onclick="toggleComp(this)">Refiner</span>
+          <span class="tag" onclick="toggleComp(this)">AIMETER</span>
+          <span class="tag" onclick="toggleComp(this)">ODC</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Installation Order -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header">
+        <h4>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Installation Order
+        </h4>
+        <span style="font-size:0.75rem;color:var(--fg-muted);">
+          <span style="color:var(--accent);">&#9608;</span> Core
+          <span style="color:var(--fg-secondary);margin-left:8px;">&#9608;</span> Common
+          <span style="color:#A855F7;margin-left:8px;">&#9608;</span> Custom
+        </span>
+      </div>
+      <div class="card-body">
+        <div class="order-pipeline">
+          {% for name, group in order_pipeline %}
+          <span class="step {{ group }}">{{ name|capitalize }}</span>{% if not loop.last %}<span class="arrow">&#8594;</span>{% endif %}
+          {% endfor %}
+        </div>
+        <div class="order-summary">
+          Order: Core (java &#8594; clickhouse &#8594; nebula) &#8594; Other Common (alphabetical) &#8594; Custom (sso &#8594; odc)
+          <span style="color:var(--accent);margin-left:12px;">&#9432; Java auto-installed on all hosts</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Target Hosts -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header">
+        <h4>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16"/><path d="M4 20V4"/><path d="M8 8h8"/><path d="M8 12h6"/><path d="M8 16h10"/></svg>
+          Target Hosts
+        </h4>
+      </div>
+      <div class="card-body" style="padding:0 20px;">
+        <ul class="host-assign" id="host-assign-list">
+          {% for host, comps in host_assignments %}
+          <li>
+            <span class="ip">{{ host }}</span>
+            <span class="count-badge">{{ comps|length }}</span>
+            <div class="comp-pills">
+              {% for c in comps %}
+              <span class="pill selected">{{ c }}</span>
+              {% endfor %}
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Parameters -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header">
+        <h4>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Deployment Parameters
+        </h4>
+        <span class="form-hint">corresponds to install.py CLI args</span>
+      </div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Install Dir <span class="required">*</span><span class="hint">--install-dir</span></label>
+            <input class="form-input" type="text" id="param-installdir" value="{{ install_dir }}" placeholder="/data/service" onchange="saveSettings()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Package Dir <span class="required">*</span><span class="hint">--package-dir</span></label>
+            <input class="form-input" type="text" id="param-pkgdir" value="{{ package_dir }}" placeholder="/data/softs" onchange="saveSettings()">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Config Dir <span class="hint">--config-dir</span></label>
+            <input class="form-input" type="text" id="param-configdir" value="{{ config_dir }}" placeholder="conf/template" onchange="saveSettings()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">HTTP Port <span class="hint">--http-port</span></label>
+            <input class="form-input" type="number" id="param-httpport" value="{{ http_port }}" onchange="saveSettings()">
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px;display:flex;gap:16px;">
+          <div class="form-checkbox">
+            <input type="checkbox" id="param-failfast" checked>
+            <label for="param-failfast">Fail-fast mode</label>
+          </div>
+          <div class="form-checkbox">
+            <input type="checkbox" id="param-debug">
+            <label for="param-debug">Debug mode (dry-run)</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Right: Execution Panel -->
+  <div class="exec-panel">
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header">
+        <h4>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Execute
+        </h4>
+      </div>
+      <div class="card-body">
+        <div id="wizardStatus" style="font-size:0.75rem;color:var(--fg-muted);padding:0 0 12px 0;border-bottom:1px solid var(--border);margin-bottom:12px;">
+          <div id="wizardStatusText" style="white-space:pre-line;line-height:1.7;">检查前置步骤...</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;">
+          <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;" id="deployBtn" onclick="startDeploy()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span>Execute Deployment</span>
+          </button>
+          <button class="btn btn-secondary" style="width:100%;justify-content:center;" onclick="cancelDeploy()" id="cancelBtn" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Cancel
+          </button>
+        </div>
+
+        <!-- Live Output -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:0.78rem;font-weight:500;color:var(--fg-secondary);">Live Output</span>
+          <button class="btn btn-ghost btn-xs" onclick="clearLog()">Clear</button>
+        </div>
+        <div class="exec-output" id="execOutput" ondblclick="enlargeLog()" title="双击放大" style="cursor:zoom-in;">
+          <div class="line info"><span class="ts">[--:--:--]</span> INFO  Ready. Click "Execute Deployment" to start.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Log Enlarge Modal -->
+<div id="logModal" class="modal-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:2000;justify-content:center;align-items:center;" onclick="if(event.target===this)closeLogModal()">
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-md);width:90%;height:85%;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.4);">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0;">
+      <span style="font-size:0.85rem;font-weight:600;color:var(--fg);">Live Output - 完整日志</span>
+      <button class="btn btn-ghost btn-xs" onclick="closeLogModal()" style="font-size:1.1rem;line-height:1;">&times;</button>
+    </div>
+    <div style="flex:1;overflow:auto;padding:16px 20px;font-family:var(--font-mono);font-size:0.78rem;line-height:1.6;background:var(--bg-elevated);white-space:pre-wrap;word-break:break-all;" id="logModalBody"></div>
+  </div>
+</div>
+
+<!-- Result Modal -->
+<div id="deployModal" class="modal-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;justify-content:center;align-items:center;" onclick="if(event.target===this)closeDeployModal()">
+  <div class="modal" style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-md);padding:28px 32px;max-width:460px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="display:flex;align-items:flex-start;gap:16px;">
+      <div id="deployModalIcon" style="flex-shrink:0;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;">&#9432;</div>
+      <div style="flex:1;min-width:0;">
+        <h4 id="deployModalTitle" style="margin:0 0 8px;font-size:1rem;"></h4>
+        <p id="deployModalMsg" style="margin:0;font-size:0.85rem;color:var(--fg-secondary);line-height:1.6;white-space:pre-wrap;"></p>
+      </div>
+    </div>
+    <div style="margin-top:20px;text-align:right;">
+      <button class="btn btn-secondary" onclick="closeDeployModal()" style="padding:8px 24px;">确定</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Wizard status from server
+var _cfgValidated = {{ 'true' if config_validated else 'false' }};
+var _tmplDone = {{ 'true' if templates_done else 'false' }};
+var _deployed = {{ 'true' if deployed else 'false' }};
+
+function enlargeLog() {
+  var src = document.getElementById('execOutput');
+  var dst = document.getElementById('logModalBody');
+  dst.innerHTML = src.innerHTML;
+  document.getElementById('logModal').style.display = 'flex';
+}
+function closeLogModal() {
+  document.getElementById('logModal').style.display = 'none';
+}
+
+function showDeployModal(icon, title, msg) {
+  var md = document.getElementById('deployModal');
+  var iconEl = document.getElementById('deployModalIcon');
+  iconEl.className = '';
+  if (icon === 'success') { iconEl.style.background = 'rgba(34,197,94,0.12)'; iconEl.style.color = '#22C55E'; iconEl.innerHTML = '&#10003;'; }
+  else if (icon === 'warning') { iconEl.style.background = 'rgba(234,179,8,0.12)'; iconEl.style.color = '#EAB308'; iconEl.innerHTML = '&#9888;'; }
+  else { iconEl.style.background = 'rgba(239,68,68,0.12)'; iconEl.style.color = '#EF4444'; iconEl.innerHTML = '&#9432;'; }
+  document.getElementById('deployModalTitle').textContent = title;
+  document.getElementById('deployModalMsg').textContent = msg;
+  md.style.display = 'flex';
+}
+function closeDeployModal() {
+  document.getElementById('deployModal').style.display = 'none';
+}
+
+function updateWizardStatus() {
+  var txt = document.getElementById('wizardStatusText');
+  if (_deployed) {
+    txt.innerHTML = '<span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:#22C55E;display:inline-block;flex-shrink:0;"></span> 已部署，请勾选需部署的组件</span>';
+  } else if (_cfgValidated && _tmplDone) {
+    txt.innerHTML = '<span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:#22C55E;display:inline-block;flex-shrink:0;"></span> 前置步骤已完成</span>';
+  } else {
+    var lines = [];
+    if (!_cfgValidated) lines.push('<span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:#EAB308;display:inline-block;flex-shrink:0;"></span> Step 1: 配置未验证</span>');
+    if (!_tmplDone) lines.push('<span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:#EAB308;display:inline-block;flex-shrink:0;"></span> Step 2: 模板未配置</span>');
+    txt.innerHTML = '前置步骤未完成:<br>' + lines.join('<br>');
+  }
+}
+
+function toggleComp(el) {
+  el.classList.toggle('selected');
+  updateCounts();
+}
+
+function updateCounts() {
+  const selected = document.querySelectorAll('.tag.selected').length;
+  document.getElementById('compCount').textContent = selected + ' selected';
+}
+
+let _saveTimer = null;
+
+function saveSettings() {
+  if (_saveTimer) clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(function() {
+    var fd = new FormData();
+    fd.append('install_dir', document.getElementById('param-installdir').value.trim());
+    fd.append('package_dir', document.getElementById('param-pkgdir').value.trim());
+    fd.append('config_dir', document.getElementById('param-configdir').value.trim());
+    fd.append('http_port', document.getElementById('param-httpport').value.trim());
+    fetch('/deploy/settings', { method: 'POST', body: fd }).catch(function(){});
+  }, 600);
+}
+
+let ws = null;
+let logBuffer = [];
+
+function connectWebSocket() {
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const wsUrl = protocol + '//' + window.location.host + '/deploy/logs';
+  ws = new WebSocket(wsUrl);
+  ws.onmessage = function(event) {
+    try {
+      const data = JSON.parse(event.data);
+      if (data.type === 'log') {
+        if (data.stream === 'file') {
+          appendRawLog(data.message);
+        } else {
+          appendLog(data.ts, data.level, data.message);
+        }
+      } else if (data.type === 'status') {
+        updateDeployStatus(data.status);
+      } else if (data.type === 'deploy_end') {
+        updateDeployStatus('idle');
+      } else if (data.type === 'deploy_error') {
+        appendLog(null, 'err', '部署异常: ' + (data.error || 'unknown error'));
+        updateDeployStatus('idle');
+      }
+    } catch(e) {
+      appendLog(null, 'info', event.data);
+    }
+  };
+  ws.onclose = function() {
+    if (deployRunning) setTimeout(connectWebSocket, 3000);
+  };
+  ws.onerror = function() {
+    // Will reconnect on close
+  };
+}
+
+let deployRunning = false;
+
+function updateDeployStatus(status) {
+  const el = document.getElementById('deployStatus');
+  if (status === 'running') {
+    el.innerHTML = '<span class="spinner" style="width:10px;height:10px;"></span> Deploying...';
+    deployRunning = true;
+    document.getElementById('deployBtn').disabled = true;
+    document.getElementById('deployBtn').innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg><span>Deploying...</span>';
+    document.getElementById('cancelBtn').disabled = false;
+  } else if (status === 'idle' || status === 'done') {
+    el.innerHTML = '<span class="dot" style="width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block;"></span> Idle';
+    deployRunning = false;
+    document.getElementById('deployBtn').disabled = false;
+    document.getElementById('deployBtn').innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>Execute Deployment</span>';
+    document.getElementById('cancelBtn').disabled = true;
+  }
+}
+
+function appendLog(ts, level, message) {
+  const output = document.getElementById('execOutput');
+  const line = document.createElement('div');
+  line.className = 'line ' + (level === 'ok' ? 'ok' : level === 'warn' ? 'warn' : level === 'err' ? 'err' : 'info');
+  const time = ts || new Date().toLocaleTimeString('en-US', {hour12:false});
+  line.innerHTML = '<span class="ts">[' + time + ']</span> ' + level.toUpperCase() + '  ' + message;
+  output.appendChild(line);
+  output.scrollTop = output.scrollHeight;
+  appendToModal(line);
+}
+
+function appendRawLog(message) {
+  const output = document.getElementById('execOutput');
+  const line = document.createElement('div');
+  line.className = 'line info';
+  line.innerHTML = message;
+  output.appendChild(line);
+  output.scrollTop = output.scrollHeight;
+  appendToModal(line);
+}
+
+function appendToModal(line) {
+  var modal = document.getElementById('logModal');
+  if (modal && modal.style.display === 'flex') {
+    var dst = document.getElementById('logModalBody');
+    var clone = line.cloneNode(true);
+    dst.appendChild(clone);
+    dst.scrollTop = dst.scrollHeight;
+  }
+}
+
+function startDeploy() {
+  // Check Wizard preconditions (Step 1: config validated, Step 2: templates done)
+  if (!_cfgValidated) {
+    showDeployModal('error', '配置未验证', 'Step 1: 请先在 Config 页面保存并验证 config.yaml 配置。');
+    return;
+  }
+  if (!_tmplDone) {
+    showDeployModal('error', '模板未配置', 'Step 2: 请先在 Wizard 页面完成模板配置，或点击"跳过此步骤"。');
+    return;
+  }
+
+  // After full deployment, must select specific components
+  const selected = document.querySelectorAll('.tag.selected');
+  if (_deployed && selected.length === 0) {
+    showDeployModal('warning', '全量部署已完成', '如需再次部署，请勾选需要部署的组件。');
+    return;
+  }
+
+  const output = document.getElementById('execOutput');
+  output.innerHTML = '';
+  appendLog(null, 'info', 'Starting deployment...');
+
+  const formData = new FormData();
+  const services = Array.from(selected).map(t => t.textContent.trim()).join(',');
+  if (services) formData.append('service', services);
+  formData.append('install_dir', document.getElementById('param-installdir').value.trim());
+  formData.append('package_dir', document.getElementById('param-pkgdir').value.trim());
+  formData.append('config_dir', document.getElementById('param-configdir').value.trim());
+  formData.append('http_port', document.getElementById('param-httpport').value.trim());
+  formData.append('debug', document.getElementById('param-debug').checked ? 'true' : 'false');
+  formData.append('fail_fast', document.getElementById('param-failfast').checked ? 'true' : 'false');
+
+  fetch('/deploy/start', { method: 'POST', body: formData })
+    .then(r => r.json())
+    .then(data => {
+      if (data.ok) {
+        updateDeployStatus('running');
+        if (!ws || ws.readyState !== WebSocket.OPEN) connectWebSocket();
+      } else {
+        appendLog(null, 'err', 'Failed: ' + (data.error || 'unknown error'));
+      }
+    })
+    .catch(err => {
+      appendLog(null, 'err', 'Connection error: ' + err.message);
+    });
+}
+
+function cancelDeploy() {
+  if (!confirm('确定要取消当前部署吗？')) return;
+  fetch('/deploy/cancel', { method: 'POST' })
+    .then(r => r.json())
+    .then(data => {
+      if (data.ok) {
+        appendLog(null, 'warn', 'Deployment cancelled by user');
+        updateDeployStatus('idle');
+      }
+    });
+}
+
+function clearLog() {
+  document.getElementById('execOutput').innerHTML = '<div class="line info"><span class="ts">[--:--:--]</span> INFO  Log cleared.</div>';
+}
+
+// Poll deploy status periodically
+setInterval(function() {
+  fetch('/deploy/status')
+    .then(r => r.json())
+    .then(data => {
+      if (data.status === 'running' && !deployRunning) {
+        updateDeployStatus('running');
+        if (!ws || ws.readyState !== WebSocket.OPEN) connectWebSocket();
+      } else if (data.status !== 'running' && deployRunning) {
+        updateDeployStatus('idle');
+      }
+    })
+    .catch(() => {});
+}, 5000);
+
+document.addEventListener('DOMContentLoaded', function() {
+  connectWebSocket();
+  updateCounts();
+  updateWizardStatus();
+});
+</script>
+
+{% endblock %}

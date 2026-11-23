@@ -1,0 +1,377 @@
+#服务器配置
+server:
+    undertow:
+        # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
+        io-threads: 16
+        # 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程,它的值设置取决于系统的负载
+        worker-threads: 400
+        # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
+        buffer-size: 1024
+        # 是否分配的直接内存
+        direct-buffers: true
+        max-http-post-size: 100MB
+    netty:
+        max-initial-line-length: 1000000
+
+#spring配置
+spring:
+    http: 
+        multipart: 
+            enabled: true
+            max-file-size: 512MB
+            max-request-size: 512MB
+    servlet:
+        multipart:
+            max-file-size: 512MB
+            max-request-size: 512MB
+    cloud:
+        sentinel:
+            eager: true
+        gateway:
+            httpclient:
+                max-initial-line-length: 100000
+    devtools:
+        restart:
+            log-condition-evaluation-delta: false
+        livereload:
+            port: 23333
+    flyway:
+        enabled: false
+    #不存在flyway_schema_history表时自动创建
+        baseline-on-migrate: true
+        validate-on-migrate: false
+    #禁止清理
+        cleanDisabled: true
+        out-of-order: true        
+#mybatis-plus配置
+mybatis-plus:
+    mapper-locations: classpath:org/origin/**/**/mapper/*Mapper.xml, classpath:/com/eoi/dragon/**/mapper/*.xml
+    #实体扫描，多个package用逗号或者分号分隔
+    typeAliasesPackage: org.origin.**.**.entity
+    configuration:
+        map-underscore-to-camel-case: true
+        call-setters-on-nulls: true
+        # log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl 
+        #开启sql日志
+    type-handlers-package: org.origin.goblin.common.globaltypeahandler
+#feign配置
+feign:
+    sentinel:
+        enabled: true
+    okhttp:
+        enabled: true
+    httpclient:
+        enabled: false
+
+# #hystrix配置
+# hystrix:
+#     threadpool:
+#         default:
+#             coreSize: 300
+#             maxQueueSize: 1000
+#             queueSizeRejectionThreshold: 800
+#     command:
+#         default:
+#             execution:
+#                 isolation:
+#                     thread:
+#                         timeoutInMilliseconds: 5000
+
+# #ribbon配置
+# ribbon:
+#     #对当前实例的重试次数
+#     MaxAutoRetries: 1
+#     #切换实例的重试次数
+#     MaxAutoRetriesNextServer: 2
+#     #请求处理的超时时间
+#     ReadTimeout: 60000
+#     #请求连接的超时时间
+#     ConnectTimeout: 60000
+#     #对所有操作请求都进行重试
+#     OkToRetryOnAllOperations: true
+
+#对外暴露端口
+management:
+    endpoints:
+        enabled-by-default: false
+        web:
+            exposure:
+                include: "*"
+    endpoint:
+        health:
+            enabled: false
+            show-details: always
+
+#knife4j配置
+knife4j:
+    #启用
+    enable: true
+    #基础认证
+    basic:
+        enable: false
+        username: origin
+        password: origin
+    #增强配置
+    setting:
+        enableSwaggerModels: true
+        enableDocumentManage: true
+        enableHost: false
+        enableHostText: http://192.168.31.170
+        enableRequestCache: true
+        enableFilterMultipartApis: false
+        enableFilterMultipartApiMethodType: POST
+        language: zh-CN
+
+#swagger
+# swagger:
+#     title: Origin 接口文档系统
+#     description: Origin 接口文档系统
+#     license: Powered By Origin
+#     license-url: https://Origin.com
+#     terms-of-service-url: https://Origin.com
+#     contact:
+#         name: Dave
+#         email: 76712649@qq.com
+#         url: https://Origin.com
+
+#origin配置
+origin:
+    springdoc:
+        title: 运营可视化中心接口文档
+        description: 运营可视化中心接口文档
+        license: Powered By Origin
+        license-url: https://Origin.com
+    #自定义路由开启
+    ribbon:
+        rule:
+            ennabled: true
+            priorIpPattern: 192.168.31.170
+    # 当前产品实施客户
+    customer: 
+        id: origin
+        name: 擎创科技
+    log:
+        request:
+            enabled: false
+        api:
+            enabled: false
+        operate:
+            enabled: true
+    # 应急场景调用cmdb的接口配置
+    em:
+        cmdb:
+            baseUrl: http://192.168.31.170:30116/api
+    #执行sql打印
+    mybatis-plus:
+        sql-log: false
+    #token配置
+    token:
+        #是否有状态
+        state: true
+        expire: 7200
+    http:
+        level: NONE
+    #接口配置
+    api:
+        #报文加密配置
+        crypto:
+            #启用报文加密配置
+            enabled: false
+            #使用AesUtil.genAesKey()生成
+            aes-key: O2BEeIv399qHQNhD6aGW8R8DEj4bqHXm
+            #使用DesUtil.genDesKey()生成
+            des-key: jMVCBsFGDQr1USHo
+    #jackson配置
+    jackson:
+        #null自动转空值
+        null-to-empty: true
+        #大数字自动转字符串
+        big-num-to-string: true
+        #支持text文本请求,与报文加密同时开启
+        support-text-plain: false
+    #xss配置
+    xss:
+        enabled: true
+        skip-url:
+            - /weixin
+            - /connection/collect/config/update
+            - /connection/collect/config/save
+            - /visual/page/save
+            - /visual/page/update
+            - /node/save
+            - /node/update
+            - /node/compile
+            - /flow-def/save
+            - /flow-def/update
+            - /api/template/update
+            - /api/template/save
+            - /template/update
+            - /template/save
+            - /visual/page/template
+            - /app/setTemplate
+            - /screenShot
+            - /app/update
+            - /app/saveApp
+            - /app/updateApp
+            - /app/savePage
+            - /component/save
+            - /component/update
+            - /terminal/save
+            - /terminal/update
+            - /develop/createService
+            - /develop/updateService
+            - /develop/copyService
+            - /ci/instance/save
+            - /ci/instance/update
+            - /function/read-config
+            - /function/save
+            - /function/update
+            - /job/send-test-data
+            - /bi/chart/chartSave
+            - /bi/chart/chartUpdate
+            - /bi/board/boardAdd
+            - /bi/board/boardUpdate
+            - /bi/chart/chartUpdate
+            - /bi/chart/chartSave
+            - /client/page/dynamic-process-config
+            - /app/menu/save
+            - /app/menu/update
+            - /ws/**
+            - /api/dragon/bussiness/regex/testregex
+            - /api/dragon/bussiness/threshold/update
+            - /api/dragon/bussiness/threshold/create
+            - /api/dragon/bussiness/regex/create
+            - /api/dragon/bussiness/regex/update
+            - /api/dragon/baseline/ththreshold/create
+            - /api/dragon/baseline/ththreshold/update
+            - /api/dragon/bussiness/fail/create
+            - /api/dragon/bussiness/fail/update
+            - /report/save
+            - /report/update
+            - /page/component/data/api
+            - /warning/instance/queryBusinessSys
+            - /warning/instance/relations
+            #- /eoi-icmc/warning/instance/queryWarning
+            - /squares/template/updateTemplate
+            - /squares/template/updateLowCodeComponent
+            - /squares/template/saveTemplate
+            - /squares/template/saveBlankLowCodeComponent
+            - /app/kv-config/save
+            - /app/component/commit
+            - /component/detailList
+            - /app/datasource/submit
+            - /log/*
+            - /page/component/getData
+            - /param/submit
+            - /client/param-value
+            - /em/dispose-behavior/plan-disposal/save
+            - /em/dispose-behavior/plan-disposal/update
+            - /app/gitlab/**
+            - /anyv/visual/page/**
+    #安全框架配置
+    secure:
+        #接口放行
+        skip-url:
+            - /oauth/check-account
+            - /test/**
+            - /copyright/detail
+            - /origin-handheld-netty-ws/**
+            - /decrypt/hxBank
+            - /license/update
+            - /template/updateTemplate
+            - /template/saveTemplate
+            - /bi/board/checkParameter
+            - /material/page
+            - /app/detail
+            - /app/v2/detail
+            - /component/common/data/tree
+            - /component/detailList
+            - /model/ci/attr/allAttrByCode   
+            - /api/dragon/bussiness/trans/expTransMould    
+            - /api/dragon/bussiness/trans/expChaMould
+            - /operation/**
+            - /operationDeal/**
+            - /external/interface/ci/instance/relationsByPrimaryKeySimple
+            - /license/info
+            - /app/datasource/mockData
+            - /app/v2/detail
+            - /app/datasource/list
+            - /page/component/getData
+            - /app/v2/listAuthorizedUids
+            - /app/getTenantIdByRoute
+            - /overall-monitor/**
+            - /em/dispose-behavior/action
+            - /em/dispose-behavior/check
+            - /em/dispose-behavior/log/export
+            - /api/**
+            - /app/gitlab/component/save
+            - /app/dao-sse-log
+            - /static/**
+            - /images/**
+            - /default.html
+            - /pbsr/param/detail
+            - /pbsr/param/submit
+            - /app/xxl-job/**
+            # 重大事件平台
+            - /flow/shrcb/**
+            - /getUserPageList
+            - /anyv/material/import
+            - /anyv/api/template/import
+        #授权认证配置
+        auth:
+            -   method: ALL
+                pattern: /weixin/**
+                expression: "hasAuth()"
+            -   method: POST
+                pattern: /dashboard/upload
+                expression: "hasTimeAuth(9, 17)"
+            -   method: POST
+                pattern: /dashboard/submit
+                expression: "hasAnyRole('administrator', 'admin', 'user')"
+        #基础认证配置
+        basic:
+            -   method: ALL
+                pattern: /dashboard/activities
+                username: "origin"
+                password: "origin"
+        #多终端认证配置
+        client:
+            -   client-id: origin
+                path-patterns:
+                    - /origin/**
+    #多租户配置
+    tenant:
+        #多租户增强
+        enhance: true
+        #多租户授权保护
+        license: false
+        #动态数据源功能
+        dynamic-datasource: false
+        #动态数据源全局扫描
+        dynamic-global: false
+        #多租户字段名
+        column: tenant_id
+        #排除多租户逻辑
+        exclude-tables:
+            - origin_user
+            - origin_copyright
+            - origin_license
+            - visual_connection_type
+            - visual_component_cat
+            - visual_component_common_data
+            - visual_material
+            - visual_material_type_component
+            - visual_component_material
+            - visual_component
+            - visual_component_theme
+            - visual_component_version
+            - template
+httpclient: 
+    maxTimeout: 8000
+    maxReadTimeout: 10000
+
+selenium:
+    remote:
+        url: http://192.168.31.170:4444/wd/hub
+    time: 20000

@@ -1,0 +1,483 @@
+{% extends "base.html" %}
+{% block title %}配置管理{% endblock %}
+{% block nav_config %}active{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="/static/css/config.css">
+<style>
+.nav-cards .card{overflow:visible}
+.file-tree{list-style:none;font-size:0.82rem;margin:0;padding:0}
+.file-tree .ft-folder{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:var(--radius-xs);cursor:pointer;color:var(--fg);font-weight:500;font-size:0.8rem;transition:background var(--transition);user-select:none}
+.file-tree .ft-folder:hover{background:rgba(255,255,255,0.04)}
+.file-tree .ft-folder .folder-icon{font-size:0.5rem;transition:transform 150ms ease;flex-shrink:0;width:10px;text-align:center}
+.file-tree .ft-folder[data-expanded="false"] .folder-icon{transform:rotate(-90deg)}
+.file-tree .ft-folder .folder-count{font-size:0.65rem;color:var(--fg-muted);margin-left:auto}
+.file-tree .ft-children{overflow:hidden;transition:max-height 200ms ease,opacity 150ms ease;max-height:800px;opacity:1}
+.file-tree .ft-folder[data-expanded="false"]+.ft-children{max-height:0;opacity:0;pointer-events:none}
+.file-tree .ft-item{display:flex;align-items:center;gap:6px;padding:5px 8px 5px 24px;border-radius:var(--radius-xs);cursor:pointer;color:var(--fg-secondary);font-size:0.78rem;transition:all var(--transition)}
+.file-tree .ft-item:hover{background:rgba(255,255,255,0.04);color:var(--fg)}
+.file-tree .ft-item.active{background:var(--accent-dim);color:var(--accent);font-weight:500}
+.file-tree .ft-item .ft-icon{opacity:0.4;flex-shrink:0}
+.file-tree .ft-item.active .ft-icon{opacity:1}
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="topbar">
+  <div>
+    <div class="breadcrumb"><span>Dashboard</span><span>/</span><span>Config</span></div>
+    <h2>Configuration <span>集群配置文件管理</span></h2>
+  </div>
+  <div style="display:flex;gap:10px;">
+    <button class="btn btn-secondary btn-sm" id="validateBtn" onclick="validateConfig()" style="display:none">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Validate
+    </button>
+    <button class="btn btn-primary" id="saveBtn" onclick="saveConfig()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Save
+    </button>
+  </div>
+</div>
+
+<div class="config-layout">
+
+  <!-- Left: 4 Nav Cards -->
+  <div class="nav-cards">
+
+    <!-- Card 1: Deploy Files (config.yaml) -->
+    <div class="card">
+      <div class="card-header">
+        <h4>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          部署文件
+        </h4>
+      </div>
+      <div class="card-body">
+        <div class="nav-item" id="nav-config-yaml" onclick="loadConfigFile()">
+          <span class="ni-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </span>
+          <span class="ni-label">config.yaml</span>
+          <span class="ni-badge">主配置</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Config Files (template file tree) -->
+    <div class="card">
+      <div class="card-header">
+        <h4>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          配置文件
+        </h4>
+      </div>
+      <div class="card-body" style="padding:4px 8px 8px">
+        <ul class="file-tree">
+          {% for comp in template_components %}
+           <li class="ft-folder" onclick="toggleFolder(this)" data-expanded="false">
+            <span class="folder-icon">&#9660;</span>
+            <span>{{ comp.name }}/</span>
+            <span class="folder-count">{{ comp.files|length }}</span>
+          </li>
+          <ul class="ft-children">
+            {% for f in comp.files %}
+            <li class="ft-item" onclick="loadTemplateFile('{{ comp.name }}','{{ f }}')" id="ft-{{ comp.name }}-{{ f | replace('/','-') }}">
+              <svg class="ft-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              {{ f }}
+            </li>
+            {% endfor %}
+          </ul>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Card 4: Common Config -->
+    <div class="card">
+      <div class="card-header">
+        <h4>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 16 12 12 12 8"/><line x1="12" y1="4" x2="12.01" y2="4"/></svg>
+          公共配置
+        </h4>
+      </div>
+      <div class="card-body">
+        <div class="nav-item" id="nav-common-config" onclick="loadCommonConfig()">
+          <span class="ni-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </span>
+          <span class="ni-label">common_config.yaml</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Unified Editor -->
+  <div>
+    <div class="card">
+      <div class="editor-header">
+        <div class="eh-left">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span class="filename" id="current-filename">config.yaml</span>
+          <span class="path" id="current-filepath"></span>
+          <span class="ph-badge" id="placeholder-badge" style="display:none">占位符模式</span>
+        </div>
+        <div class="eh-right">
+          <span style="font-size:0.72rem;color:var(--fg-muted);" id="line-count">YAML</span>
+        </div>
+      </div>
+
+      <div class="section-nav" id="section-nav">
+        <span class="sn active" onclick="jumpToSection(this,'')">All</span>
+        <span class="sn" onclick="jumpToSection(this,'mysql:')">mysql</span>
+        <span class="sn" onclick="jumpToSection(this,'redis:')">redis</span>
+        <span class="sn" onclick="jumpToSection(this,'zookeeper:')">zookeeper</span>
+        <span class="sn" onclick="jumpToSection(this,'kafka:')">kafka</span>
+        <span class="sn" onclick="jumpToSection(this,'hadoop:')">hadoop</span>
+        <span class="sn" onclick="jumpToSection(this,'nacos:')">nacos</span>
+        <span class="sn" onclick="jumpToSection(this,'clickhouse:')">clickhouse</span>
+        <span class="sn" onclick="jumpToSection(this,'nebula:')">nebula</span>
+        <span class="sn" onclick="jumpToSection(this,'nginx:')">nginx</span>
+        <span class="sn" onclick="jumpToSection(this,'servers:')">servers</span>
+        <span class="sn" onclick="jumpToSection(this,'deploy:')">deploy</span>
+      </div>
+
+      <div class="editor-wrap">
+        <div class="editor-gutter" id="editor-gutter"></div>
+        <textarea id="yamlEditor" spellcheck="false" wrap="off" onscroll="syncScroll()" oninput="updateGutter();markDirty();" placeholder="选择左侧文件开始编辑…">{{ config_raw }}</textarea>
+      </div>
+    </div>
+
+    <div id="result-area" style="margin-top:12px;">
+      {% if result_type and result_message %}
+      <div class="result-bar {{ result_type }}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          {% if result_type == 'success' %}<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+          {% elif result_type == 'error' %}<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+          {% else %}<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          {% endif %}
+        </svg>
+        <span>{{ result_message }}</span>
+        {% if result_type == 'warning' or result_type == 'error' %}
+        <span style="margin-left:auto;font-size:0.78rem;">{{ validation_errors|length }} 个错误</span>
+        {% endif %}
+      </div>
+      {% if validation_errors %}
+      <div style="margin-top:8px;">
+        {% for e in validation_errors %}
+        <div style="padding:4px 12px;font-size:0.78rem;color:var(--danger);font-family:var(--font-mono);background:var(--danger-dim);border-radius:4px;margin-bottom:4px;">{{ e }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div id="resultModal" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;">
+  <div style="background:var(--bg-card);border-radius:var(--radius);width:480px;max-width:90vw;padding:0;box-shadow:0 20px 60px rgba(0,0,0,0.3);max-height:80vh;display:flex;flex-direction:column;">
+    <div style="display:flex;align-items:center;gap:8px;padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0;" id="resultModalHeader">
+      <span style="font-weight:600;font-size:0.9rem;" id="resultModalTitle"></span>
+    </div>
+    <div style="padding:20px;font-size:0.85rem;color:var(--fg-secondary);line-height:1.6;overflow-y:auto;" id="resultModalBody"></div>
+    <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;flex-shrink:0;">
+      <button class="btn btn-primary btn-sm" onclick="document.getElementById('resultModal').style.display='none'">知道了</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function showResultModal(type, title, messages) {
+  var header = document.getElementById('resultModalHeader');
+  var body = document.getElementById('resultModalBody');
+  var isSuccess = type === 'success';
+  var isWarning = type === 'warning';
+  body.innerHTML = '';
+  if (isSuccess) {
+    header.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span style="font-weight:600;font-size:0.9rem;color:var(--success);">' + title + '</span>';
+  } else if (isWarning) {
+    header.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span style="font-weight:600;font-size:0.9rem;color:var(--warning);">' + title + '</span>';
+  } else {
+    header.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span style="font-weight:600;font-size:0.9rem;color:var(--danger);">' + title + '</span>';
+  }
+  if (typeof messages === 'string') {
+    var p = document.createElement('div');
+    p.style.cssText = 'padding:8px 0;font-size:0.9rem;';
+    p.textContent = messages;
+    body.appendChild(p);
+  } else {
+    messages.forEach(function(e) {
+      var d = document.createElement('div');
+      d.style.cssText = 'padding:6px 10px;font-size:0.8rem;color:var(--warning);font-family:var(--font-mono);background:var(--warning-dim);border-radius:4px;margin-bottom:6px;';
+      d.textContent = e;
+      body.appendChild(d);
+    });
+  }
+  document.getElementById('resultModal').style.display = 'flex';
+}
+
+var _showErrorModal = showResultModal;
+
+var currentMode = 'config'; // 'config' | 'template' | 'common'
+var currentFile = 'config.yaml';
+var currentComponent = null;
+var isDirty = false;
+var editor = document.getElementById('yamlEditor');
+
+function updateGutter() {
+  var lines = editor.value.split('\n').length;
+  var html = '';
+  for (var i = 1; i <= lines; i++) {
+    html += '<span class="gl">' + i + '</span>';
+  }
+  document.getElementById('editor-gutter').innerHTML = html;
+  document.getElementById('line-count').textContent = lines + ' lines' + (isDirty ? ' *' : '');
+}
+
+function syncScroll() {
+  document.getElementById('editor-gutter').scrollTop = editor.scrollTop;
+}
+
+function markDirty() {
+  if (!isDirty) {
+    isDirty = true;
+    updateGutter();
+  }
+}
+
+function clearNavActive() {
+  document.querySelectorAll('.nav-item.active, .ft-item.active, .ft-folder.active').forEach(function(el) {
+    el.classList.remove('active');
+  });
+}
+
+function loadConfigFile() {
+  currentMode = 'config';
+  currentFile = 'config.yaml';
+  currentComponent = null;
+  clearNavActive();
+  document.getElementById('nav-config-yaml').classList.add('active');
+  document.getElementById('current-filename').textContent = 'config.yaml';
+  document.getElementById('current-filepath').textContent = '';
+  document.getElementById('section-nav').style.display = '';
+  document.getElementById('placeholder-badge').style.display = 'none';
+  document.getElementById('validateBtn').style.display = '';
+  isDirty = false;
+
+  fetch('/config/api/raw')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      editor.value = data.content || '';
+      editor.disabled = false;
+      updateGutter();
+    })
+    .catch(function() {
+      editor.disabled = false;
+      updateGutter();
+    });
+}
+
+function loadTemplateFile(component, file) {
+  currentMode = 'template';
+  currentFile = file;
+  currentComponent = component;
+  clearNavActive();
+  var leafId = 'ft-' + component + '-' + file.replace(/\//g, '-');
+  var el = document.getElementById(leafId);
+  if (el) el.classList.add('active');
+  document.getElementById('current-filename').textContent = component + '/' + file;
+  document.getElementById('current-filepath').textContent = 'conf/template/';
+  document.getElementById('section-nav').style.display = 'none';
+  document.getElementById('validateBtn').style.display = 'none';
+  isDirty = false;
+
+  editor.value = '加载中...';
+  editor.disabled = true;
+
+  fetch('/config/api/template/file?component=' + encodeURIComponent(component) + '&file=' + encodeURIComponent(file))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.ok) {
+        editor.value = data.content;
+        editor.disabled = false;
+        var hasPH = /\$\{/.test(data.content);
+        document.getElementById('placeholder-badge').style.display = hasPH ? '' : 'none';
+      } else {
+        editor.value = '加载失败: ' + (data.error || 'unknown');
+      }
+      updateGutter();
+    });
+}
+
+function loadCommonConfig() {
+  currentMode = 'common';
+  currentFile = 'common_config.yaml';
+  currentComponent = '__common__';
+  clearNavActive();
+  document.getElementById('nav-common-config').classList.add('active');
+  document.getElementById('current-filename').textContent = 'common_config.yaml';
+  document.getElementById('current-filepath').textContent = 'mockdata/config/';
+  document.getElementById('section-nav').style.display = 'none';
+  document.getElementById('placeholder-badge').style.display = 'none';
+  document.getElementById('validateBtn').style.display = 'none';
+  isDirty = false;
+
+  editor.value = '加载中...';
+  editor.disabled = true;
+
+  fetch('/mockdata/config/raw')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.ok) {
+        editor.value = data.text || '';
+        editor.disabled = false;
+      } else {
+        editor.value = '加载失败: ' + (data.error || 'unknown');
+      }
+      updateGutter();
+    });
+}
+
+var _btnSaveHTML = '';
+var _btnValidateHTML = '';
+
+function _setBtnLoading(btnId, text) {
+  var btn = document.getElementById(btnId);
+  if (btnId === 'saveBtn') _btnSaveHTML = btn.innerHTML;
+  if (btnId === 'validateBtn') _btnValidateHTML = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> ' + text;
+}
+
+function _restoreBtn(btnId) {
+  var btn = document.getElementById(btnId);
+  btn.disabled = false;
+  if (btnId === 'saveBtn') btn.innerHTML = _btnSaveHTML;
+  if (btnId === 'validateBtn') btn.innerHTML = _btnValidateHTML;
+}
+
+function saveConfig() {
+  if (currentMode === 'template') {
+    var formData = new FormData();
+    formData.append('component', currentComponent);
+    formData.append('file', currentFile);
+    formData.append('content', editor.value);
+
+    fetch('/config/api/template/file', { method: 'POST', body: formData })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.ok) {
+          isDirty = false;
+          updateGutter();
+          showResultModal('success', '保存成功', '文件保存成功');
+          document.getElementById('placeholder-badge').style.display = /\$\{/.test(editor.value) ? '' : 'none';
+        } else {
+          showResultModal('error', '保存失败', data.validation_errors || [data.error || '保存失败']);
+        }
+      });
+  } else if (currentMode === 'common') {
+    fetch('/mockdata/config/raw', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({text: editor.value})
+    })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.ok) {
+          isDirty = false;
+          updateGutter();
+          showResultModal('success', '保存成功', '公共配置保存成功');
+        } else {
+          showResultModal('error', '保存失败', [data.error || '保存失败']);
+        }
+      });
+  } else {
+    _setBtnLoading('saveBtn', '保存中…');
+    var formData = new FormData();
+    formData.append('config_content', editor.value);
+    formData.append('install_dir', '');
+    formData.append('package_dir', '');
+
+    fetch('/config/save', { method: 'POST', body: formData })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        _restoreBtn('saveBtn');
+        if (data.ok) {
+          showResultModal('success', '保存成功', data.message);
+          isDirty = false;
+          updateGutter();
+        } else {
+          showResultModal('error', '校验未通过', data.validation_errors || [data.message]);
+        }
+      })
+      .catch(function() { _restoreBtn('saveBtn'); });
+  }
+}
+
+function validateConfig() {
+  if (currentMode !== 'config') return;
+  _setBtnLoading('validateBtn', '校验中…');
+  var formData = new FormData();
+  formData.append('config_content', editor.value);
+  fetch('/config/check', { method: 'POST', body: formData })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      _restoreBtn('validateBtn');
+      if (data.ok) {
+        showResultModal('success', '校验通过', data.message);
+      } else {
+        showResultModal('error', '校验未通过', data.validation_errors || [data.message]);
+      }
+    })
+    .catch(function() { _restoreBtn('validateBtn'); });
+}
+
+function jumpToSection(el, prefix) {
+  document.querySelectorAll('.section-nav .sn').forEach(function(s) { s.classList.remove('active'); });
+  el.classList.add('active');
+  if (!prefix) return;
+  var lines = editor.value.split('\n');
+  var targetLine = -1;
+  for (var i = 0; i < lines.length; i++) {
+    if (lines[i].trim() === prefix) { targetLine = i; break; }
+  }
+  if (targetLine >= 0) {
+    editor.focus();
+    /* 光标定位 */
+    var charIndex = 0;
+    for (var j = 0; j < targetLine; j++) { charIndex += lines[j].length + 1; }
+    editor.selectionStart = charIndex;
+    editor.selectionEnd = charIndex;
+    /* 平滑滚动，使目标行居中 */
+    var totalLines = lines.length;
+    var ratio = targetLine / totalLines;
+    var maxScroll = editor.scrollHeight - editor.clientHeight;
+    editor.scrollTo({ top: Math.max(0, ratio * maxScroll - 60), behavior: 'smooth' });
+  }
+}
+
+function toggleFolder(el) {
+  var expanded = el.getAttribute('data-expanded') !== 'false';
+  el.setAttribute('data-expanded', expanded ? 'false' : 'true');
+}
+
+
+
+// Init
+document.addEventListener('DOMContentLoaded', function() {
+  fetch('/config/api/raw')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.content) {
+        editor.value = data.content;
+        editor.disabled = false;
+        updateGutter();
+      }
+    })
+    .catch(function() {
+      updateGutter();
+    });
+
+  document.getElementById('nav-config-yaml').classList.add('active');
+});
+</script>
+{% endblock %}

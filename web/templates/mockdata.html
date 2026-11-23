@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block title %}Mock 数据管理{% endblock %}
+{% block nav_mockdata %}active{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="/static/css/mockdata.css">
+{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <div class="breadcrumb"><a href="/deploy/">部署管理</a><span>/</span><span>Mock 数据管理</span></div>
+    <h2>Mock 数据 <span>模拟数据生成与启停控制</span></h2>
+    <div class="topbar-links"><a href="/config/" class="topbar-link">配置管理 → 公共配置</a></div>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn btn-secondary btn-sm" onclick="startAll()">全部启动</button>
+    <button class="btn btn-sm btn-ghost" onclick="stopAll()" style="color:var(--danger)">全部停止</button>
+  </div>
+</div>
+
+<div id="module-grid" class="module-grid">
+  <div class="module-card skeleton" data-module="alert">
+    <div class="mc-header"><h4>告警数据</h4><span class="status-badge">—</span></div>
+    <div class="mc-body">
+      <div class="mc-meta"><span class="mc-label">进程 ID</span><span class="mc-value">—</span></div>
+      <div class="mc-meta"><span class="mc-label">启动时间</span><span class="mc-value">—</span></div>
+    </div>
+    <div class="mc-actions"><button class="btn btn-sm btn-primary" disabled>启动</button><button class="btn btn-sm btn-secondary" disabled>停止</button></div>
+  </div>
+</div>
+
+<script>
+var pollTimer = null;
+
+function updateModuleCard(name, info) {
+  var card = document.querySelector('.module-card[data-module="' + name + '"]');
+  if (!card) return;
+  card.classList.remove('skeleton');
+  var running = info.status === 'running';
+  card.querySelector('.status-badge').textContent = running ? '运行中' : '已停止';
+  card.querySelector('.status-badge').className = 'status-badge ' + (running ? 'running' : 'stopped');
+  var metaItems = card.querySelectorAll('.mc-meta');
+  metaItems[0].querySelector('.mc-value').textContent = running ? info.pid : '—';
+  metaItems[1].querySelector('.mc-value').textContent = info.started_at || '—';
+  if (metaItems.length >= 3) {
+    metaItems[2].querySelector('.mc-value').textContent = info.last_started_at || '—';
+  }
+  if (metaItems.length >= 4) {
+    metaItems[3].querySelector('.mc-value').textContent = info.last_stopped_at || '—';
+  }
+  if (metaItems.length >= 5) {
+    metaItems[4].querySelector('.mc-value').textContent = info.output || '—';
+    metaItems[4].querySelector('.mc-label').textContent = (info.output_type === 'table' ? '输出表名称' : '输出 TOPIC');
+  }
+  var btnStart = card.querySelector('.mc-actions button:nth-child(1)');
+  var btnStop = card.querySelector('.mc-actions button:nth-child(2)');
+  btnStart.disabled = running;
+  btnStop.disabled = !running;
+  btnStart.onclick = function() { toggleModule(name, 'start'); };
+  btnStop.onclick = function() { toggleModule(name, 'stop'); };
+}
+
+function toggleModule(name, action) {
+  fetch('/mockdata/' + action + '/' + name, {method: 'POST'}).then(function(r) { return r.json(); }).then(function(data) {
+    if (!data.ok) {
+      var card = document.querySelector('.module-card[data-module="' + name + '"]');
+      if (card) {
+        var existing = card.querySelector('.mc-error');
+        if (!existing) {
+          var el = document.createElement('div');
+          el.className = 'mc-error';
+          card.querySelector('.mc-body').appendChild(el);
+        }
+        card.querySelector('.mc-error').textContent = data.error || '操作失败';
+      }
+    }
+    pollStatus();
+  });
+}
+
+function startAll() {
+  fetch('/mockdata/start-all', {method: 'POST'}).then(function() { pollStatus(); });
+}
+
+function stopAll() {
+  fetch('/mockdata/stop-all', {method: 'POST'}).then(function() { pollStatus(); });
+}
+
+function pollStatus() {
+  fetch('/mockdata/status').then(function(r) { return r.json(); }).then(function(data) {
+    if (data.ok) {
+      Object.keys(data.status).forEach(function(name) {
+        updateModuleCard(name, data.status[name]);
+      });
+    }
+  });
+}
+
+function buildModuleGrid(modules) {
+  var grid = document.getElementById('module-grid');
+  grid.innerHTML = '';
+  Object.keys(modules).forEach(function(name) {
+    var m = modules[name];
+    var div = document.createElement('div');
+    div.className = 'module-card skeleton';
+    div.setAttribute('data-module', name);
+    div.innerHTML =
+      '<div class="mc-header"><h4>' + m.label + '</h4><span class="status-badge">—</span></div>' +
+      '<div class="mc-body">' +
+        '<div class="mc-meta"><span class="mc-label">进程 ID</span><span class="mc-value">—</span></div>' +
+        '<div class="mc-meta"><span class="mc-label">当前启动时间</span><span class="mc-value">—</span></div>' +
+        '<div class="mc-meta"><span class="mc-label">上次启动时间</span><span class="mc-value">—</span></div>' +
+        '<div class="mc-meta"><span class="mc-label">上次停止时间</span><span class="mc-value">—</span></div>' +
+        '<div class="mc-meta"><span class="mc-label">' + (m.output_type === 'table' ? '输出表名称' : '输出 TOPIC') + '</span><span class="mc-value mc-output" title="' + (m.output || '') + '">' + (m.output || '—') + '</span></div>' +
+      '</div>' +
+      '<div class="mc-actions">' +
+        '<button class="btn btn-sm btn-primary" disabled>启动</button>' +
+        '<button class="btn btn-sm btn-secondary" disabled>停止</button>' +
+      '</div>';
+    grid.appendChild(div);
+  });
+  pollStatus();
+}
+
+window.addEventListener('load', function() {
+  fetch('/mockdata/modules').then(function(r) { return r.json(); }).then(function(data) {
+    if (data.ok) {
+      buildModuleGrid(data.modules);
+    }
+  });
+  loadConfig();
+  setInterval(pollStatus, 3000);
+});
+</script>
+{% endblock %}

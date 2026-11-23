@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block title %}History - 部署记录{% endblock %}
+
+{% block nav_history %}active{% endblock %}
+
+{% block head %}
+<style>
+/* Search bar */
+.search-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.search-input{padding:9px 14px 9px 36px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-xs);color:var(--fg);font-family:var(--font-sans);font-size:0.85rem;outline:none;transition:border var(--transition);width:280px}
+.search-input:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-dim)}
+.search-input::placeholder{color:var(--fg-muted)}
+.search-wrap{position:relative}
+.search-wrap .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;opacity:0.4}
+
+/* Filter pills */
+.filter-group{display:flex;gap:6px;flex-wrap:wrap}
+.filter-group .filt{padding:5px 14px;border-radius:14px;font-size:0.78rem;font-weight:500;cursor:pointer;transition:all var(--transition);user-select:none;background:var(--bg-card);color:var(--fg-secondary);border:1px solid var(--border)}
+.filter-group .filt:hover{border-color:var(--border-light);color:var(--fg)}
+.filter-group .filt.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+
+/* History table */
+.history-table{width:100%;border-collapse:collapse;font-size:0.85rem}
+.history-table th{padding:12px 14px;font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em;color:var(--fg-muted);border-bottom:1px solid var(--border);white-space:nowrap;text-align:left}
+.history-table td{padding:14px;border-bottom:1px solid var(--border);color:var(--fg-secondary);vertical-align:middle}
+.history-table .col-comp{max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.history-table .col-comp-inner{font-size:0.75rem;display:block;overflow:hidden;text-overflow:ellipsis}
+.history-table .col-nowrap{white-space:nowrap}
+.history-table .col-actions{white-space:nowrap}
+.history-table .col-actions .btn{color:var(--accent)}
+.history-table .detail-row td{overflow:visible;text-overflow:clip;text-align:left;width:auto;white-space:normal}
+.history-table .detail-row td{overflow:visible;text-overflow:clip;text-align:left;width:auto;white-space:normal}
+.history-table tr:last-child td{border-bottom:none}
+.history-table tr:hover td{background:rgba(255,255,255,0.02)}
+.history-table tr.clickable{cursor:pointer}
+.history-table .run-id{font-family:var(--font-mono);font-weight:600;color:var(--fg)}
+.history-table .col-desc{color:var(--fg)}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:0.72rem;font-weight:500;padding:2px 10px;border-radius:10px;white-space:nowrap}
+.badge .sm{width:5px;height:5px;border-radius:50%}
+.badge.success{background:var(--accent-dim);color:var(--accent)}.badge.success .sm{background:var(--accent)}
+.badge.failed{background:var(--danger-dim);color:var(--danger)}.badge.failed .sm{background:var(--danger)}
+.badge.running{background:var(--info-dim);color:var(--info)}.badge.running .sm{background:var(--info)}
+.badge.cancelled{background:rgba(107,114,128,0.1);color:var(--fg-muted)}.badge.cancelled .sm{background:var(--fg-muted)}
+
+/* Health bar */
+.health-bar{display:flex;align-items:center;gap:4px}
+.health-bar .hm{width:20px;height:4px;border-radius:2px}
+.health-bar .hm.ok{background:var(--accent)}
+.health-bar .hm.fail{background:var(--danger)}
+.health-bar .hm.na{background:var(--border)}
+
+/* Pagination */
+.pagination{display:flex;align-items:center;justify-content:center;gap:8px;padding:20px 0 0}
+.pagination .page{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:0.8rem;color:var(--fg-secondary);cursor:pointer;transition:all var(--transition);border:1px solid var(--border);background:var(--bg-card)}
+.pagination .page:hover{border-color:var(--border-light);color:var(--fg)}
+.pagination .page.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);font-weight:600}
+.pagination .page.na{opacity:0.3;cursor:default}
+
+/* Detail panel */
+.detail-panel{margin-top:20px;display:none}
+.detail-panel.show{display:block}
+
+/* Log viewer */
+.log-viewer{background:#000;border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 18px;font-family:var(--font-mono);font-size:0.73rem;line-height:1.8;max-height:360px;overflow-y:auto}
+.log-viewer .ln{color:var(--fg-muted)}
+.log-viewer .ln.info{color:var(--info)}
+.log-viewer .ln.ok{color:var(--accent)}
+.log-viewer .ln.warn{color:var(--warning)}
+.log-viewer .ln.err{color:var(--danger)}
+.log-viewer .ln .ts{opacity:0.4;margin-right:6px}
+
+/* Summary row */
+.summary-row{display:flex;gap:16px;padding:12px 0;flex-wrap:wrap;border-bottom:1px solid var(--border);margin-bottom:16px}
+.summary-row:last-child{border-bottom:none;margin-bottom:0}
+.summary-row .sr-item{font-size:0.82rem}
+.summary-row .sr-item .k{color:var(--fg-muted);margin-right:6px}
+.summary-row .sr-item .v{color:var(--fg);font-weight:500}
+
+@media(max-width:768px){.history-table{font-size:0.78rem}.search-input{width:100%}}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="topbar">
+  <div>
+    <div class="breadcrumb">
+      <a href="/dashboard/">Dashboard</a>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      <span>History</span>
+    </div>
+    <h2>Deployment History <span>部署记录与日志</span></h2>
+  </div>
+  <div style="display:flex;gap:10px;">
+    <button class="btn btn-secondary btn-sm" onclick="location.reload()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      刷新
+    </button>
+  </div>
+</div>
+
+<div class="search-bar">
+  <div class="search-wrap">
+    <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input class="search-input" type="text" placeholder="按 #ID、组件、主机搜索..." oninput="filterHistory(this.value)">
+  </div>
+  <div class="filter-group">
+    <span class="filt active" onclick="filterBy(this,'all')">全部</span>
+    <span class="filt" onclick="filterBy(this,'success')">成功</span>
+    <span class="filt" onclick="filterBy(this,'failed')">失败</span>
+    <span class="filt" onclick="filterBy(this,'running')">运行中</span>
+  </div>
+</div>
+
+<div class="card">
+  <div style="overflow-x:auto;">
+    <table class="history-table" id="historyTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>日期</th>
+          <th>组件</th>
+          <th>主机</th>
+          <th>耗时</th>
+          <th>状态</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if not runs %}
+        <tr>
+          <td colspan="7" style="text-align:center;padding:60px 20px;color:var(--fg-muted);border:none;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <p style="margin-top:10px;font-size:0.9rem;">暂无部署记录</p>
+            <p style="font-size:0.78rem;">通过 Web UI 或 CLI 执行部署后，记录会自动出现在这里</p>
+          </td>
+        </tr>
+        {% else %}
+        {% for run in runs %}
+        <tr class="clickable" onclick="toggleDetail(this,{{ run.id }})">
+          <td><span class="run-id" title="#{{ run.id }}">#{{ run.id }}</span></td>
+          <td title="{{ run.date }}" class="col-nowrap">{{ run.date }}</td>
+          <td class="col-comp"><span class="col-comp-inner" title="{{ run.components }}">{{ run.components }}</span></td>
+          <td title="{{ run.hosts }}" class="col-nowrap">{{ run.hosts }}</td>
+          <td title="{{ run.duration }}" class="col-nowrap" style="font-family:var(--font-mono);font-size:0.78rem;">{{ run.duration }}</td>
+          <td class="col-nowrap"><span class="badge {{ run.status }}" title="{{ run.status_label }}"><span class="sm"></span> {{ run.status_label }}</span></td>
+          <td class="col-actions"><button class="btn btn-ghost btn-xs">日志</button></td>
+        </tr>
+        <tr id="detail-{{ run.id }}" class="detail-row" style="display:none;">
+          <td colspan="7" style="padding:0;">
+            <div class="detail-panel show">
+              <div style="padding:16px 20px;background:var(--bg-elevated);border-bottom:1px solid var(--border);">
+                <div class="summary-row">
+                  <div class="sr-item"><span class="k">部署 ID:</span><span class="v">#{{ run.id }}</span></div>
+                  <div class="sr-item"><span class="k">开始时间:</span><span class="v">{{ run.started_at }}</span></div>
+                  <div class="sr-item"><span class="k">模式:</span><span class="v">{{ run.mode }}</span></div>
+                  <div class="sr-item"><span class="k">配置:</span><span class="v" style="font-family:var(--font-mono)">{{ run.config }}</span></div>
+                  <div class="sr-item"><span class="k">触发方式:</span><span class="v">{{ run.trigger }}</span></div>
+                </div>
+              </div>
+              <div style="padding:12px 20px;">
+                <div class="log-viewer">
+                  {% for line in run.logs %}
+                  <div class="ln {{ line.level }}"><span class="ts">[{{ line.time }}]</span> {{ line.tag }}  {{ line.msg }}</div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="pagination">
+  {% if page > 1 %}<a class="page" href="?page={{ page - 1 }}">&laquo;</a>{% else %}<span class="page na">&laquo;</span>{% endif %}
+  {% for p in page_range %}
+  {% if p == page %}<span class="page active">{{ p }}</span>{% else %}<a class="page" href="?page={{ p }}">{{ p }}</a>{% endif %}
+  {% endfor %}
+  {% if page < total_pages %}<a class="page" href="?page={{ page + 1 }}">&raquo;</a>{% else %}<span class="page na">&raquo;</span>{% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleDetail(tr, id) {
+  const detail = document.getElementById('detail-' + id);
+  if (detail) {
+    const isVisible = detail.style.display === 'table-row';
+    document.querySelectorAll('.detail-row').forEach(r => r.style.display = 'none');
+    detail.style.display = isVisible ? 'none' : 'table-row';
+  }
+}
+
+function filterHistory(val) {
+  const q = val.toLowerCase();
+  document.querySelectorAll('#historyTable tbody tr:not(.detail-row)').forEach(r => {
+    r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+function filterBy(el, status) {
+  document.querySelectorAll('.filter-group .filt').forEach(f => f.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('#historyTable tbody tr:not(.detail-row)').forEach(r => {
+    if (status === 'all') { r.style.display = ''; return; }
+    const badge = r.querySelector('.badge');
+    if (!badge) { r.style.display = 'none'; return; }
+    const cls = Array.from(badge.classList).find(c => ['success','failed','running','cancelled'].includes(c));
+    r.style.display = cls === status ? '' : 'none';
+  });
+}
+</script>
+{% endblock %}
